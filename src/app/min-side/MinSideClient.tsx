@@ -33,12 +33,21 @@ export default function MinSideClient() {
     const saved = localStorage.getItem('bv_email')
     if (saved) {
       setEmail(saved)
+      setLoading(true)
       fetch(`/api/min-side?email=${encodeURIComponent(saved)}`)
         .then(r => r.json())
         .then(d => {
-          if (d.subscriber) { setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[]); setView('dash') }
-          else localStorage.removeItem('bv_email')
+          if (d.subscriber) {
+            setSub(d.subscriber)
+            setLocs(d.locations || [])
+            setRecs(d.recipients || [])
+            setView('dash')
+          } else {
+            localStorage.removeItem('bv_email')
+          }
+          setLoading(false)
         })
+        .catch(() => setLoading(false))
     }
   }, [])
 
@@ -139,12 +148,18 @@ export default function MinSideClient() {
     <div style={S.page}>
       <nav style={S.nav}><div style={{maxWidth:680,margin:'0 auto'}}><a href="/" style={S.logo}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a></div></nav>
       <div style={{maxWidth:420,margin:'0 auto',padding:'5rem 1.5rem',textAlign:'center'}}>
-        <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Min side</h1>
-        <p style={{color:'#6b8fa3',marginBottom:'2rem'}}>Logg inn med e-posten du registrerte deg med</p>
-        <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem'}}>
-          <input style={S.inp} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required />
-          <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem'}} disabled={loading}>{loading?'Søker...':'Logg inn →'}</button>
-        </form>
+        {loading ? (
+          <p style={{color:'#6b8fa3'}}>Laster inn...</p>
+        ) : (
+          <>
+            <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Min side</h1>
+            <p style={{color:'#6b8fa3',marginBottom:'2rem'}}>Logg inn med e-posten du registrerte deg med</p>
+            <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem'}}>
+              <input style={S.inp} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required />
+              <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem'}} disabled={loading}>{loading?'Søker...':'Logg inn →'}</button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   )
