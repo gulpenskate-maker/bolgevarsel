@@ -1,171 +1,265 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import styles from './page.module.css'
 
-type Subscriber = { id: string; email: string; plan: string; status: string; stripe_customer_id: string }
-type Location = { id: string; name: string; lat: number; lon: number }
-type Recipient = { id: string; location_id: string; phone: string; name: string; active: boolean }
+const S = {
+  page: { minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' } as React.CSSProperties,
+  nav: { padding:'1.2rem 2rem', borderBottom:'1px solid rgba(10,42,61,0.08)', background:'rgba(232,244,248,0.95)', position:'sticky' as const, top:0, zIndex:100 },
+  logo: { fontFamily:'serif', fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' } as React.CSSProperties,
+  wrap: { maxWidth:680, margin:'0 auto', padding:'2.5rem 1.5rem' },
+  card: { background:'white', borderRadius:20, padding:'1.5rem', border:'1px solid rgba(10,42,61,0.07)', marginBottom:'1.2rem', boxShadow:'0 2px 12px rgba(10,42,61,0.06)' } as React.CSSProperties,
+  sTitle: { fontFamily:'serif', fontSize:'1.2rem', fontWeight:400, color:'#0a2a3d', marginBottom:'1rem', paddingBottom:'0.6rem', borderBottom:'1px solid rgba(10,42,61,0.07)' } as React.CSSProperties,
+  inp: { width:'100%', padding:'0.75rem 1rem', borderRadius:100, border:'1.5px solid rgba(10,42,61,0.12)', background:'#f8fbfc', fontSize:'0.9rem', color:'#0a2a3d', outline:'none', fontFamily:'inherit', boxSizing:'border-box' as const },
+  btnPrimary: { background:'#0a2a3d', color:'white', padding:'0.7rem 1.2rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.88rem', fontWeight:500 } as React.CSSProperties,
+  btnDanger: { background:'#fee2e2', color:'#ef4444', padding:'0.5rem 0.9rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:500 } as React.CSSProperties,
+  btnGhost: { background:'#f0f8fc', color:'#0a2a3d', padding:'0.5rem 0.9rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:500 } as React.CSSProperties,
+  badge: (plan: string) => ({ background: plan==='pro'?'#fef3c7':plan==='familie'?'#dbeafe':'#e8f4f8', color: plan==='pro'?'#92400e':plan==='familie'?'#1d4ed8':'#0a2a3d', padding:'3px 10px', borderRadius:100, fontSize:'0.78rem', fontWeight:500 }) as React.CSSProperties,
+  tag: (active: boolean) => ({ background: active?'#dcfce7':'#f1f5f9', color: active?'#16a34a':'#64748b', padding:'2px 8px', borderRadius:100, fontSize:'0.75rem', fontWeight:500 }) as React.CSSProperties,
+}
+
+type Sub = { id:string; email:string; plan:string; status:string }
+type Loc = { id:string; name:string; lat:number; lon:number }
+type Rec = { id:string; location_id:string; phone:string; name:string; active:boolean }
 
 export default function MinSideClient() {
   const [email, setEmail] = useState('')
-  const [subscriber, setSubscriber] = useState<Subscriber | null>(null)
-  const [locations, setLocations] = useState<Location[]>([])
-  const [recipients, setRecipients] = useState<Recipient[]>([])
+  const [sub, setSub] = useState<Sub|null>(null)
+  const [locs, setLocs] = useState<Loc[]>([])
+  const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
-  const [view, setView] = useState<'login' | 'dashboard'>('login')
+  const [view, setView] = useState<'login'|'dash'>('login')
 
-  // Lokasjonssøk med autocomplete
-  const [locQuery, setLocQuery] = useState('')
+  // Lokasjonssøk
+  const [locQ, setLocQ] = useState('')
   const [locSugg, setLocSugg] = useState<any[]>([])
   const [locOpen, setLocOpen] = useState(false)
-  const [locValgt, setLocValgt] = useState<{name:string;lat:number;lon:number} | null>(null)
+  const [locValgt, setLocValgt] = useState<{name:string;lat:number;lon:number}|null>(null)
   const locTimer = useRef<any>(null)
 
-  // Mottaker
-  const [newPhone, setNewPhone] = useState('')
-  const [newRecipientName, setNewRecipientName] = useState('')
-  const [selectedLocId, setSelectedLocId] = useState('')
+  // Rediger mottaker
+  const [editRec, setEditRec] = useState<Rec|null>(null)
+  const [editPhone, setEditPhone] = useState('')
+  const [editName, setEditName] = useState('')
 
-  // Autocomplete stedssøk
+  // Ny mottaker
+  const [newPhone, setNewPhone] = useState('')
+  const [newName, setNewName] = useState('')
+  const [newLocId, setNewLocId] = useState('')
+
   useEffect(() => {
-    if (locQuery.length < 2) { setLocSugg([]); setLocOpen(false); return }
+    if (locQ.length < 2) { setLocSugg([]); setLocOpen(false); return }
     clearTimeout(locTimer.current)
     locTimer.current = setTimeout(async () => {
-      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locQuery)}&count=6&format=json`)
+      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locQ)}&count=6&format=json`)
       const d = await r.json()
-      const hits = (d.results || []).filter((x: any) => x.country_code === 'NO').slice(0, 5)
-      setLocSugg(hits); setLocOpen(hits.length > 0)
+      const hits = (d.results||[]).filter((x:any) => x.country_code==='NO').slice(0,5)
+      setLocSugg(hits); setLocOpen(hits.length>0)
     }, 300)
-  }, [locQuery])
+  }, [locQ])
 
-  async function handleLogin(e: React.FormEvent) {
+  async function login(e: React.FormEvent) {
     e.preventDefault(); setLoading(true)
-    const res = await fetch(`/api/min-side?email=${encodeURIComponent(email)}`)
-    const data = await res.json()
-    if (data.subscriber) { setSubscriber(data.subscriber); setLocations(data.locations || []); setRecipients(data.recipients || []); setView('dashboard') }
-    else alert('Ingen abonnement funnet for denne e-postadressen.')
+    const r = await fetch(`/api/min-side?email=${encodeURIComponent(email)}`)
+    const d = await r.json()
+    if (d.subscriber) { setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[]); setView('dash') }
+    else alert('Ingen konto funnet for denne e-postadressen.')
     setLoading(false)
   }
 
   function pickLoc(s: any) {
-    const name = s.name + (s.admin1 ? ', ' + s.admin1.replace(' Fylke','') : '')
-    setLocQuery(name); setLocValgt({ name, lat: s.latitude, lon: s.longitude }); setLocOpen(false); setLocSugg([])
+    const name = s.name + (s.admin1 ? ', '+s.admin1.replace(' Fylke','') : '')
+    setLocQ(name); setLocValgt({name, lat:s.latitude, lon:s.longitude}); setLocOpen(false); setLocSugg([])
   }
 
-  async function addLocation(e: React.FormEvent) {
+  async function addLoc(e: React.FormEvent) {
+    e.preventDefault(); if (!locValgt) return
+    const r = await fetch('/api/min-side/location', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ subscriber_id:sub!.id, name:locValgt.name, lat:locValgt.lat, lon:locValgt.lon }) })
+    const d = await r.json()
+    if (d.location) { setLocs([...locs, d.location]); setLocQ(''); setLocValgt(null) }
+  }
+
+  async function deleteLoc(id: string) {
+    if (!confirm('Slett lokasjon og alle tilknyttede mottakere?')) return
+    await fetch('/api/min-side/location/delete', { method:'DELETE', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id, subscriber_id:sub!.id }) })
+    setLocs(locs.filter(l=>l.id!==id)); setRecs(recs.filter(r=>r.location_id!==id))
+  }
+
+  async function addRec(e: React.FormEvent) {
     e.preventDefault()
-    if (!locValgt) return
-    const res = await fetch('/api/min-side/location', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subscriber_id: subscriber!.id, name: locValgt.name, lat: locValgt.lat, lon: locValgt.lon }),
-    })
-    const data = await res.json()
-    if (data.location) { setLocations([...locations, data.location]); setLocQuery(''); setLocValgt(null) }
+    const r = await fetch('/api/min-side/recipient', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName }) })
+    const d = await r.json()
+    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId('') }
   }
 
-  async function addRecipient(e: React.FormEvent) {
-    e.preventDefault()
-    const res = await fetch('/api/min-side/recipient', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subscriber_id: subscriber!.id, location_id: selectedLocId, phone: newPhone, name: newRecipientName }),
-    })
-    const data = await res.json()
-    if (data.recipient) { setRecipients([...recipients, data.recipient]); setNewPhone(''); setNewRecipientName('') }
+  async function deleteRec(id: string) {
+    if (!confirm('Slett mottaker?')) return
+    await fetch('/api/min-side/recipient/delete', { method:'DELETE', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id, subscriber_id:sub!.id }) })
+    setRecs(recs.filter(r=>r.id!==id))
   }
 
-  const planLabel: Record<string, string> = { basis: 'Basis 49 kr/mnd', familie: 'Familie 99 kr/mnd', pro: 'Pro 199 kr/mnd' }
+  async function toggleRec(rec: Rec) {
+    const r = await fetch('/api/min-side/recipient/update', { method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id:rec.id, subscriber_id:sub!.id, active:!rec.active }) })
+    const d = await r.json()
+    if (d.recipient) setRecs(recs.map(r=>r.id===rec.id ? d.recipient : r))
+  }
 
+  async function saveEditRec(e: React.FormEvent) {
+    e.preventDefault(); if (!editRec) return
+    const r = await fetch('/api/min-side/recipient/update', { method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id:editRec.id, subscriber_id:sub!.id, phone:editPhone, name:editName }) })
+    const d = await r.json()
+    if (d.recipient) { setRecs(recs.map(r=>r.id===editRec.id ? d.recipient : r)); setEditRec(null) }
+  }
 
-  if (view === 'login') return (
-    <div className={styles.page}>
-      <nav className={styles.nav}><a href="/" className={styles.logo}>bølge<span>varsel</span></a></nav>
-      <div className={styles.center}>
-        <h1 className={styles.title}>Min side</h1>
-        <p className={styles.sub}>Logg inn med e-postadressen du registrerte deg med</p>
-        <form onSubmit={handleLogin} className={styles.form}>
-          <input className={styles.input} type="email" placeholder="din@epost.no" value={email} onChange={e => setEmail(e.target.value)} required />
-          <button className={styles.btn} disabled={loading}>{loading ? 'Søker...' : 'Logg inn →'}</button>
+  const planLabel: Record<string,string> = { basis:'Basis', familie:'Familie', pro:'Pro' }
+
+  if (view==='login') return (
+    <div style={S.page}>
+      <nav style={S.nav}><div style={{maxWidth:680,margin:'0 auto'}}><a href="/" style={S.logo}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a></div></nav>
+      <div style={{maxWidth:420,margin:'0 auto',padding:'5rem 1.5rem',textAlign:'center'}}>
+        <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Min side</h1>
+        <p style={{color:'#6b8fa3',marginBottom:'2rem'}}>Logg inn med e-posten du registrerte deg med</p>
+        <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem'}}>
+          <input style={S.inp} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required />
+          <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem'}} disabled={loading}>{loading?'Søker...':'Logg inn →'}</button>
         </form>
       </div>
     </div>
   )
 
   return (
-    <div className={styles.page}>
-      <nav className={styles.nav}><a href="/" className={styles.logo}>bølge<span>varsel</span></a></nav>
-      <div className={styles.dashboard}>
-        <div className={styles.dHeader}>
-          <h1 className={styles.dTitle}>Hei! 👋</h1>
-          <p className={styles.dSub}>{subscriber!.email} · <span className={styles.planBadge}>{planLabel[subscriber!.plan]}</span></p>
+    <div style={S.page}>
+      <nav style={S.nav}>
+        <div style={{maxWidth:680,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <a href="/" style={S.logo}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a>
+          <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+            <span style={S.badge(sub!.plan)}>{planLabel[sub!.plan]} 🟢</span>
+          </div>
+        </div>
+      </nav>
+      <div style={S.wrap}>
+        <div style={{marginBottom:'1.5rem'}}>
+          <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',margin:0}}>Hei! 👋</h1>
+          <p style={{color:'#6b8fa3',margin:'4px 0 0'}}>{sub!.email}</p>
         </div>
 
-        {/* Lokasjoner */}
-        <section className={styles.section}>
-          <h2 className={styles.sTitle}>🗺️ Mine lokasjoner</h2>
-          {locations.length === 0 && <p className={styles.empty}>Ingen lokasjoner ennå. Legg til din første!</p>}
-          <div className={styles.cards}>
-            {locations.map(loc => (
-              <div key={loc.id} className={styles.card}>
-                <div className={styles.cardTitle}>{loc.name}</div>
-                <div className={styles.cardSub}>{loc.lat.toFixed(4)}°N, {loc.lon.toFixed(4)}°Ø</div>
+        {/* LOKASJONER */}
+        <div style={S.card}>
+          <h2 style={S.sTitle}>🗺️ Mine lokasjoner</h2>
+          {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen lokasjoner ennå.</p>}
+          <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:locs.length?'1.2rem':0}}>
+            {locs.map(loc => (
+              <div key={loc.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+                <div>
+                  <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{loc.name}</div>
+                  <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginTop:'2px'}}>{loc.lat.toFixed(4)}°N, {loc.lon.toFixed(4)}°Ø · {recs.filter(r=>r.location_id===loc.id).length} mottaker(e)</div>
+                </div>
+                <button style={S.btnDanger} onClick={()=>deleteLoc(loc.id)}>🗑 Slett</button>
               </div>
             ))}
           </div>
-
-          <form onSubmit={addLocation} className={styles.addForm}>
-            <div style={{position:'relative'}}>
-              <input
-                className={styles.input}
-                placeholder="Søk etter sted (f.eks. Tånes, Mandal...)"
-                value={locQuery}
-                onChange={e => { setLocQuery(e.target.value); setLocValgt(null) }}
-                onBlur={() => setTimeout(() => setLocOpen(false), 200)}
-                onFocus={() => locSugg.length > 0 && setLocOpen(true)}
-                autoComplete="off"
-              />
-              {locValgt && <span style={{position:'absolute',right:'12px',top:'50%',transform:'translateY(-50%)',fontSize:'0.75rem',color:'#22c55e',fontWeight:500}}>✓ {locValgt.lat.toFixed(3)}, {locValgt.lon.toFixed(3)}</span>}
-              {locOpen && locSugg.length > 0 && (
+          <form onSubmit={addLoc}>
+            <div style={{position:'relative',marginBottom:'0.6rem'}}>
+              <input style={S.inp} placeholder="Søk etter sted langs kysten..." value={locQ}
+                onChange={e=>{setLocQ(e.target.value);setLocValgt(null)}}
+                onBlur={()=>setTimeout(()=>setLocOpen(false),200)}
+                onFocus={()=>locSugg.length>0&&setLocOpen(true)} autoComplete="off" />
+              {locValgt && <span style={{position:'absolute',right:'12px',top:'50%',transform:'translateY(-50%)',fontSize:'0.72rem',color:'#22c55e',fontWeight:500}}>✓ funnet</span>}
+              {locOpen && locSugg.length>0 && (
                 <div style={{position:'absolute',top:'calc(100% + 4px)',left:0,right:0,background:'white',borderRadius:12,boxShadow:'0 8px 24px rgba(10,42,61,0.12)',border:'1px solid rgba(10,42,61,0.08)',overflow:'hidden',zIndex:999}}>
-                  {locSugg.map((s, i) => (
-                    <div key={i} onMouseDown={() => pickLoc(s)}
-                      style={{padding:'10px 14px',cursor:'pointer',borderBottom:i<locSugg.length-1?'1px solid #f0f4f8':'none',fontSize:'0.9rem'}}
-                      onMouseEnter={e => (e.currentTarget.style.background='#f0f8fc')}
-                      onMouseLeave={e => (e.currentTarget.style.background='white')}>
+                  {locSugg.map((s,i)=>(
+                    <div key={i} onMouseDown={()=>pickLoc(s)}
+                      style={{padding:'9px 14px',cursor:'pointer',borderBottom:i<locSugg.length-1?'1px solid #f0f4f8':'none',fontSize:'0.88rem'}}
+                      onMouseEnter={e=>(e.currentTarget.style.background='#f0f8fc')}
+                      onMouseLeave={e=>(e.currentTarget.style.background='white')}>
                       <span style={{fontWeight:500,color:'#0a2a3d'}}>{s.name}</span>
-                      {s.admin1 && <span style={{color:'#6b8fa3',fontSize:'0.82rem'}}> – {s.admin1.replace(' Fylke','')}</span>}
+                      {s.admin1&&<span style={{color:'#6b8fa3',fontSize:'0.8rem'}}> – {s.admin1.replace(' Fylke','')}</span>}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            <button className={styles.addBtn} type="submit" disabled={!locValgt}>+ Legg til lokasjon</button>
+            <button style={{...S.btnPrimary, opacity:locValgt?1:0.5}} type="submit" disabled={!locValgt}>+ Legg til lokasjon</button>
           </form>
-        </section>
+        </div>
 
-        {/* Mottakere */}
-        <section className={styles.section}>
-          <h2 className={styles.sTitle}>📱 Mine mottakere</h2>
-          {recipients.length === 0 && <p className={styles.empty}>Ingen mottakere ennå.</p>}
-          <div className={styles.cards}>
-            {recipients.map(r => (
-              <div key={r.id} className={styles.card}>
-                <div className={styles.cardTitle}>{r.name || r.phone}</div>
-                <div className={styles.cardSub}>{r.phone} · {r.active ? '✅ Aktiv' : '⏸ Pauset'}</div>
+        {/* MOTTAKERE */}
+        <div style={S.card}>
+          <h2 style={S.sTitle}>📱 Mine mottakere</h2>
+          {recs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen mottakere ennå.</p>}
+          <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:locs.length?'1.2rem':0}}>
+            {recs.map(rec => (
+              <div key={rec.id}>
+                {editRec?.id===rec.id ? (
+                  <form onSubmit={saveEditRec} style={{background:'#f0f8fc',borderRadius:12,padding:'1rem',display:'flex',flexDirection:'column',gap:'0.5rem'}}>
+                    <div style={{fontSize:'0.78rem',color:'#6b8fa3',fontWeight:500,marginBottom:'2px'}}>Rediger mottaker</div>
+                    <input style={S.inp} placeholder="Navn" value={editName} onChange={e=>setEditName(e.target.value)} />
+                    <input style={S.inp} placeholder="Telefon (+4799...)" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
+                    <div style={{display:'flex',gap:'0.5rem'}}>
+                      <button style={S.btnPrimary} type="submit">Lagre</button>
+                      <button style={S.btnGhost} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
+                    </div>
+                  </form>
+                ) : (
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+                    <div>
+                      <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{rec.name||rec.phone}</div>
+                      <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginTop:'2px',display:'flex',alignItems:'center',gap:'6px'}}>
+                        {rec.name&&<span>{rec.phone} · </span>}
+                        <span>{locs.find(l=>l.id===rec.location_id)?.name||'Ukjent lokasjon'}</span>
+                        <span style={S.tag(rec.active)}>{rec.active?'Aktiv':'Pauset'}</span>
+                      </div>
+                    </div>
+                    <div style={{display:'flex',gap:'0.4rem'}}>
+                      <button style={S.btnGhost} onClick={()=>toggleRec(rec)}>{rec.active?'⏸ Pause':'▶ Aktiver'}</button>
+                      <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}}>✏️</button>
+                      <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)}>🗑</button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
-          {locations.length > 0 && (
-            <form onSubmit={addRecipient} className={styles.addForm}>
-              <select className={styles.input} value={selectedLocId} onChange={e => setSelectedLocId(e.target.value)} required>
+          {locs.length>0 && (
+            <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+              <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
                 <option value="">Velg lokasjon</option>
-                {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
               </select>
-              <input className={styles.input} placeholder="Navn (valgfritt)" value={newRecipientName} onChange={e => setNewRecipientName(e.target.value)} />
-              <input className={styles.input} placeholder="Telefonnummer (+4799..." value={newPhone} onChange={e => setNewPhone(e.target.value)} required />
-              <button className={styles.addBtn} type="submit">+ Legg til mottaker</button>
+              <input style={S.inp} placeholder="Navn (valgfritt)" value={newName} onChange={e=>setNewName(e.target.value)} />
+              <input style={S.inp} placeholder="Telefon (+4799...)" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required />
+              <button style={S.btnPrimary} type="submit">+ Legg til mottaker</button>
             </form>
           )}
-        </section>
+          {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.85rem'}}>Legg til en lokasjon først.</p>}
+        </div>
+
+        {/* KONTO */}
+        <div style={S.card}>
+          <h2 style={S.sTitle}>⚙️ Min konto</h2>
+          <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+              <div>
+                <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'2px'}}>E-postadresse</div>
+                <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{sub!.email}</div>
+              </div>
+            </div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+              <div>
+                <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'2px'}}>Abonnement</div>
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <span style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{planLabel[sub!.plan]}</span>
+                  <span style={S.tag(sub!.status==='active')}>{sub!.status==='active'?'Aktivt':'Inaktivt'}</span>
+                </div>
+              </div>
+            </div>
+            <p style={{fontSize:'0.8rem',color:'#6b8fa3',padding:'0 0.5rem'}}>For å endre e-post, avslutte abonnement eller andre kontospørsmål — kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a></p>
+          </div>
+        </div>
       </div>
     </div>
   )
