@@ -58,10 +58,14 @@ inp.addEventListener('input',()=>{
 });
 
 inp.addEventListener('keydown',e=>{
-  if(!sugg.length)return;
   if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,sugg.length-1);renderDD();}
   else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,-1);renderDD();}
-  else if(e.key==='Enter'&&sel>=0){e.preventDefault();pick(sugg[sel]);}
+  else if(e.key==='Enter'){
+    e.preventDefault();
+    if(sel>=0&&sugg.length>0){pick(sugg[sel]);}
+    else if(sugg.length>0){pick(sugg[0]);}
+    else{document.getElementById('sjekk').click();}
+  }
   else if(e.key==='Escape'){dd.style.display='none';sel=-1;}
 });
 
