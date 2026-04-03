@@ -3,48 +3,25 @@ import { useState, useEffect } from 'react'
 
 // Alle IDs fra cdn.skylinewebcams.com/live{ID}.jpg
 const cameras = [
-  {
-    id: 4383,
-    name: 'Stavanger – Havna',
-    location: 'Rogaland',
-    region: 'Sørvest',
-    link: 'https://www.skylinewebcams.com/en/webcam/norge/rogaland/stavanger/stavanger.html',
-  },
-  {
-    id: 284,
-    name: 'Bergen – Bryggen',
-    location: 'Vestland',
-    region: 'Vestlandet',
-    link: 'https://www.skylinewebcams.com/en/webcam/norge/western-norway/bergen/bergen.html',
-  },
-  {
-    id: 1951,
-    name: 'Ålesund – Havna',
-    location: 'Møre og Romsdal',
-    region: 'Vestlandet',
-    link: 'https://www.skylinewebcams.com/en/webcam/norge/western-norway/alesund/alesund.html',
-  },
-  {
-    id: 617,
-    name: 'Lofoten – Reine',
-    location: 'Nordland',
-    region: 'Nord-Norge',
-    link: 'https://www.skylinewebcams.com/en/webcam/norge/nordland/lofoten/reine.html',
-  },
-  {
-    id: 4384,
-    name: 'Tromsø – Panorama',
-    location: 'Troms',
-    region: 'Nord-Norge',
-    link: 'https://www.skylinewebcams.com/en/webcam/norge/northern-norway/tromso/panorama.html',
-  },
-  {
-    id: 5885,
-    name: 'Sandefjord – Havna',
-    location: 'Vestfold',
-    region: 'Østlandet',
-    link: 'https://www.skylinewebcams.com/en/webcam/norge/vestfold/sandefjord/sandefjord-harbor.html',
-  },
+  // Sørvest
+  { id: 4383, name: 'Stavanger – Havna', location: 'Rogaland', region: 'Sørvest', link: 'https://www.skylinewebcams.com/en/webcam/norge/rogaland/stavanger/stavanger.html' },
+  { id: 2369, name: 'Jørpeland – Havna', location: 'Rogaland', region: 'Sørvest', link: 'https://www.skylinewebcams.com/en/webcam/norge/rogaland/jorpeland/jorpeland.html' },
+  // Sørlandet
+  { id: 5085, name: 'Kristiansund Panorama', location: 'Møre og Romsdal', region: 'Sørlandet', link: 'https://www.skylinewebcams.com/en/webcam/norge/more-og-romsdal/kristiansund/panorama.html' },
+  { id: 5491, name: 'Halsnøy – Kyst', location: 'Vestland', region: 'Sørlandet', link: 'https://www.skylinewebcams.com/en/webcam/norge/western-norway/halsnoy/halsnoy.html' },
+  // Vestlandet
+  { id: 284, name: 'Bergen – Bryggen', location: 'Vestland', region: 'Vestlandet', link: 'https://www.skylinewebcams.com/en/webcam/norge/western-norway/bergen/bergen.html' },
+  { id: 2061, name: 'Geiranger – Cruise', location: 'Møre og Romsdal', region: 'Vestlandet', link: 'https://www.skylinewebcams.com/en/webcam/norge/sunnmore/geiranger/geirangerfjord-cruise-port.html' },
+  { id: 1951, name: 'Ålesund – Havna', location: 'Møre og Romsdal', region: 'Vestlandet', link: 'https://www.skylinewebcams.com/en/webcam/norge/western-norway/alesund/alesund.html' },
+  // Midt-Norge
+  { id: 4053, name: 'Trondheim', location: 'Trøndelag', region: 'Midt-Norge', link: 'https://www.skylinewebcams.com/en/webcam/norge/eastern-norway/trondheim/trondheim.html' },
+  // Oslofjorden
+  { id: 4562, name: 'Oslo – Sentrum', location: 'Oslo', region: 'Oslofjorden', link: 'https://www.skylinewebcams.com/en/webcam/norge/eastern-norway/oslo/oslo.html' },
+  { id: 5885, name: 'Sandefjord – Havna', location: 'Vestfold', region: 'Oslofjorden', link: 'https://www.skylinewebcams.com/en/webcam/norge/vestfold/sandefjord/sandefjord-harbor.html' },
+  { id: 5940, name: 'Sandefjord – Bjerggata', location: 'Vestfold', region: 'Oslofjorden', link: 'https://www.skylinewebcams.com/en/webcam/norge/vestfold/sandefjord/bjerggata.html' },
+  // Nord-Norge
+  { id: 617, name: 'Lofoten – Reine', location: 'Nordland', region: 'Nord-Norge', link: 'https://www.skylinewebcams.com/en/webcam/norge/nordland/lofoten/reine.html' },
+  { id: 4384, name: 'Tromsø – Panorama', location: 'Troms', region: 'Nord-Norge', link: 'https://www.skylinewebcams.com/en/webcam/norge/northern-norway/tromso/panorama.html' },
 ]
 
 function CameraCard({ cam }: { cam: typeof cameras[0] }) {
@@ -119,9 +96,18 @@ export default function Sjokamera() {
           <h1 style={{fontFamily:'serif',fontSize:'clamp(2rem,4vw,3rem)',fontWeight:300,color:'#0a2a3d',letterSpacing:'-0.02em',marginBottom:'1rem'}}>Se sjøen live<br/>langs norskekysten</h1>
           <p style={{color:'#6b8fa3',fontSize:'0.9rem'}}>Oppdateres automatisk hvert minutt{time && ` · Sist oppdatert ${time}`}</p>
         </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'1.5rem'}}>
-          {cameras.map(cam => <CameraCard key={cam.id} cam={cam} />)}
-        </div>
+        {['Sørvest','Sørlandet','Vestlandet','Midt-Norge','Oslofjorden','Nord-Norge'].map(region => {
+          const regionCams = cameras.filter(c => c.region === region)
+          if (!regionCams.length) return null
+          return (
+            <div key={region} style={{marginBottom:'3rem'}}>
+              <h2 style={{fontFamily:'serif',fontSize:'1.4rem',fontWeight:300,color:'#0a2a3d',marginBottom:'1.2rem',paddingBottom:'0.5rem',borderBottom:'1px solid rgba(10,42,61,0.1)'}}>{region}</h2>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'1.5rem'}}>
+                {regionCams.map(cam => <CameraCard key={cam.id} cam={cam} />)}
+              </div>
+            </div>
+          )
+        })}
         <div style={{textAlign:'center',marginTop:'4rem',background:'#0a2a3d',borderRadius:24,padding:'3rem 2rem'}}>
           <h2 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'0.8rem'}}>Vil du ha daglig bølgevarsel?</h2>
           <p style={{color:'rgba(255,255,255,0.6)',marginBottom:'1.5rem'}}>Motta daglig SMS kl. 07:30 med bølgehøyde, vind og vurdering</p>
