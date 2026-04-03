@@ -35,7 +35,7 @@ export default function Hero() {
         <h1 className={styles.h1}>Vet hva sjøen<br/>gjør i <em>morgen</em></h1>
         <p className={styles.sub}>Daglig bølge- og værvarsel direkte på SMS — skreddersydd for din kystlokasjon. Enkelt, pålitelig, norsk.</p>
         <div className={styles.actions}>
-          <a href="#pris" className={styles.btnPrimary}>Start gratis prøveperiode</a>
+          <a href="/registrer" className={styles.btnPrimary}>Start gratis prøveperiode</a>
           <a href="#hvordan" className={styles.btnGhost}>Se hvordan det fungerer →</a>
         </div>
       </div>

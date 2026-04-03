@@ -20,7 +20,7 @@ export default function Pricing() {
               <div className={styles.price}>{plan.price}<span className={styles.suffix}>kr</span></div>
               <div className={styles.per}>per måned</div>
               <ul className={styles.features}>{plan.features.map((f) => <li key={f}>{f}</li>)}</ul>
-              <a href="#" className={styles.planBtn}>Kom i gang</a>
+              <a href={`/registrer?plan=${plan.id}`} className={styles.planBtn}>Kom i gang</a>
             </div>
           ))}
         </div>

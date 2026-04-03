@@ -8,8 +8,9 @@ export default function Nav() {
       <ul className={styles.links}>
         <li><a href="#hvordan">Hvordan det fungerer</a></li>
         <li><a href="#pris">Priser</a></li>
+        <li><a href="/min-side">Min side</a></li>
       </ul>
-      <a href="#pris" className={styles.cta}>Kom i gang</a>
+      <a href="/registrer" className={styles.cta}>Kom i gang</a>
     </nav>
   )
 }
