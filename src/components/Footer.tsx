@@ -1,0 +1,15 @@
+import styles from './Footer.module.css'
+
+export default function Footer() {
+  return (
+    <footer className={styles.footer}>
+      <p className={styles.name}><strong>bølgevarsel.no</strong> — daglig sjøvarsel på SMS</p>
+      <p className={styles.links}>
+        Data fra <a href="https://met.no" target="_blank" rel="noopener">met.no</a> og Open-Meteo Marine API
+        &nbsp;·&nbsp;<a href="/personvern">Personvern</a>
+        &nbsp;·&nbsp;<a href="mailto:hei@bolgevarsel.no">Kontakt</a>
+      </p>
+      <p className={styles.copy}>© 2026 Stå på Pinne AS</p>
+    </footer>
+  )
+}

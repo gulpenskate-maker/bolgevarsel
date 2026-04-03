@@ -1,0 +1,24 @@
+.wrap { background: var(--ocean-deep); padding: 6rem 2rem; }
+.inner { max-width: 1000px; margin: 0 auto; }
+.label { display: block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ocean-foam); margin-bottom: 1rem; }
+.title { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); color: var(--white); letter-spacing: -0.02em; margin-bottom: 3.5rem; line-height: 1.15; }
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+.plan { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2rem; transition: transform 0.2s, background 0.2s; }
+.plan:hover { transform: translateY(-4px); background: rgba(255,255,255,0.1); }
+.featured { background: var(--white) !important; border-color: transparent !important; box-shadow: 0 16px 48px rgba(0,0,0,0.25); }
+.badge { display: inline-block; background: var(--ocean-foam); color: var(--ocean-deep); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.8rem; border-radius: 100px; margin-bottom: 1.2rem; }
+.planName { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 400; margin-bottom: 0.3rem; color: var(--white); }
+.featured .planName { color: var(--ocean-deep); }
+.price { font-family: 'Fraunces', serif; font-size: 2.5rem; font-weight: 300; margin-bottom: 0.2rem; color: var(--white); }
+.featured .price { color: var(--ocean-deep); }
+.suffix { font-size: 1.2rem; }
+.per { font-size: 0.82rem; color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; }
+.featured .per { color: var(--text-light); }
+.features { list-style: none; }
+.features li { font-size: 0.88rem; padding: 0.45rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.75); }
+.features li::before { content: '→'; font-size: 0.8rem; opacity: 0.5; }
+.featured .features li { border-color: rgba(10,42,61,0.06); color: var(--text-mid); }
+.planBtn { display: block; text-align: center; margin-top: 1.8rem; padding: 0.75rem; border-radius: 100px; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.2); color: var(--white); }
+.planBtn:hover { background: rgba(255,255,255,0.1); }
+.featured .planBtn { background: var(--ocean-deep); color: var(--white); border-color: transparent; }
+.featured .planBtn:hover { background: var(--ocean-light); }
