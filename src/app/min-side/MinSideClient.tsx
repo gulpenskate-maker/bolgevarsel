@@ -203,7 +203,9 @@ export default function MinSideClient() {
                 </div>
               )}
             </div>
-            <button style={{...S.btnPrimary, opacity:locValgt?1:0.5}} type="submit" disabled={!locValgt}>+ Legg til lokasjon</button>
+            <button style={{...S.btnPrimary, opacity:locValgt?1:0.4, width:'100%', padding:'0.85rem'}} type="submit" disabled={!locValgt}>
+              {locValgt ? `+ Legg til ${locValgt.name}` : 'Søk etter sted for å legge til'}
+            </button>
           </form>
         </div>
 
@@ -216,12 +218,12 @@ export default function MinSideClient() {
               <div key={rec.id}>
                 {editRec?.id===rec.id ? (
                   <form onSubmit={saveEditRec} style={{background:'#f0f8fc',borderRadius:12,padding:'1rem',display:'flex',flexDirection:'column',gap:'0.5rem'}}>
-                    <div style={{fontSize:'0.78rem',color:'#6b8fa3',fontWeight:500,marginBottom:'2px'}}>Rediger mottaker</div>
-                    <input style={S.inp} placeholder="Navn" value={editName} onChange={e=>setEditName(e.target.value)} />
+                    <div style={{fontSize:'0.78rem',color:'#6b8fa3',fontWeight:500,marginBottom:'2px'}}>✏️ Rediger mottaker</div>
+                    <input style={S.inp} placeholder="Navn (valgfritt)" value={editName} onChange={e=>setEditName(e.target.value)} />
                     <input style={S.inp} placeholder="Telefon (+4799...)" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
-                    <div style={{display:'flex',gap:'0.5rem'}}>
-                      <button style={S.btnPrimary} type="submit">Lagre</button>
-                      <button style={S.btnGhost} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
+                    <div style={{display:'flex',gap:'0.5rem',marginTop:'0.2rem'}}>
+                      <button style={{...S.btnPrimary, flex:1, padding:'0.7rem'}} type="submit">💾 Lagre endringer</button>
+                      <button style={{...S.btnGhost, padding:'0.7rem 1rem'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
                     </div>
                   </form>
                 ) : (
@@ -247,12 +249,12 @@ export default function MinSideClient() {
           {locs.length>0 && (
             <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
               <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
-                <option value="">Velg lokasjon</option>
+                <option value="">Velg lokasjon for varselet</option>
                 {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
               </select>
-              <input style={S.inp} placeholder="Navn (valgfritt)" value={newName} onChange={e=>setNewName(e.target.value)} />
-              <input style={S.inp} placeholder="Telefon (+4799...)" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required />
-              <button style={S.btnPrimary} type="submit">+ Legg til mottaker</button>
+              <input style={S.inp} placeholder="Navn på mottaker (valgfritt)" value={newName} onChange={e=>setNewName(e.target.value)} />
+              <input style={S.inp} placeholder="Telefonnummer (+4799...)" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required />
+              <button style={{...S.btnPrimary, padding:'0.85rem', width:'100%'}} type="submit">+ Legg til mottaker</button>
             </form>
           )}
           {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.85rem'}}>Legg til en lokasjon først.</p>}
