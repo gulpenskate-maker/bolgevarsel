@@ -28,6 +28,20 @@ export default function MinSideClient() {
   const [loading, setLoading] = useState(false)
   const [view, setView] = useState<'login'|'dash'>('login')
 
+  // Auto-login ved sideinnlasting
+  useEffect(() => {
+    const saved = localStorage.getItem('bv_email')
+    if (saved) {
+      setEmail(saved)
+      fetch(`/api/min-side?email=${encodeURIComponent(saved)}`)
+        .then(r => r.json())
+        .then(d => {
+          if (d.subscriber) { setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[]); setView('dash') }
+          else localStorage.removeItem('bv_email')
+        })
+    }
+  }, [])
+
   // Lokasjonssøk
   const [locQ, setLocQ] = useState('')
   const [locSugg, setLocSugg] = useState<any[]>([])
@@ -60,7 +74,11 @@ export default function MinSideClient() {
     e.preventDefault(); setLoading(true)
     const r = await fetch(`/api/min-side?email=${encodeURIComponent(email)}`)
     const d = await r.json()
-    if (d.subscriber) { setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[]); setView('dash') }
+    if (d.subscriber) {
+      setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[])
+      setView('dash')
+      localStorage.setItem('bv_email', email)
+    }
     else alert('Ingen konto funnet for denne e-postadressen.')
     setLoading(false)
   }
@@ -138,6 +156,8 @@ export default function MinSideClient() {
           <a href="/" style={S.logo}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a>
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
             <span style={S.badge(sub!.plan)}>{planLabel[sub!.plan]} 🟢</span>
+            <button onClick={()=>{localStorage.removeItem('bv_email');setView('login');setSub(null)}}
+              style={{background:'transparent',border:'none',color:'rgba(10,42,61,0.4)',cursor:'pointer',fontSize:'0.8rem',padding:'4px 8px'}}>Logg ut</button>
           </div>
         </div>
       </nav>
