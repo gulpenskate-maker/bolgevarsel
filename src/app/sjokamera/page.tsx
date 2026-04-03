@@ -96,18 +96,9 @@ export default function Sjokamera() {
           <h1 style={{fontFamily:'serif',fontSize:'clamp(2rem,4vw,3rem)',fontWeight:300,color:'#0a2a3d',letterSpacing:'-0.02em',marginBottom:'1rem'}}>Se sjøen live<br/>langs norskekysten</h1>
           <p style={{color:'#6b8fa3',fontSize:'0.9rem'}}>Oppdateres automatisk hvert minutt{time && ` · Sist oppdatert ${time}`}</p>
         </div>
-        {['Sørvest','Sørlandet','Vestlandet','Midt-Norge','Oslofjorden','Nord-Norge'].map(region => {
-          const regionCams = cameras.filter(c => c.region === region)
-          if (!regionCams.length) return null
-          return (
-            <div key={region} style={{marginBottom:'3rem'}}>
-              <h2 style={{fontFamily:'serif',fontSize:'1.4rem',fontWeight:300,color:'#0a2a3d',marginBottom:'1.2rem',paddingBottom:'0.5rem',borderBottom:'1px solid rgba(10,42,61,0.1)'}}>{region}</h2>
-              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'1.5rem'}}>
-                {regionCams.map(cam => <CameraCard key={cam.id} cam={cam} />)}
-              </div>
-            </div>
-          )
-        })}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'1.5rem'}}>
+          {cameras.map(cam => <CameraCard key={cam.id} cam={cam} />)}
+        </div>
         <div style={{textAlign:'center',marginTop:'4rem',background:'#0a2a3d',borderRadius:24,padding:'3rem 2rem'}}>
           <h2 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'0.8rem'}}>Vil du ha daglig bølgevarsel?</h2>
           <p style={{color:'rgba(255,255,255,0.6)',marginBottom:'1.5rem'}}>Motta daglig SMS kl. 07:30 med bølgehøyde, vind og vurdering</p>
