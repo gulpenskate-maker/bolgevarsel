@@ -16,7 +16,7 @@ export default function MinSide() {
           <p style={{color:'#6b8fa3'}}>Laster inn...</p>
         </div>
       </div>
-      <script src="/min-side.js"></script>
+      <script src="/min-side.js" defer></script>
     </div>
   )
 }
