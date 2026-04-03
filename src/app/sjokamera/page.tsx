@@ -17,7 +17,6 @@ const cameras = [
   { id: 4053, name: 'Trondheim', location: 'Trøndelag', region: 'Midt-Norge', link: 'https://www.skylinewebcams.com/en/webcam/norge/eastern-norway/trondheim/trondheim.html' },
   // Oslofjorden
   { id: 4562, name: 'Oslo – Sentrum', location: 'Oslo', region: 'Oslofjorden', link: 'https://www.skylinewebcams.com/en/webcam/norge/eastern-norway/oslo/oslo.html' },
-  { id: 5885, name: 'Sandefjord – Havna', location: 'Vestfold', region: 'Oslofjorden', link: 'https://www.skylinewebcams.com/en/webcam/norge/vestfold/sandefjord/sandefjord-harbor.html' },
   { id: 5940, name: 'Sandefjord – Bjerggata', location: 'Vestfold', region: 'Oslofjorden', link: 'https://www.skylinewebcams.com/en/webcam/norge/vestfold/sandefjord/bjerggata.html' },
   // Nord-Norge
   { id: 617, name: 'Lofoten – Reine', location: 'Nordland', region: 'Nord-Norge', link: 'https://www.skylinewebcams.com/en/webcam/norge/nordland/lofoten/reine.html' },
