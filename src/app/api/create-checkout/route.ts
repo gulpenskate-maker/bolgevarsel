@@ -1,8 +1,7 @@
 export const dynamic = 'force-dynamic'
-
 import { NextRequest, NextResponse } from 'next/server'
 import { PLANS, getOrCreateCustomer, createCheckoutSession } from '@/lib/stripe'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,9 +9,10 @@ export async function POST(req: NextRequest) {
     if (!email || !plan || !PLANS[plan as keyof typeof PLANS]) {
       return NextResponse.json({ error: 'Ugyldig forespørsel' }, { status: 400 })
     }
+    const supabase = getSupabaseAdmin()
     const selectedPlan = PLANS[plan as keyof typeof PLANS]
     const customer = await getOrCreateCustomer(email)
-    await supabaseAdmin.from('bv_subscribers').upsert({
+    await supabase.from('bv_subscribers').upsert({
       email, stripe_customer_id: customer.id, plan, status: 'inactive',
     }, { onConflict: 'email' })
     const session = await createCheckoutSession(customer.id, selectedPlan.priceId, email, plan)
