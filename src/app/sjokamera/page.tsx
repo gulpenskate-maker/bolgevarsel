@@ -59,7 +59,7 @@ function CameraCard({ cam }: { cam: typeof cameras[0] }) {
     return () => clearInterval(interval)
   }, [])
 
-  const imgUrl = `https://cdn.skylinewebcams.com/live${cam.id}.jpg?t=${ts}`
+  const imgUrl = `/api/camera-proxy?url=${encodeURIComponent(`https://cdn.skylinewebcams.com/live${cam.id}.jpg`)}&t=${ts}`
 
   return (
     <div style={{background:'white',borderRadius:20,overflow:'hidden',border:'1px solid rgba(10,42,61,0.07)',boxShadow:'0 2px 12px rgba(10,42,61,0.07)'}}>
