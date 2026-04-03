@@ -1,0 +1,10 @@
+.page { min-height: 100vh; background: var(--sky-dawn); }
+.nav { padding: 1.2rem 2.5rem; border-bottom: 1px solid rgba(10,42,61,0.08); }
+.logo { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--ocean-deep); text-decoration: none; }
+.logo span { color: var(--ocean-foam); }
+.container { max-width: 520px; margin: 0 auto; padding: 6rem 1.5rem; text-align: center; }
+.icon { font-size: 4rem; margin-bottom: 1.5rem; }
+.title { font-family: 'Fraunces', serif; font-size: 2.5rem; font-weight: 300; color: var(--ocean-deep); margin-bottom: 1rem; }
+.sub { color: var(--text-mid); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
+.btn { display: inline-block; background: var(--ocean-deep); color: white; padding: 1rem 2rem; border-radius: 100px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+.btn:hover { background: var(--ocean-light); transform: translateY(-1px); }
