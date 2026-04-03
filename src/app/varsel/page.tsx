@@ -5,6 +5,7 @@ interface WeatherReport {
   location: string
   date: string
   temp: number
+  seaTemp: number | null
   windSpeed: number
   windDir: string
   waveHeight: number
@@ -52,7 +53,7 @@ export default function Varsel() {
       // Hent vær og bølgedata
       const [wxRes, marineRes] = await Promise.all([
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=Europe/Oslo`),
-        fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${latitude}&longitude=${longitude}&current=wave_height,wave_period,wave_direction&timezone=Europe/Oslo`)
+        fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${latitude}&longitude=${longitude}&current=wave_height,wave_period,wave_direction,sea_surface_temperature&timezone=Europe/Oslo`)
       ])
       const [wx, marine] = await Promise.all([wxRes.json(), marineRes.json()])
 
@@ -62,6 +63,7 @@ export default function Varsel() {
       const waveHeight = parseFloat((marine.current?.wave_height ?? 0).toFixed(1))
       const wavePeriod = Math.round(marine.current?.wave_period ?? 0)
       const waveDeg = marine.current?.wave_direction ?? 0
+      const seaTemp = marine.current?.sea_surface_temperature != null ? parseFloat(marine.current.sea_surface_temperature.toFixed(1)) : null
       const { text, emoji, color } = assess(waveHeight, windSpeed)
       const now = new Date()
       const dateStr = now.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' })
@@ -70,6 +72,7 @@ export default function Varsel() {
         location: `${name}${country !== 'Norway' ? ', ' + country : ''}`,
         date: dateStr,
         temp,
+        seaTemp,
         windSpeed,
         windDir: degToDir(windDeg, WIND_DIRS),
         waveHeight,
@@ -129,8 +132,12 @@ export default function Varsel() {
 
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.7rem',marginBottom:'1.2rem'}}>
               <div style={{background:'#f0f8fc',borderRadius:12,padding:'0.8rem 1rem'}}>
-                <div style={{fontSize:'0.72rem',color:'#6b8fa3',marginBottom:'0.2rem',textTransform:'uppercase',letterSpacing:'0.05em'}}>Temperatur</div>
+                <div style={{fontSize:'0.72rem',color:'#6b8fa3',marginBottom:'0.2rem',textTransform:'uppercase',letterSpacing:'0.05em'}}>Lufttemperatur</div>
                 <div style={{fontSize:'1.3rem',fontWeight:500,color:'#0a2a3d'}}>🌡️ {report.temp}°C</div>
+              </div>
+              <div style={{background:'#f0f8fc',borderRadius:12,padding:'0.8rem 1rem'}}>
+                <div style={{fontSize:'0.72rem',color:'#6b8fa3',marginBottom:'0.2rem',textTransform:'uppercase',letterSpacing:'0.05em'}}>Sjøtemperatur</div>
+                <div style={{fontSize:'1.3rem',fontWeight:500,color:'#0a2a3d'}}>{report.seaTemp != null ? `🏊 ${report.seaTemp}°C` : '– ikke tilgjengelig'}</div>
               </div>
               <div style={{background:'#f0f8fc',borderRadius:12,padding:'0.8rem 1rem'}}>
                 <div style={{fontSize:'0.72rem',color:'#6b8fa3',marginBottom:'0.2rem',textTransform:'uppercase',letterSpacing:'0.05em'}}>Vind</div>
