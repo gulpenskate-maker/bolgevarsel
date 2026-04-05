@@ -233,6 +233,10 @@ export default function MinSideClient() {
                   <a href="mailto:hei@bolgevarsel.no" style={{color:'#1a6080'}}>hei@bolgevarsel.no</a>
                 </div>
                 <div style={{fontSize:'0.88rem',color:'#334155'}}>
+                  <strong>Trenger du hjelp?</strong>{' '}
+                  <a href="/hjelp" style={{color:'#1a6080',textDecoration:'none',fontWeight:500}}>Se hjelpesenter →</a>
+                </div>
+                <div style={{fontSize:'0.88rem',color:'#334155'}}>
                   <strong>Ny kunde?</strong>{' '}
                   <a href="/registrer" style={{color:'#1a6080',textDecoration:'none',fontWeight:500}}>Start gratis prøveperiode →</a>
                 </div>
@@ -380,7 +384,7 @@ export default function MinSideClient() {
               </div>
             </div>
             <p style={{fontSize:'0.8rem',color:'#6b8fa3',padding:'0 0.5rem'}}>
-              Spørsmål? Kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
+              Spørsmål? Besøk <a href="/hjelp" style={{color:'#4da8cc'}}>hjelpesenteret</a> eller kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
             </p>
           </div>
         </div>

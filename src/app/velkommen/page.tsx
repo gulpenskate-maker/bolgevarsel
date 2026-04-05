@@ -50,6 +50,7 @@ export default function Velkommen() {
         </a>
         <p style={{marginTop:'1rem',fontSize:'0.82rem',color:'rgba(10,42,61,0.4)'}}>
           Ikke funnet e-posten? Sjekk søppelpost eller <a href="/min-side" style={{color:'#4da8cc'}}>logg inn med e-postadressen din</a>
+          &nbsp;·&nbsp;<a href="/hjelp" style={{color:'#4da8cc'}}>Hjelpesenter</a>
         </p>
       </div>
     </div>
