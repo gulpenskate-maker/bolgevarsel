@@ -18,29 +18,30 @@ const S = {
 
 function BrandIllustration() {
   return (
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style={{ width:'100%', display:'block', marginBottom:'-4px' }}>
+    <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" style={{ width:'100%', height:'100%', display:'block' }} preserveAspectRatio="xMidYMid slice">
       <defs>
-        <linearGradient id="loginSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c8e8f5"/><stop offset="100%" stopColor="#e8f4f8"/></linearGradient>
-        <linearGradient id="loginSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a6080"/><stop offset="100%" stopColor="#0a2a3d"/></linearGradient>
+        <linearGradient id="loginSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c8e8f5"/><stop offset="60%" stopColor="#e8f4f8"/><stop offset="100%" stopColor="#0a2a3d"/></linearGradient>
+        <linearGradient id="loginSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a6080"/><stop offset="100%" stopColor="#071622"/></linearGradient>
       </defs>
-      <rect width="600" height="180" fill="url(#loginSky)"/>
-      <circle cx="520" cy="55" r="30" fill="#fff4e0" opacity="0.5"/>
-      <circle cx="520" cy="55" r="20" fill="#ffd580" opacity="0.6"/>
-      <circle cx="520" cy="55" r="12" fill="#ffbc40" opacity="0.8"/>
-      <g opacity="0.6"><ellipse cx="80" cy="40" rx="50" ry="15" fill="white"/><ellipse cx="100" cy="30" rx="35" ry="13" fill="white"/><ellipse cx="60" cy="35" rx="30" ry="12" fill="white"/></g>
-      <g opacity="0.4"><ellipse cx="320" cy="30" rx="40" ry="12" fill="white"/><ellipse cx="345" cy="22" rx="28" ry="10" fill="white"/></g>
-      <path d="M0 110 L80 60 L160 100 L240 55 L320 95 L400 50 L480 90 L560 60 L600 80 L600 130 L0 130 Z" fill="#2a6a8a" opacity="0.2"/>
-      <path d="M0 120 L100 75 L200 105 L300 65 L400 100 L500 70 L600 90 L600 135 L0 135 Z" fill="#1e5a7a" opacity="0.25"/>
-      <ellipse cx="140" cy="128" rx="55" ry="14" fill="#2a5a3a" opacity="0.85"/>
-      <path d="M95 128 Q120 115 140 112 Q160 115 185 128 Z" fill="#3a6a4a" opacity="0.9"/>
-      <rect x="137" y="100" width="6" height="16" fill="#e8e0d0" rx="1"/>
-      <rect x="135" y="98" width="10" height="4" fill="#cc3333" rx="1"/>
-      <circle cx="140" cy="98" r="2.5" fill="#ffcc00" opacity="0.9"/>
-      <g><line x1="440" y1="128" x2="440" y2="114" stroke="#8a7a6a" strokeWidth="1.2"/><path d="M440 128 L425 123 L440 116 Z" fill="rgba(255,255,255,0.9)"/><path d="M440 128 L454 123 L440 120 Z" fill="rgba(255,255,255,0.65)"/><path d="M428 130 Q440 133 452 130" fill="#5a4a3a"/></g>
-      <path d="M0 132 Q75 126 150 132 Q225 138 300 132 Q375 126 450 132 Q525 138 600 132 L600 180 L0 180 Z" fill="url(#loginSea)"/>
+      <rect width="600" height="400" fill="url(#loginSky)"/>
+      <circle cx="520" cy="70" r="35" fill="#fff4e0" opacity="0.5"/>
+      <circle cx="520" cy="70" r="22" fill="#ffd580" opacity="0.6"/>
+      <circle cx="520" cy="70" r="13" fill="#ffbc40" opacity="0.8"/>
+      <g opacity="0.6"><ellipse cx="80" cy="55" rx="55" ry="16" fill="white"/><ellipse cx="105" cy="42" rx="38" ry="14" fill="white"/><ellipse cx="58" cy="48" rx="32" ry="13" fill="white"/></g>
+      <g opacity="0.4"><ellipse cx="320" cy="40" rx="45" ry="13" fill="white"/><ellipse cx="350" cy="30" rx="30" ry="11" fill="white"/></g>
+      <path d="M0 160 L80 100 L160 140 L240 90 L320 130 L400 85 L480 125 L560 95 L600 115 L600 220 L0 220 Z" fill="#2a6a8a" opacity="0.2"/>
+      <path d="M0 185 L100 130 L200 165 L300 115 L400 155 L500 120 L600 145 L600 230 L0 230 Z" fill="#1e5a7a" opacity="0.25"/>
+      <ellipse cx="140" cy="210" rx="60" ry="16" fill="#2a5a3a" opacity="0.85"/>
+      <path d="M90 210 Q120 194 140 190 Q160 194 190 210 Z" fill="#3a6a4a" opacity="0.9"/>
+      <rect x="137" y="170" width="6" height="24" fill="#e8e0d0" rx="1"/>
+      <rect x="134" y="168" width="11" height="5" fill="#cc3333" rx="1"/>
+      <circle cx="140" cy="168" r="3" fill="#ffcc00" opacity="0.9"/>
+      <g><line x1="440" y1="210" x2="440" y2="192" stroke="#8a7a6a" strokeWidth="1.4"/><path d="M440 210 L422 204 L440 194 Z" fill="rgba(255,255,255,0.9)"/><path d="M440 210 L456 204 L440 200 Z" fill="rgba(255,255,255,0.65)"/><path d="M426 213 Q440 217 454 213" fill="#5a4a3a"/></g>
+      <path d="M0 220 Q75 210 150 220 Q225 230 300 218 Q375 206 450 220 Q525 234 600 218 L600 400 L0 400 Z" fill="url(#loginSea)"/>
       <g opacity="0.3">
-        <path d="M-50 148 Q50 142 150 148 Q250 154 350 148 Q450 142 550 148 Q580 150 650 148" fill="none" stroke="white" strokeWidth="1.5"><animateTransform attributeName="transform" type="translate" from="0 0" to="100 0" dur="4s" repeatCount="indefinite"/></path>
-        <path d="M-50 160 Q60 154 160 160 Q260 166 360 160 Q460 154 560 160 Q590 162 650 160" fill="none" stroke="white" strokeWidth="1"><animateTransform attributeName="transform" type="translate" from="0 0" to="-80 0" dur="5.5s" repeatCount="indefinite"/></path>
+        <path d="M-50 250 Q50 242 150 250 Q250 258 350 250 Q450 242 550 250 Q580 252 650 250" fill="none" stroke="white" strokeWidth="1.5"><animateTransform attributeName="transform" type="translate" from="0 0" to="100 0" dur="4s" repeatCount="indefinite"/></path>
+        <path d="M-50 275 Q60 267 160 275 Q260 283 360 273 Q460 263 560 273 Q590 275 650 273" fill="none" stroke="white" strokeWidth="1"><animateTransform attributeName="transform" type="translate" from="0 0" to="-80 0" dur="5.5s" repeatCount="indefinite"/></path>
+        <path d="M-50 310 Q70 302 170 310 Q270 318 370 308 Q470 298 570 308 Q595 310 650 308" fill="none" stroke="white" strokeWidth="0.8" opacity="0.6"><animateTransform attributeName="transform" type="translate" from="0 0" to="60 0" dur="7s" repeatCount="indefinite"/></path>
       </g>
     </svg>
   )
@@ -182,44 +183,58 @@ export default function MinSideClient() {
 
   // LOGIN VIEW
   if (view==='login') return (
-    <div style={{ minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' }}>
-      <nav style={S.nav}><div style={{maxWidth:680,margin:'0 auto'}}><a href="/" style={S.logo}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a></div></nav>
-      <div style={{ overflow:'hidden', maxHeight:180 }}><BrandIllustration /></div>
+    <div style={{ minHeight:'100vh', fontFamily:'DM Sans, sans-serif', position:'relative' }}>
+      {/* Full-side illustrasjon */}
+      <div style={{ position:'fixed', inset:0, zIndex:0 }}>
+        <BrandIllustration />
+        {/* Fyller resten under SVG med havfarge */}
+        <div style={{ background:'#0a2a3d', flex:1, minHeight:'100vh' }}/>
+      </div>
 
-      <div style={{ maxWidth:440, margin:'0 auto', padding:'2rem 1.5rem', textAlign:'center' }}>
+      {/* Nav over illustrasjonen */}
+      <nav style={{ position:'relative', zIndex:10, padding:'1.2rem 2rem', display:'flex', alignItems:'center' }}>
+        <a href="/" style={{ fontFamily:'serif', fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' }}>
+          bølge<span style={{color:'#1a6080'}}>varsel</span>
+        </a>
+      </nav>
+
+      {/* Innhold over illustrasjonen */}
+      <div style={{ position:'relative', zIndex:10, maxWidth:420, margin:'0 auto', padding:'1rem 1.5rem 3rem', textAlign:'center' }}>
         {magicSendt ? (
-          <>
+          <div style={{ background:'rgba(255,255,255,0.85)', backdropFilter:'blur(12px)', borderRadius:24, padding:'2.5rem 2rem', boxShadow:'0 8px 40px rgba(10,42,61,0.15)' }}>
             <div style={{fontSize:'3rem',marginBottom:'1rem'}}>📬</div>
             <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Sjekk innboksen!</h1>
             <p style={{color:'#6b8fa3',marginBottom:'0.3rem'}}>Vi har sendt en innloggingslenke til</p>
             <p style={{color:'#0a2a3d',fontWeight:600,marginBottom:'1.5rem'}}>{email}</p>
             <p style={{color:'#6b8fa3',fontSize:'0.85rem',marginBottom:'1.5rem'}}>Lenken er gyldig i 1 time. Sjekk eventuelt søppelpost.</p>
             <button onClick={()=>{setMagicSendt(false);setFeil('')}} style={{...S.btnGhost,fontSize:'0.85rem'}}>← Prøv en annen e-post</button>
-          </>
+          </div>
         ) : (
           <>
-            <div style={{fontSize:'2.5rem',marginBottom:'0.6rem'}}>🌊</div>
-            <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.4rem'}}>Min side</h1>
-            <p style={{color:'#6b8fa3',marginBottom:'1.5rem',fontSize:'0.95rem'}}>Skriv inn e-posten din — vi sender deg en innloggingslenke</p>
-            <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem',marginBottom:'1.5rem'}}>
-              <input style={S.inp} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus />
-              {feil && <p style={{color:'#ef4444',fontSize:'0.85rem',margin:0}}>{feil}</p>}
-              <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem',fontSize:'0.95rem'}} disabled={loading}>
-                {loading ? 'Sender...' : 'Send innloggingslenke →'}
-              </button>
-            </form>
+            {/* Hovedkort — glassmorphism */}
+            <div style={{ background:'rgba(255,255,255,0.82)', backdropFilter:'blur(16px)', borderRadius:24, padding:'2.5rem 2rem', boxShadow:'0 8px 40px rgba(10,42,61,0.15)', marginBottom:'1rem' }}>
+              <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.4rem'}}>Min side</h1>
+              <p style={{color:'#6b8fa3',marginBottom:'1.5rem',fontSize:'0.95rem'}}>Skriv inn e-posten din — vi sender deg en innloggingslenke</p>
+              <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem'}}>
+                <input style={{...S.inp, background:'rgba(248,251,252,0.9)'}} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus />
+                {feil && <p style={{color:'#ef4444',fontSize:'0.85rem',margin:0}}>{feil}</p>}
+                <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem',fontSize:'0.95rem'}} disabled={loading}>
+                  {loading ? 'Sender...' : 'Send innloggingslenke →'}
+                </button>
+              </form>
+            </div>
 
-            {/* Hjelpsomme tips */}
-            <div style={{background:'white',borderRadius:16,padding:'1.2rem 1.4rem',textAlign:'left',boxShadow:'0 2px 12px rgba(10,42,61,0.06)',border:'1px solid rgba(10,42,61,0.07)'}}>
-              <p style={{margin:'0 0 0.8rem',fontSize:'0.8rem',fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'0.06em'}}>Hjelp</p>
-              <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+            {/* Hjelpekort — lett transparent */}
+            <div style={{ background:'rgba(255,255,255,0.65)', backdropFilter:'blur(12px)', borderRadius:16, padding:'1.2rem 1.4rem', textAlign:'left', boxShadow:'0 4px 20px rgba(10,42,61,0.1)' }}>
+              <p style={{margin:'0 0 0.7rem',fontSize:'0.78rem',fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'0.06em'}}>Hjelp</p>
+              <div style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
                 <div style={{fontSize:'0.88rem',color:'#334155'}}>
-                  <strong>Husker du ikke e-posten din?</strong> Sjekk i Stripe-kvitteringen du mottok etter kjøp, eller kontakt oss på{' '}
-                  <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
+                  <strong>Husker du ikke e-posten?</strong> Sjekk Stripe-kvitteringen du fikk etter kjøp, eller kontakt{' '}
+                  <a href="mailto:hei@bolgevarsel.no" style={{color:'#1a6080'}}>hei@bolgevarsel.no</a>
                 </div>
                 <div style={{fontSize:'0.88rem',color:'#334155'}}>
                   <strong>Ny kunde?</strong>{' '}
-                  <a href="/registrer" style={{color:'#4da8cc',textDecoration:'none',fontWeight:500}}>Start gratis prøveperiode →</a>
+                  <a href="/registrer" style={{color:'#1a6080',textDecoration:'none',fontWeight:500}}>Start gratis prøveperiode →</a>
                 </div>
               </div>
             </div>
