@@ -323,7 +323,16 @@ export default function MinSideClient() {
 
       <div style={S.wrap}>
         <div style={{marginBottom:'1.5rem'}}>
-          <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',margin:0}}>Hei! 👋</h1>
+          <h1 style={{fontFamily:'Fraunces, Georgia, serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',margin:0,letterSpacing:'-0.02em'}}>
+            Hei!{' '}
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style={{display:'inline-block',verticalAlign:'middle',marginBottom:'4px'}}>
+              <path d="M10 6 C10 6 8 4 6.5 5.5 C5 7 7 9 7 9 L11 14" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <path d="M13 5 C13 5 11 3 9.5 4.5 C8 6 10 8 10 8 L14 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <path d="M16 5.5 C16 5.5 14.5 3.5 13 5 C11.5 6.5 13 8.5 13 8.5 L17 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <path d="M19 7 C19 7 17.5 5 16 6.5 C14.5 8 16 10 16 10 L20 15" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <path d="M7 9 L11 18 C11 18 12 21 14 21 C16 21 18 19 18 17 L20 15 L17 13 L14 13 L11 14 Z" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="rgba(77,168,204,0.12)"/>
+            </svg>
+          </h1>
           <p style={{color:'#6b8fa3',margin:'4px 0 0',fontSize:'0.9rem'}}>{sub!.email}</p>
         </div>
 
