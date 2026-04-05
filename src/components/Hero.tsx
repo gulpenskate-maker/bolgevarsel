@@ -10,113 +10,128 @@ function getDagensDato() {
   return `${dagNavn[nå.getDay()]} ${nå.getDate()}. ${månedNavn[nå.getMonth()]}`
 }
 
-const locations = [
-  {
-    name: 'Tånes',
-    date: getDagensDato(),
-    vær: '11°C',
-    vind: 'Svak bris 3.2 m/s fra SV',
-    bølger: '0.4m – Stille 🟢',
-    status: 'Flott dag på sjøen! ⛵',
-  },
-  {
-    name: 'Stavanger havn',
-    date: getDagensDato(),
-    vær: '10°C',
-    vind: 'Lett bris 4.1 m/s fra V',
-    bølger: '0.6m – Rolig 🟡',
-    status: 'Greit for erfarne 🚤',
-  },
-  {
-    name: 'Jærstrendene',
-    date: getDagensDato(),
-    vær: '9°C',
-    vind: 'Frisk bris 7.8 m/s fra SV',
-    bølger: '1.2m – Moderat 🟠',
-    status: 'Vær forsiktig i dag! 🏄',
-  },
-  {
-    name: 'Tananger',
-    date: getDagensDato(),
-    vær: '11°C',
-    vind: 'Svak bris 2.9 m/s fra S',
-    bølger: '0.3m – Stille 🟢',
-    status: 'Perfekt dag på sjøen! ⛵',
-  },
-  {
-    name: 'Karmøy',
-    date: getDagensDato(),
-    vær: '10°C',
-    vind: 'Lett bris 5.2 m/s fra NV',
-    bølger: '0.8m – Rolig 🟡',
-    status: 'Bra forhold i dag 🎣',
-  },
-  {
-    name: 'Haugesund',
-    date: getDagensDato(),
-    vær: '12°C',
-    vind: 'Svak bris 3.5 m/s fra N',
-    bølger: '0.5m – Stille 🟢',
-    status: 'Flott dag på sjøen! ⛵',
-  },
-  {
-    name: 'Kristiansand',
-    date: getDagensDato(),
-    vær: '13°C',
-    vind: 'Lett bris 4.4 m/s fra SØ',
-    bølger: '0.5m – Stille 🟢',
-    status: 'Flott dag på sjøen! ⛵',
-  },
-  {
-    name: 'Lillesand',
-    date: getDagensDato(),
-    vær: '13°C',
-    vind: 'Svak bris 2.8 m/s fra S',
-    bølger: '0.3m – Stille 🟢',
-    status: 'Perfekt skjærgårdsdag! 🏝️',
-  },
-  {
-    name: 'Grimstad',
-    date: getDagensDato(),
-    vær: '14°C',
-    vind: 'Svak bris 3.1 m/s fra SV',
-    bølger: '0.4m – Stille 🟢',
-    status: 'Perfekt for kajakk! 🚣',
-  },
-  {
-    name: 'Drøbak',
-    date: getDagensDato(),
-    vær: '12°C',
-    vind: 'Lett bris 4.8 m/s fra N',
-    bølger: '0.3m – Stille 🟢',
-    status: 'Bra dag i fjorden! ⛵',
-  },
-  {
-    name: 'Oslofjorden',
-    date: getDagensDato(),
-    vær: '11°C',
-    vind: 'Frisk bris 6.2 m/s fra SV',
-    bølger: '0.7m – Rolig 🟡',
-    status: 'Greit for erfarne 🚤',
-  },
+const retning = (deg: number) => {
+  const retninger = ['N','NØ','Ø','SØ','S','SV','V','NV']
+  return retninger[Math.round(deg / 45) % 8]
+}
+
+const vindBeskrivelse = (ms: number) => {
+  if (ms < 0.5) return 'Stille'
+  if (ms < 1.6) return 'Flau vind'
+  if (ms < 3.4) return 'Svak vind'
+  if (ms < 5.5) return 'Lett bris'
+  if (ms < 8.0) return 'Laber bris'
+  if (ms < 10.8) return 'Frisk bris'
+  if (ms < 13.9) return 'Liten kuling'
+  if (ms < 17.2) return 'Stiv kuling'
+  if (ms < 20.8) return 'Sterk kuling'
+  if (ms < 24.5) return 'Liten storm'
+  if (ms < 28.5) return 'Full storm'
+  return 'Orkan'
+}
+
+const sjøStatus = (vindMs: number, bølgeM: number) => {
+  if (vindMs >= 20.8 || bølgeM >= 4.0) return { tekst: 'FAREVARSEL – Bli på land! 🚨', ikon: '🔴', fare: true }
+  if (vindMs >= 13.9 || bølgeM >= 2.5) return { tekst: 'Farlige forhold – ikke gå ut! ⛔', ikon: '🔴', fare: true }
+  if (vindMs >= 10.8 || bølgeM >= 1.5) return { tekst: 'Kuling – kun erfarne 🌊', ikon: '🟠', fare: false }
+  if (vindMs >= 8.0 || bølgeM >= 1.0)  return { tekst: 'Moderat – vær forsiktig 🏄', ikon: '🟠', fare: false }
+  if (vindMs >= 5.5 || bølgeM >= 0.5)  return { tekst: 'Greit for erfarne 🚤', ikon: '🟡', fare: false }
+  return { tekst: 'Flott dag på sjøen! ⛵', ikon: '🟢', fare: false }
+}
+
+const LOCATIONS = [
+  { name: 'Tånes',          lat: 58.97, lon: 5.72 },
+  { name: 'Stavanger havn', lat: 58.97, lon: 5.73 },
+  { name: 'Jærstrendene',   lat: 58.77, lon: 5.52 },
+  { name: 'Tananger',       lat: 58.94, lon: 5.58 },
+  { name: 'Karmøy',         lat: 59.28, lon: 5.29 },
+  { name: 'Haugesund',      lat: 59.41, lon: 5.27 },
+  { name: 'Kristiansand',   lat: 58.15, lon: 8.00 },
+  { name: 'Lillesand',      lat: 58.25, lon: 8.38 },
+  { name: 'Grimstad',       lat: 58.34, lon: 8.59 },
+  { name: 'Drøbak',         lat: 59.66, lon: 10.63 },
+  { name: 'Oslofjorden',    lat: 59.45, lon: 10.55 },
 ]
+
+type LiveData = {
+  name: string
+  date: string
+  vær: string
+  vind: string
+  bølger: string
+  status: string
+  fare: boolean
+  loaded: boolean
+}
+
+async function fetchLocation(loc: typeof LOCATIONS[0]): Promise<LiveData> {
+  try {
+    const res = await fetch(
+      `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${loc.lat}&lon=${loc.lon}`,
+      { headers: { 'User-Agent': 'bolgevarsel.no kontakt@bolgevarsel.no' } }
+    )
+    const data = await res.json()
+    const now = data.properties.timeseries[0].data.instant.details
+    const vindMs = Math.round(now.wind_speed * 10) / 10
+    const vindDir = Math.round(now.wind_from_direction)
+    const temp = Math.round(now.air_temperature)
+
+    // Bølgehøyde fra ocean forecast hvis tilgjengelig, ellers estimat fra vind
+    let bølgeM = now.significant_wave_height
+    if (!bølgeM) bølgeM = Math.pow(vindMs * 0.12, 2) // grovt estimat
+
+    const status = sjøStatus(vindMs, bølgeM)
+    const bølgeTekst = `${bølgeM.toFixed(1)}m – ${status.ikon}`
+
+    return {
+      name: loc.name,
+      date: getDagensDato(),
+      vær: `${temp}°C`,
+      vind: `${vindBeskrivelse(vindMs)} ${vindMs} m/s fra ${retning(vindDir)}`,
+      bølger: bølgeTekst,
+      status: status.tekst,
+      fare: status.fare,
+      loaded: true,
+    }
+  } catch {
+    return {
+      name: loc.name, date: getDagensDato(),
+      vær: '–', vind: '–', bølger: '–',
+      status: 'Kunne ikke hente data', fare: false, loaded: true,
+    }
+  }
+}
 
 export default function Hero() {
   const [current, setCurrent] = useState(0)
   const [fading, setFading] = useState(false)
+  const [liveData, setLiveData] = useState<LiveData[]>(
+    LOCATIONS.map(l => ({
+      name: l.name, date: getDagensDato(),
+      vær: '…', vind: '…', bølger: '…',
+      status: 'Henter data…', fare: false, loaded: false,
+    }))
+  )
+
+  useEffect(() => {
+    LOCATIONS.forEach(async (loc, i) => {
+      const data = await fetchLocation(loc)
+      setLiveData(prev => { const n = [...prev]; n[i] = data; return n })
+    })
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
       setFading(true)
       setTimeout(() => {
-        setCurrent(prev => (prev + 1) % locations.length)
+        setCurrent(prev => (prev + 1) % LOCATIONS.length)
         setFading(false)
       }, 500)
     }, 5000)
     return () => clearInterval(interval)
   }, [])
 
-  const loc = locations[current]
+  const loc = liveData[current]
 
   return (
     <section className={styles.hero}>
@@ -156,14 +171,16 @@ export default function Hero() {
           <a href="#hvordan" className={styles.btnGhost}>Se hvordan det fungerer →</a>
         </div>
       </div>
-      <div className={styles.smsFloat} style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.4s ease' }}>
+      <div className={styles.smsFloat} style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.5s ease', border: loc.fare ? '2px solid #e53e3e' : undefined }}>
         <div className={styles.smsHeader}><div className={styles.smsDot}/><span className={styles.smsLabel}>Bølgevarsel · 07:30</span></div>
         <div className={styles.smsBody}>
           <div className={styles.smsRow}>🌊 <strong>{loc.name} – {loc.date}</strong></div>
           <div className={styles.smsRow}>⛅ Vær: {loc.vær}</div>
           <div className={styles.smsRow}>💨 Vind: {loc.vind}</div>
           <div className={styles.smsRow}>🌊 Bølger: {loc.bølger}</div>
-          <div className={styles.smsRow}>✅ {loc.status}</div>
+          <div className={styles.smsRow} style={{ color: loc.fare ? '#e53e3e' : undefined, fontWeight: loc.fare ? 600 : undefined }}>
+            {loc.fare ? '🚨' : '✅'} {loc.status}
+          </div>
           <span className={styles.smsTag}>Levert kl. 07:30</span>
         </div>
       </div>
