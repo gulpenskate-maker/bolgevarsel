@@ -277,7 +277,7 @@ export default function MinSideClient() {
         </div>
 
         <div style={S.card}>
-          <h2 style={S.sTitle}>🗺️ Mine lokasjoner</h2>
+          <h2 style={S.sTitle}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.52 1.5 3.5 3.52 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.48-2.02-4.5-4.5-4.5z" stroke="#1a6080" strokeWidth="1.3" fill="none" strokeLinejoin="round"/><circle cx="8" cy="6" r="1.5" stroke="#1a6080" strokeWidth="1.2" fill="none"/></svg>Mine lokasjoner</span></h2>
           {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen lokasjoner ennå.</p>}
           <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:locs.length?'1.2rem':0}}>
             {locs.map(loc => (
@@ -286,7 +286,7 @@ export default function MinSideClient() {
                   <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{loc.name}</div>
                   <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginTop:'2px'}}>{loc.lat.toFixed(4)}°N · {recs.filter(r=>r.location_id===loc.id).length} mottaker(e)</div>
                 </div>
-                <button style={S.btnDanger} onClick={()=>deleteLoc(loc.id)}>🗑</button>
+                <button style={S.btnDanger} onClick={()=>deleteLoc(loc.id)}><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
               </div>
             ))}
           </div>
@@ -316,7 +316,7 @@ export default function MinSideClient() {
         </div>
 
         <div style={S.card}>
-          <h2 style={S.sTitle}>📱 Mine mottakere</h2>
+          <h2 style={S.sTitle}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="4.5" y="1" width="7" height="13" rx="1.5" stroke="#1a6080" strokeWidth="1.3" fill="none"/><path d="M6.5 11h3" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/></svg>Mine mottakere</span></h2>
           {recs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen mottakere ennå.</p>}
           <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:locs.length?'1.2rem':0}}>
             {recs.map(rec => (
@@ -326,7 +326,7 @@ export default function MinSideClient() {
                     <input style={S.inp} placeholder="Navn (valgfritt)" value={editName} onChange={e=>setEditName(e.target.value)} />
                     <input style={S.inp} placeholder="Telefon (+4799...)" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
                     <div style={{display:'flex',gap:'0.5rem'}}>
-                      <button style={{...S.btnPrimary,flex:1,padding:'0.7rem'}} type="submit">💾 Lagre</button>
+                      <button style={{...S.btnPrimary,flex:1,padding:'0.7rem'}} type="submit"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg> Lagre</button>
                       <button style={{...S.btnGhost,padding:'0.7rem 1rem'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
                     </div>
                   </form>
@@ -338,16 +338,16 @@ export default function MinSideClient() {
                         {rec.name&&<span>{rec.phone} · </span>}
                         <span>{locs.find(l=>l.id===rec.location_id)?.name||'Ukjent lokasjon'}</span>
                         <span style={S.tag(rec.active)}>{rec.active?'Aktiv':'Pauset'}</span>
-                        <span style={{...S.tag(rec.sms_enabled!==false),fontSize:'0.7rem'}}>{rec.sms_enabled!==false?'📱 SMS på':'🔕 SMS av'}</span>
+                        <span style={{...S.tag(rec.sms_enabled!==false),fontSize:'0.7rem'}}>{rec.sms_enabled!==false?'SMS på':'SMS av'}</span>
                       </div>
                     </div>
                     <div style={{display:'flex',gap:'0.4rem'}}>
-                      <button style={S.btnGhost} onClick={()=>toggleRec(rec)}>{rec.active?'⏸':'▶'}</button>
+                      <button style={S.btnGhost} onClick={()=>toggleRec(rec)}>{rec.active?(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2" y="2" width="3" height="8" rx="0.5" fill="currentColor"/><rect x="7" y="2" width="3" height="8" rx="0.5" fill="currentColor"/></svg></>):(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 2l7 4-7 4V2z" fill="currentColor"/></svg></>)}</button>
                       <button style={{...S.btnGhost,background:rec.sms_enabled!==false?'#f0fdf4':'#fef9c3',color:rec.sms_enabled!==false?'#16a34a':'#854d0e'}} onClick={()=>toggleSms(rec)}>
-                        {rec.sms_enabled!==false?'📱':'🔕'}
+                        {rec.sms_enabled!==false?(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2.5" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3.5 5.5h5M3.5 7.5h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/></svg></>):(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2.5" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3 3.5l6 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/></svg></>)}
                       </button>
-                      <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}}>✏️</button>
-                      <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)}>🗑</button>
+                      <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}}><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L5 11H3v-2l6.5-6.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+                      <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)}><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
                     </div>
                   </div>
                 )}
@@ -369,7 +369,7 @@ export default function MinSideClient() {
         </div>
 
         <div style={S.card}>
-          <h2 style={S.sTitle}>⚙️ Min konto</h2>
+          <h2 style={S.sTitle}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="#1a6080" strokeWidth="1.3" fill="none"/><path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l0.9 0.9M11.7 11.7l0.9 0.9M3.4 12.6l0.9-0.9M11.7 4.3l0.9-0.9" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/></svg>Min konto</span></h2>
           <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
             <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
               <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'2px'}}>E-postadresse</div>
