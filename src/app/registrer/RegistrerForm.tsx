@@ -2,12 +2,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import styles from './page.module.css'
-
-const PLANS = [
-  { id: 'basis', name: 'Basis', price: 49, desc: '1 lokasjon · 1 mottaker', features: ['Daglig SMS kl. 07:30', 'Bølge, vind og temperatur', '1 kystlokasjon'] },
-  { id: 'familie', name: 'Familie', price: 99, desc: '1 lokasjon · 3 mottakere', features: ['Daglig SMS kl. 07:30', 'Bølge, vind og temperatur', 'Farevarsel ved kuling'], featured: true },
-  { id: 'pro', name: 'Pro', price: 199, desc: '5 lokasjoner · 5 mottakere', features: ['Daglig SMS kl. 07:30', 'Ukentlig rapport', 'Farevarsel ved kuling'] },
-]
+import { PLANS } from '@/lib/plans'
 
 export default function RegistrerForm() {
   const searchParams = useSearchParams()
@@ -52,9 +47,13 @@ export default function RegistrerForm() {
           {PLANS.map((plan) => (
             <button key={plan.id} className={`${styles.plan} ${selectedPlan === plan.id ? styles.selected : ''} ${plan.featured ? styles.featured : ''}`} onClick={() => setSelectedPlan(plan.id)}>
               {plan.featured && <span className={styles.badge}>Mest populær</span>}
+              {!plan.smsEnabled && <span className={styles.badge} style={{background:'#f0fdf4',color:'#16a34a'}}>Kun e-post</span>}
               <div className={styles.planName}>{plan.name}</div>
               <div className={styles.planPrice}>{plan.price}<span>kr/mnd</span></div>
-              <div className={styles.planDesc}>{plan.desc}</div>
+              <div className={styles.planDesc}>
+                {plan.lokasjoner} lokasjon{plan.lokasjoner > 1 ? 'er' : ''}
+                {plan.mottakere > 0 ? ` · ${plan.mottakere} mottaker${plan.mottakere > 1 ? 'e' : ''}` : ' · Kun e-post'}
+              </div>
               <ul className={styles.planFeatures}>{plan.features.map(f => <li key={f}>{f}</li>)}</ul>
             </button>
           ))}
