@@ -28,27 +28,30 @@ export default function MinSideClient() {
   const [loading, setLoading] = useState(false)
   const [view, setView] = useState<'login'|'dash'>('login')
 
-  // Auto-login ved sideinnlasting
+  // Auto-login: sjekk cookie (magic link) først, så localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('bv_email')
-    if (saved) {
-      setEmail(saved)
-      setLoading(true)
-      fetch(`/api/min-side?email=${encodeURIComponent(saved)}`)
-        .then(r => r.json())
-        .then(d => {
-          if (d.subscriber) {
-            setSub(d.subscriber)
-            setLocs(d.locations || [])
-            setRecs(d.recipients || [])
-            setView('dash')
-          } else {
-            localStorage.removeItem('bv_email')
+    setLoading(true)
+    fetch('/api/min-side/session')
+      .then(r => r.json())
+      .then(async d => {
+        if (d.subscriber) {
+          setSub(d.subscriber); setLocs(d.locations || []); setRecs(d.recipients || [])
+          setEmail(d.subscriber.email); setView('dash'); setLoading(false)
+        } else {
+          const saved = localStorage.getItem('bv_email')
+          if (saved) {
+            setEmail(saved)
+            const r2 = await fetch(`/api/min-side?email=${encodeURIComponent(saved)}`)
+            const d2 = await r2.json()
+            if (d2.subscriber) {
+              setSub(d2.subscriber); setLocs(d2.locations || []); setRecs(d2.recipients || [])
+              setView('dash')
+            } else localStorage.removeItem('bv_email')
           }
           setLoading(false)
-        })
-        .catch(() => setLoading(false))
-    }
+        }
+      })
+      .catch(() => setLoading(false))
   }, [])
 
   // Lokasjonssøk
@@ -79,16 +82,17 @@ export default function MinSideClient() {
     }, 300)
   }, [locQ])
 
+  const [magicSendt, setMagicSendt] = useState(false)
+
   async function login(e: React.FormEvent) {
     e.preventDefault(); setLoading(true)
-    const r = await fetch(`/api/min-side?email=${encodeURIComponent(email)}`)
+    const r = await fetch('/api/auth/send-magic-link', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    })
     const d = await r.json()
-    if (d.subscriber) {
-      setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[])
-      setView('dash')
-      localStorage.setItem('bv_email', email)
-    }
-    else alert('Ingen konto funnet for denne e-postadressen.')
+    if (d.ok) setMagicSendt(true)
+    else alert(d.error || 'Ingen konto funnet for denne e-postadressen.')
     setLoading(false)
   }
 
@@ -157,13 +161,22 @@ export default function MinSideClient() {
       <div style={{maxWidth:420,margin:'0 auto',padding:'5rem 1.5rem',textAlign:'center'}}>
         {loading ? (
           <p style={{color:'#6b8fa3'}}>Laster inn...</p>
+        ) : magicSendt ? (
+          <>
+            <div style={{fontSize:'3rem',marginBottom:'1rem'}}>📬</div>
+            <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Sjekk innboksen!</h1>
+            <p style={{color:'#6b8fa3',marginBottom:'0.5rem'}}>Vi har sendt en innloggingslenke til</p>
+            <p style={{color:'#0a2a3d',fontWeight:500,marginBottom:'1.5rem'}}>{email}</p>
+            <p style={{color:'#6b8fa3',fontSize:'0.85rem'}}>Lenken er gyldig i 1 time. Sjekk eventuelt søppelpost.</p>
+            <button onClick={()=>setMagicSendt(false)} style={{...S.btnGhost,marginTop:'1rem',fontSize:'0.85rem'}}>← Prøv en annen e-post</button>
+          </>
         ) : (
           <>
             <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Min side</h1>
-            <p style={{color:'#6b8fa3',marginBottom:'2rem'}}>Logg inn med e-posten du registrerte deg med</p>
+            <p style={{color:'#6b8fa3',marginBottom:'2rem'}}>Skriv inn e-posten din — vi sender deg en innloggingslenke</p>
             <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem'}}>
               <input style={S.inp} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required />
-              <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem'}} disabled={loading}>{loading?'Søker...':'Logg inn →'}</button>
+              <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem'}} disabled={loading}>{loading?'Sender...':'Send innloggingslenke →'}</button>
             </form>
           </>
         )}
