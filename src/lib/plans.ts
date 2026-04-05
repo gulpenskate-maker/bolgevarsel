@@ -36,8 +36,8 @@ export const PLANS: Plan[] = [
   {
     id: 'familie',
     name: 'Familie',
-    price: 149,
-    priceId: 'price_1TIn6WDF2t9Ys3TQgiisUNoM',
+    price: 179,
+    priceId: 'price_1TInAnDF2t9Ys3TQJLe4tkWR',
     featured: true,
     lokasjoner: 1,
     mottakere: 3,
