@@ -18,6 +18,8 @@
 .smsDot { width: 8px; height: 8px; border-radius: 50%; background: #4cd964; }
 .smsLabel { font-size: 0.7rem; font-weight: 500; color: var(--text-light); letter-spacing: 0.05em; text-transform: uppercase; }
 .smsBody { font-size: 0.82rem; line-height: 1.6; color: var(--text-dark); }
-.smsRow { display: flex; align-items: flex-start; gap: 0.4rem; margin-bottom: 0.25rem; }
+.smsRow { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-dark); line-height: 1.9; }
+.smsGood { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 500; margin-top: 4px; line-height: 1.9; }
+.smsGoodIcon { width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .smsTag { display: inline-block; margin-top: 0.8rem; background: #e8f8ee; color: #1a7a45; font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.6rem; border-radius: 100px; }
 @media (max-width: 768px) { .smsFloat { display: none; } }

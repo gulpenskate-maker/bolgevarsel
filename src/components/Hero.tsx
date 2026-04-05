@@ -31,12 +31,12 @@ const vindBeskrivelse = (ms: number) => {
 }
 
 const sjøStatus = (vindMs: number, bølgeM: number) => {
-  if (vindMs >= 20.8 || bølgeM >= 4.0) return { tekst: 'FAREVARSEL – Bli på land!', ikon: '🔴', fare: true }
-  if (vindMs >= 13.9 || bølgeM >= 2.5) return { tekst: 'Farlige forhold – ikke gå ut! ⛔', ikon: '🔴', fare: true }
-  if (vindMs >= 10.8 || bølgeM >= 1.5) return { tekst: 'Kuling – kun erfarne 🌊', ikon: '🟠', fare: false }
-  if (vindMs >= 8.0 || bølgeM >= 1.0)  return { tekst: 'Moderat – vær forsiktig 🏄', ikon: '🟠', fare: false }
-  if (vindMs >= 5.5 || bølgeM >= 0.5)  return { tekst: 'Greit for erfarne 🚤', ikon: '🟡', fare: false }
-  return { tekst: 'Flott dag på sjøen! ⛵', ikon: '🟢', fare: false }
+  if (vindMs >= 20.8 || bølgeM >= 4.0) return { tekst: 'FAREVARSEL – Bli på land!', ikon: '', fare: true }
+  if (vindMs >= 13.9 || bølgeM >= 2.5) return { tekst: 'Farlige forhold – ikke gå ut', ikon: '', fare: true }
+  if (vindMs >= 10.8 || bølgeM >= 1.5) return { tekst: 'Kuling – kun erfarne', ikon: '', fare: false }
+  if (vindMs >= 8.0 || bølgeM >= 1.0)  return { tekst: 'Moderat – vær forsiktig', ikon: '', fare: false }
+  if (vindMs >= 5.5 || bølgeM >= 0.5)  return { tekst: 'Greit for erfarne', ikon: '', fare: false }
+  return { tekst: 'Gode forhold — fin dag på sjøen', ikon: '', fare: false }
 }
 
 const LOCATIONS = [
@@ -86,7 +86,7 @@ async function fetchLocation(loc: typeof LOCATIONS[0]): Promise<LiveData> {
 
     // Bruk maks vind neste 24t for fareberegning
     const status = sjøStatus(maxVindMs, bølgeM)
-    const bølgeTekst = `${bølgeM.toFixed(1)}m – ${status.ikon}`
+    const bølgeTekst = `${bølgeM.toFixed(1)} m`
 
     return {
       name: loc.name,
@@ -176,15 +176,47 @@ export default function Hero() {
           <a href="#hvordan" className={styles.btnGhost}>Se hvordan det fungerer →</a>
         </div>
       </div>
-      <div className={styles.smsFloat} style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.5s ease', border: loc.fare ? '2px solid #e53e3e' : undefined }}>
-        <div className={styles.smsHeader}><div className={styles.smsDot}/><span className={styles.smsLabel}>Bølgevarsel · 07:30</span></div>
+      <div className={styles.smsFloat} style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.5s ease' }}>
+        <div className={styles.smsHeader}>
+          <div className={styles.smsDot}/>
+          <span className={styles.smsLabel}>Bølgevarsel · {loc.name} · {loc.date}</span>
+        </div>
         <div className={styles.smsBody}>
-          <div className={styles.smsRow}>🌊 <strong>{loc.name} – {loc.date}</strong></div>
-          <div className={styles.smsRow}>⛅ Vær: {loc.vær}</div>
-          <div className={styles.smsRow}>💨 Vind: {loc.vind}</div>
-          <div className={styles.smsRow}>🌊 Bølger: {loc.bølger}</div>
-          <div className={styles.smsRow} style={{ color: loc.fare ? '#e53e3e' : undefined, fontWeight: loc.fare ? 600 : undefined }}>
-            {loc.fare ? '🚨' : '✅'} {loc.status}
+          {/* Bølger */}
+          <div className={styles.smsRow}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
+              <path d="M1 7 Q3 5 5 7 Q7 9 9 7 Q11 5 13 7 Q14 8 15 7" stroke="#1a6080" strokeWidth="1.4" strokeLinecap="round"/>
+              <path d="M1 10.5 Q3 8.5 5 10.5 Q7 12.5 9 10.5 Q11 8.5 13 10.5 Q14 11.5 15 10.5" stroke="#4da8cc" strokeWidth="1" strokeLinecap="round" opacity="0.6"/>
+            </svg>
+            <span>Bølger: {loc.bølger}</span>
+          </div>
+          {/* Vind */}
+          <div className={styles.smsRow}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
+              <path d="M1 6 Q6 4 10 6 Q12 7 14 6" stroke="#1a6080" strokeWidth="1.4" strokeLinecap="round"/>
+              <path d="M1 9.5 Q5 8 8 9.5 Q10 10.5 12 9.5" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/>
+              <path d="M14 6 Q16 6 16 7.5 Q16 9 14 9 H9" stroke="#1a6080" strokeWidth="1.1" strokeLinecap="round" opacity="0.35"/>
+            </svg>
+            <span>Vind: {loc.vind}</span>
+          </div>
+          {/* Luft */}
+          <div className={styles.smsRow}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
+              <path d="M8 2 V9" stroke="#1a6080" strokeWidth="1.3" strokeLinecap="round"/>
+              <circle cx="8" cy="12" r="2.5" stroke="#1a6080" strokeWidth="1.3" fill="none"/>
+              <path d="M10 4.5 H12 M10 6.5 H11.5" stroke="#1a6080" strokeWidth="1" strokeLinecap="round" opacity="0.4"/>
+            </svg>
+            <span>Luft: {loc.vær}</span>
+          </div>
+          {/* Status */}
+          <div className={styles.smsGood} style={{ color: loc.fare ? '#dc2626' : '#1a7a50' }}>
+            <span className={styles.smsGoodIcon} style={{ background: loc.fare ? '#dc2626' : '#1a7a50' }}>
+              {loc.fare
+                ? <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 9H1Z" stroke="white" strokeWidth="1.2" strokeLinejoin="round" fill="none"/><path d="M5 4V6" stroke="white" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                : <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5 L4.5 7.5 L8.5 3" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              }
+            </span>
+            <span>{loc.status}</span>
           </div>
           <span className={styles.smsTag}>Levert kl. 07:30</span>
         </div>
