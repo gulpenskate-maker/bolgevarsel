@@ -34,23 +34,6 @@ export const PLANS: Plan[] = [
     ],
   },
   {
-    id: 'basis',
-    name: 'Basis',
-    price: 49,
-    priceId: 'price_1TI5ooDF2t9Ys3TQvOQMK6c7',
-    featured: false,
-    lokasjoner: 1,
-    mottakere: 1,
-    smsEnabled: true,
-    features: [
-      '1 lokasjon',
-      '1 mottaker',
-      'Daglig SMS kl. 07:30',
-      'Bølge, vind og temperatur',
-      'Farevarsel ved ekstremvær',
-    ],
-  },
-  {
     id: 'familie',
     name: 'Familie',
     price: 99,
