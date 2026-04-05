@@ -1,4 +1,17 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Hjelpesenter – Bølgevarsel',
+  description: 'Finn svar på spørsmål om Bølgevarsel — kom i gang, forstå varsler, administrer kontoen din og les vanlige spørsmål.',
+  alternates: { canonical: 'https://bolgevarsel.no/hjelp' },
+  openGraph: {
+    title: 'Hjelpesenter – Bølgevarsel',
+    description: 'Alt du trenger for å komme i gang med daglige sjøvarsler.',
+    url: 'https://bolgevarsel.no/hjelp',
+  },
+}
+
 
 // Egne SVG-ikoner i Bølgevarsel-stil
 function IkonBolge() {
@@ -101,6 +114,20 @@ const KATEGORIER = [
 export default function HjelpPage() {
   return (
     <div style={{ minHeight:'100vh', background:'#f0f4f8', fontFamily:'DM Sans, sans-serif' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: [
+            { '@type': 'Question', name: 'Hva er Bølgevarsel?', acceptedAnswer: { '@type': 'Answer', text: 'Bølgevarsel er en norsk tjeneste som sender daglig sjøvarsel på SMS — skreddersydd for din kystlokasjon.' } },
+            { '@type': 'Question', name: 'Når sendes varselet?', acceptedAnswer: { '@type': 'Answer', text: 'Varselet sendes kl. 07:30 hver morgen, men du kan velge ditt eget leveringstidspunkt mellom 04:00 og 12:00.' } },
+            { '@type': 'Question', name: 'Hvilke lokasjoner støttes?', acceptedAnswer: { '@type': 'Answer', text: 'Vi støtter hele norskekysten via Open-Meteo Marine API og met.no.' } },
+            { '@type': 'Question', name: 'Kan jeg ha flere mottakere?', acceptedAnswer: { '@type': 'Answer', text: 'Ja, du kan ha opptil 5 mottakere per lokasjon — for eksempel deg selv, ektefelle og svigerforeldre.' } },
+            { '@type': 'Question', name: 'Hva koster det?', acceptedAnswer: { '@type': 'Answer', text: 'Vi tilbyr tre planer: Kyst (49 kr/mnd, kun e-post), Familie (179 kr/mnd, SMS til opptil 4) og Pro (299 kr/mnd, opptil 5 mottakere og 3 lokasjoner).' } },
+          ]
+        }) }}
+      />
       <nav style={{ padding:'1.2rem 2rem', borderBottom:'1px solid rgba(10,42,61,0.08)', background:'rgba(240,244,248,0.95)', position:'sticky' as const, top:0, zIndex:100 }}>
         <div style={{ maxWidth:900, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <Link href="/" style={{ fontFamily:'Georgia, serif', fontSize:'1.3rem', fontWeight:400, color:'#0a2a3d', textDecoration:'none', letterSpacing:'-0.01em' }}>

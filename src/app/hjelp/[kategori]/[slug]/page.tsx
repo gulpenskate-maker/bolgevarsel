@@ -3,6 +3,29 @@ import { notFound } from 'next/navigation'
 import { ARTIKLER } from '@/lib/hjelp-artikler'
 import '../../artikkel.css'
 
+
+import type { Metadata } from 'next'
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ kategori: string; slug: string }> }
+): Promise<Metadata> {
+  const { kategori, slug } = await params
+  const artikkel = ARTIKLER[`${kategori}/${slug}`]
+  if (!artikkel) return {}
+  const url = `https://bolgevarsel.no/hjelp/${kategori}/${slug}`
+  return {
+    title: artikkel.tittel,
+    description: `${artikkel.tittel} — les vår guide på Bølgevarsel hjelpesenteret.`,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${artikkel.tittel} | Bølgevarsel`,
+      description: `${artikkel.tittel} — les vår guide på Bølgevarsel hjelpesenteret.`,
+      url,
+      type: 'article',
+    },
+  }
+}
+
 export default async function ArtikkelPage({ params }: { params: Promise<{ kategori: string; slug: string }> }) {
   const { kategori, slug } = await params
   const artikkel = ARTIKLER[`${kategori}/${slug}`]
