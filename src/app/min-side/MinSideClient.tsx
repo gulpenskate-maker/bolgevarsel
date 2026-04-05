@@ -229,10 +229,6 @@ export default function MinSideClient() {
               <p style={{margin:'0 0 0.7rem',fontSize:'0.78rem',fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'0.06em'}}>Hjelp</p>
               <div style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
                 <div style={{fontSize:'0.88rem',color:'#334155'}}>
-                  <strong>Husker du ikke e-posten?</strong> Sjekk Stripe-kvitteringen du fikk etter kjøp, eller kontakt{' '}
-                  <a href="mailto:hei@bolgevarsel.no" style={{color:'#1a6080'}}>hei@bolgevarsel.no</a>
-                </div>
-                <div style={{fontSize:'0.88rem',color:'#334155'}}>
                   <strong>Trenger du hjelp?</strong>{' '}
                   <a href="/hjelp" style={{color:'#1a6080',textDecoration:'none',fontWeight:500}}>Se hjelpesenter →</a>
                 </div>
