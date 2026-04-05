@@ -1,0 +1,19 @@
+/* Artikkel innhold styling */
+.artikkel-innhold h2 {
+  font-family: serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #0a2a3d;
+  margin: 1.8rem 0 0.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #f1f5f9;
+}
+.artikkel-innhold h2:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.artikkel-innhold p { color: #334155; line-height: 1.7; margin: 0 0 1rem; }
+.artikkel-innhold ul, .artikkel-innhold ol { color: #334155; line-height: 1.7; margin: 0 0 1rem; padding-left: 1.4rem; }
+.artikkel-innhold li { margin-bottom: 0.4rem; }
+.artikkel-innhold a { color: #4da8cc; }
+.artikkel-innhold code { background: #f0f8fc; padding: 2px 6px; border-radius: 6px; font-size: 0.88em; color: #0a2a3d; }
+.artikkel-innhold table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+.artikkel-innhold th { background: #f0f8fc; padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #0a2a3d; }
+.artikkel-innhold td { padding: 10px; border-bottom: 1px solid #f1f5f9; color: #334155; }
