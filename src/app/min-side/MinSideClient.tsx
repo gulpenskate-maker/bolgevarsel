@@ -67,20 +67,23 @@ export default function MinSideClient() {
   const [sub, setSub] = useState<Sub|null>(null)
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true) // starter som true mens vi sjekker session
   const [view, setView] = useState<'login'|'dash'>('login')
   const [magicSendt, setMagicSendt] = useState(false)
   const [feil, setFeil] = useState('')
 
   // Auto-login: sjekk cookie (magic link) først, så localStorage
   useEffect(() => {
-    setLoading(true)
-    fetch('/api/min-side/session')
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 3000) // 3s timeout
+
+    fetch('/api/min-side/session', { signal: controller.signal })
       .then(r => r.json())
       .then(async d => {
+        clearTimeout(timeout)
         if (d.subscriber) {
           setSub(d.subscriber); setLocs(d.locations || []); setRecs(d.recipients || [])
-          setEmail(d.subscriber.email); setView('dash'); setLoading(false)
+          setEmail(d.subscriber.email); setView('dash')
         } else {
           const saved = localStorage.getItem('bv_email')
           if (saved) {
@@ -92,10 +95,10 @@ export default function MinSideClient() {
               setView('dash')
             } else localStorage.removeItem('bv_email')
           }
-          setLoading(false)
         }
       })
-      .catch(() => setLoading(false))
+      .catch(() => clearTimeout(timeout))
+      .finally(() => setLoading(false))
   }, [])
 
   const [locQ, setLocQ] = useState('')
