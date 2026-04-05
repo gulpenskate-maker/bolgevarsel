@@ -73,21 +73,23 @@ async function fetchLocation(loc: typeof LOCATIONS[0]): Promise<LiveData> {
     const data = await res.json()
     const now = data.properties.timeseries[0].data.instant.details
     const vindMs = Math.round(now.wind_speed * 10) / 10
+    const vindKast = now.wind_speed_of_gust ? Math.round(now.wind_speed_of_gust * 10) / 10 : vindMs
     const vindDir = Math.round(now.wind_from_direction)
     const temp = Math.round(now.air_temperature)
 
-    // Bølgehøyde fra ocean forecast hvis tilgjengelig, ellers estimat fra vind
+    // Bølgehøyde fra ocean forecast hvis tilgjengelig, ellers estimat fra vindkast
     let bølgeM = now.significant_wave_height
-    if (!bølgeM) bølgeM = Math.pow(vindMs * 0.12, 2) // grovt estimat
+    if (!bølgeM) bølgeM = Math.pow(vindKast * 0.10, 2)
 
-    const status = sjøStatus(vindMs, bølgeM)
+    // Bruk vindkast for fareberegning — det er det farlige
+    const status = sjøStatus(vindKast, bølgeM)
     const bølgeTekst = `${bølgeM.toFixed(1)}m – ${status.ikon}`
 
     return {
       name: loc.name,
       date: getDagensDato(),
       vær: `${temp}°C`,
-      vind: `${vindBeskrivelse(vindMs)} ${vindMs} m/s fra ${retning(vindDir)}`,
+      vind: `${vindBeskrivelse(vindMs)} ${vindMs} m/s (kast ${vindKast} m/s) fra ${retning(vindDir)}`,
       bølger: bølgeTekst,
       status: status.tekst,
       fare: status.fare,
