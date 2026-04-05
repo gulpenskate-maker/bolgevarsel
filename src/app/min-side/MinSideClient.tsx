@@ -57,6 +57,8 @@ export default function MinSideClient() {
   const [sendTime, setSendTime] = useState('07:30')
   const [sendTimeSaving, setSendTimeSaving] = useState(false)
   const [sendTimeSaved, setSendTimeSaved] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [accountLoading, setAccountLoading] = useState<string|null>(null)
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
@@ -443,6 +445,42 @@ export default function MinSideClient() {
               </div>
             </div>
             <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+              <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'8px'}}>Abonnementsstatus</div>
+              <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+                {sub!.status === 'active' ? (
+                  <button
+                    onClick={async()=>{
+                      setAccountLoading('pause')
+                      await fetch('/api/min-side/frys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,action:'pause'})})
+                      setSub({...sub!,status:'paused'})
+                      setAccountLoading(null)
+                    }}
+                    style={{padding:'0.5rem 1rem',borderRadius:8,background:'#fff',border:'1px solid rgba(10,42,61,0.15)',color:'#0a2a3d',cursor:'pointer',fontSize:'0.82rem',fontWeight:500,display:'flex',alignItems:'center',gap:'6px'}}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="2" width="3.5" height="9" rx="0.5" fill="currentColor"/><rect x="7.5" y="2" width="3.5" height="9" rx="0.5" fill="currentColor"/></svg>
+                    {accountLoading==='pause'?'Fryser...':'Frys abonnement'}
+                  </button>
+                ) : sub!.status === 'paused' ? (
+                  <button
+                    onClick={async()=>{
+                      setAccountLoading('resume')
+                      await fetch('/api/min-side/frys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,action:'resume'})})
+                      setSub({...sub!,status:'active'})
+                      setAccountLoading(null)
+                    }}
+                    style={{padding:'0.5rem 1rem',borderRadius:8,background:'#1a6080',border:'none',color:'white',cursor:'pointer',fontSize:'0.82rem',fontWeight:500,display:'flex',alignItems:'center',gap:'6px'}}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 2l8 4.5-8 4.5V2z" fill="currentColor"/></svg>
+                    {accountLoading==='resume'?'Aktiverer...':'Reaktiver abonnement'}
+                  </button>
+                ) : null}
+              </div>
+              {sub!.status === 'paused' && (
+                <p style={{fontSize:'0.75rem',color:'#6b8fa3',margin:'6px 0 0'}}>Abonnementet er frosset — ingen varsler sendes. Reaktiver når du er klar.</p>
+              )}
+            </div>
+
+            <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
               <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'8px'}}>Leveringstidspunkt for daglig rapport</div>
               <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
                 <select
@@ -469,6 +507,37 @@ export default function MinSideClient() {
             <p style={{fontSize:'0.8rem',color:'#6b8fa3',padding:'0 0.5rem'}}>
               Spørsmål? Besøk <a href="/hjelp" style={{color:'#4da8cc'}}>hjelpesenteret</a> eller kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
             </p>
+
+            <div style={{borderTop:'1px solid rgba(10,42,61,0.07)',paddingTop:'0.75rem',marginTop:'0.25rem'}}>
+              {!showDeleteConfirm ? (
+                <button
+                  onClick={()=>setShowDeleteConfirm(true)}
+                  style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:'0.8rem',padding:'0 0.5rem',textDecoration:'underline',textUnderlineOffset:'2px'}}
+                >Slett konto</button>
+              ) : (
+                <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:10,padding:'0.85rem 1rem'}}>
+                  <p style={{fontSize:'0.85rem',color:'#991b1b',fontWeight:500,margin:'0 0 0.3rem'}}>Er du sikker?</p>
+                  <p style={{fontSize:'0.78rem',color:'#b91c1c',margin:'0 0 0.75rem',lineHeight:1.5}}>Stripe-abonnementet kanselleres umiddelbart. Data slettes permanent etter 30 dager.</p>
+                  <div style={{display:'flex',gap:'0.5rem'}}>
+                    <button
+                      onClick={async()=>{
+                        setAccountLoading('delete')
+                        await fetch('/api/min-side/slett-konto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id})})
+                        await fetch('/api/auth/logout',{method:'POST'})
+                        localStorage.removeItem('bv_email')
+                        setView('login')
+                        setSub(null)
+                      }}
+                      style={{padding:'0.45rem 1rem',borderRadius:8,background:'#ef4444',border:'none',color:'white',cursor:'pointer',fontSize:'0.82rem',fontWeight:500}}
+                    >{accountLoading==='delete'?'Sletter...':'Ja, slett kontoen'}</button>
+                    <button
+                      onClick={()=>setShowDeleteConfirm(false)}
+                      style={{padding:'0.45rem 1rem',borderRadius:8,background:'white',border:'1px solid #fecaca',color:'#991b1b',cursor:'pointer',fontSize:'0.82rem'}}
+                    >Avbryt</button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
