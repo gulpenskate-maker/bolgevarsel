@@ -27,13 +27,15 @@ export default function ForWho() {
   return (
     <section className={styles.wrap}>
       <div className={styles.inner}>
-        <span className={styles.label}>Hvem er det for?</span>
-        <h2 className={styles.title}>Laget for alle som<br/>bryr seg om sjøen</h2>
-        <p className={styles.sub}>Enten du bekymrer deg for barna dine på sjøen, planlegger helgeturen eller bare vil vite om det er verdt å ta ut båten — Bølgevarsel gir deg svaret før du trenger det.</p>
+        <div className={styles.header}>
+          <span className={styles.label}>Hvem er det for?</span>
+          <h2 className={styles.title}>Laget for alle som<br/>bryr seg om sjøen</h2>
+          <p className={styles.sub}>Enten du bekymrer deg for barna dine på sjøen, planlegger helgeturen eller bare vil vite om det er verdt å ta ut båten — Bølgevarsel gir deg svaret før du trenger det.</p>
+        </div>
         <div className={styles.grid}>
           {personas.map((p) => (
             <div key={p.tittel} className={styles.card}>
-              <div className={styles.emoji}>{p.emoji}</div>
+              <span className={styles.emoji}>{p.emoji}</span>
               <h3 className={styles.cardTitle}>{p.tittel}</h3>
               <p className={styles.cardText}>{p.beskrivelse}</p>
             </div>
