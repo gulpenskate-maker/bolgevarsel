@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import styles from './ForWho.module.css'
 
 const personas = [
@@ -43,8 +44,7 @@ export default function ForWho() {
           {personas.map((p) => (
             <div key={p.tittel} className={styles.card}>
               <div className={styles.imgWrap}>
-                <img src={p.img} alt={p.imgAlt} className={styles.img} />
-                <div className={styles.imgFallback} />
+                <Image src={p.img} alt={p.imgAlt} fill className={styles.img} style={{ objectFit: 'cover' }} />
               </div>
               <div className={styles.cardContent}>
                 <span className={styles.tag}>{p.tag}</span>
