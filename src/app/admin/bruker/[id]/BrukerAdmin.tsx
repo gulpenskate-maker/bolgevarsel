@@ -105,6 +105,7 @@ export default function BrukerAdmin({ sub }: { sub: any }) {
           {sub.bv_recipients?.map((r: any) => (
             <RecipientRow key={r.id} r={r} subscriberId={sub.id} onSave={() => router.refresh()} onDelete={() => slettMottaker(r.id)} />
           ))}
+          <NyMottakerForm subscriberId={sub.id} lokasjoner={sub.bv_locations ?? []} onSave={() => router.refresh()} />
         </div>
 
         {/* LOKASJONER */}
@@ -253,5 +254,63 @@ function LokasjonRow({ l, onSave, onDelete }: { l: any; onSave: () => void; onDe
         <button onClick={onDelete} style={{ background: 'rgba(239,68,68,0.15)', color: '#f87171', padding: '4px 12px', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>🗑 Slett</button>
       </div>
     </div>
+  )
+}
+
+// Legg til ny mottaker
+function NyMottakerForm({ subscriberId, lokasjoner, onSave }: { subscriberId: string; lokasjoner: any[]; onSave: () => void }) {
+  const [open, setOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [locationId, setLocationId] = useState(lokasjoner[0]?.id || '')
+  const [smsEnabled, setSmsEnabled] = useState(true)
+  const [loading, setLoading] = useState(false)
+
+  async function lagre(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    await fetch('/api/min-side/recipient', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subscriber_id: subscriberId, location_id: locationId, phone, name }),
+    })
+    // Oppdater sms_enabled om den er av
+    setName(''); setPhone(''); setLoading(false); setOpen(false)
+    onSave()
+  }
+
+  const minInp: React.CSSProperties = { padding: '0.6rem 0.9rem', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: '0.88rem', fontFamily: 'inherit', outline: 'none', width: '100%', boxSizing: 'border-box' as const }
+
+  if (!open) return (
+    <button onClick={() => setOpen(true)} style={{ marginTop: '0.6rem', background: 'rgba(77,168,204,0.15)', color: '#4da8cc', padding: '0.5rem 1.2rem', borderRadius: 100, border: '1px solid rgba(77,168,204,0.3)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 500, width: '100%' }}>
+      + Legg til mottaker
+    </button>
+  )
+
+  return (
+    <form onSubmit={lagre} style={{ marginTop: '0.8rem', background: 'rgba(77,168,204,0.06)', borderRadius: 10, padding: '1rem', border: '1px solid rgba(77,168,204,0.2)' }}>
+      <div style={{ fontSize: '0.72rem', color: '#4da8cc', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.7rem', fontWeight: 600 }}>+ Ny mottaker</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <input style={minInp} placeholder="Navn (valgfritt)" value={name} onChange={e => setName(e.target.value)} />
+        <input style={minInp} placeholder="Telefonnummer (+4799...)" value={phone} onChange={e => setPhone(e.target.value)} required />
+        {lokasjoner.length > 1 && (
+          <select style={{ ...minInp }} value={locationId} onChange={e => setLocationId(e.target.value)} required>
+            {lokasjoner.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+          </select>
+        )}
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
+          <input type="checkbox" checked={smsEnabled} onChange={e => setSmsEnabled(e.target.checked)} />
+          SMS aktivert
+        </label>
+      </div>
+      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.8rem' }}>
+        <button type="submit" disabled={loading} style={{ background: '#4da8cc', color: 'white', padding: '0.55rem 1.2rem', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 500 }}>
+          {loading ? '...' : '💾 Lagre'}
+        </button>
+        <button type="button" onClick={() => setOpen(false)} style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', padding: '0.55rem 1rem', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}>
+          Avbryt
+        </button>
+      </div>
+    </form>
   )
 }
