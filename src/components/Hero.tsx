@@ -169,6 +169,7 @@ export default function Hero() {
       </svg>
       <div className={styles.content}>
         <div className={styles.eyebrow}><span className={styles.line}/>Sjøvarseltjeneste for norskekysten<span className={styles.line}/></div>
+        <h1 className={styles.h1}>Sjøvarsel rett i <em>lomma</em></h1>
         <p className={styles.sub}>Rett i lomma når det gjelder. Daglig sjøvarsel på SMS, detaljert rapport på e-post og kritisk farevarsel for din kystlokasjon.</p>
         <div className={styles.actions}>
           <a href="/registrer" className={styles.btnPrimary}>Start gratis prøveperiode</a>
