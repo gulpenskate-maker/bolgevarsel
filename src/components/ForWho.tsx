@@ -43,7 +43,7 @@ export default function ForWho() {
           {personas.map((p) => (
             <div key={p.tittel} className={styles.card}>
               <div className={styles.imgWrap}>
-                <img src={p.img} alt={p.imgAlt} className={styles.img} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                <img src={p.img} alt={p.imgAlt} className={styles.img} />
                 <div className={styles.imgFallback} />
               </div>
               <div className={styles.cardContent}>
