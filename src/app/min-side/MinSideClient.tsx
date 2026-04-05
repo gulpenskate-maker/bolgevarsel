@@ -12,7 +12,7 @@ const S = {
   btnPrimary: { background:'#0a2a3d', color:'white', padding:'0.7rem 1.2rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.88rem', fontWeight:500 } as React.CSSProperties,
   btnDanger: { background:'#fee2e2', color:'#ef4444', padding:'0.5rem 0.9rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:500 } as React.CSSProperties,
   btnGhost: { background:'#f0f8fc', color:'#0a2a3d', padding:'0.5rem 0.9rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:500 } as React.CSSProperties,
-  badge: (plan: string) => ({ background: plan==='pro'?'#fef3c7':plan==='familie'?'#dbeafe':'#e8f4f8', color: plan==='pro'?'#92400e':plan==='familie'?'#1d4ed8':'#0a2a3d', padding:'3px 10px', borderRadius:100, fontSize:'0.78rem', fontWeight:500 }) as React.CSSProperties,
+  badge: (plan: string) => ({ background: plan==='pro'?'#fef3c7':plan==='familie'?'#dbeafe':'#e8f4f8', color: plan==='pro'?'#92400e':plan==='familie'?'#1d4ed8':'#0a2a3d', padding:'7px 18px', borderRadius:100, fontSize:'0.85rem', fontWeight:500 }) as React.CSSProperties,
   tag: (active: boolean) => ({ background: active?'#dcfce7':'#f1f5f9', color: active?'#16a34a':'#64748b', padding:'2px 8px', borderRadius:100, fontSize:'0.75rem', fontWeight:500 }) as React.CSSProperties,
 }
 
@@ -256,7 +256,7 @@ export default function MinSideClient() {
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
             <span style={{...S.badge(sub!.plan)}}>{planLabel[sub!.plan]}</span>
             <button onClick={async()=>{await fetch('/api/auth/logout',{method:'POST'});localStorage.removeItem('bv_email');setView('login');setSub(null)}}
-              style={{background:'transparent',border:'1px solid rgba(10,42,61,0.15)',color:'rgba(10,42,61,0.4)',cursor:'pointer',fontSize:'0.78rem',padding:'4px 14px',borderRadius:100}}>Logg ut</button>
+              style={{background:'transparent',border:'1px solid rgba(10,42,61,0.2)',color:'rgba(10,42,61,0.5)',cursor:'pointer',fontSize:'0.85rem',padding:'7px 18px',borderRadius:100,fontFamily:'inherit'}}>Logg ut</button>
           </div>
         </div>
         <svg viewBox="0 0 1440 180" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',display:'block',marginTop:'-6px'}}>
