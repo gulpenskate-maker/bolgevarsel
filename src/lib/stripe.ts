@@ -1,20 +1,5 @@
-export const PLANS = {
-  basis: {
-    name: 'Basis',
-    price: 49,
-    priceId: 'price_1TI5ooDF2t9Ys3TQvOQMK6c7',
-  },
-  familie: {
-    name: 'Familie',
-    price: 99,
-    priceId: 'price_1TI5otDF2t9Ys3TQQeZqW0Bh',
-  },
-  pro: {
-    name: 'Pro',
-    price: 199,
-    priceId: 'price_1TI5owDF2t9Ys3TQai5tcWFQ',
-  },
-}
+import { getPlanById } from '@/lib/plans'
+export { PLANS } from '@/lib/plans'
 
 async function stripeRequest(path: string, body?: Record<string, string>) {
   const res = await fetch(`https://api.stripe.com/v1${path}`, {

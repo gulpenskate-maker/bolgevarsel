@@ -1,10 +1,5 @@
 import styles from './Pricing.module.css'
-
-const plans = [
-  { name: 'Basis', price: '49', features: ['1 lokasjon', '1 mottaker', 'Daglig SMS kl. 07:30', 'Bølge, vind og temperatur', 'Farevarsel ved ekstremvær'], featured: false },
-  { name: 'Familie', price: '99', features: ['1 lokasjon', 'Opptil 3 mottakere', 'Daglig SMS kl. 07:30', 'Bølge, vind og temperatur', 'Farevarsel ved kuling', 'Farevarsel ved ekstremvær'], featured: true },
-  { name: 'Pro', price: '199', features: ['5 lokasjoner', 'Opptil 5 mottakere', 'Daglig SMS kl. 07:30', 'Ukentlig rapport', 'Farevarsel ved kuling', 'Farevarsel ved ekstremvær'], featured: false },
-]
+import { PLANS } from '@/lib/plans'
 
 export default function Pricing() {
   return (
@@ -13,8 +8,8 @@ export default function Pricing() {
         <span className={styles.label}>Priser</span>
         <h2 className={styles.title}>Enkle, transparente<br/>abonnementer</h2>
         <div className={styles.plans}>
-          {plans.map((plan) => (
-            <div key={plan.name} className={`${styles.plan} ${plan.featured ? styles.featured : ''}`}>
+          {PLANS.map((plan) => (
+            <div key={plan.id} className={`${styles.plan} ${plan.featured ? styles.featured : ''}`}>
               {plan.featured && <div className={styles.badge}>Mest populær</div>}
               <div className={styles.planName}>{plan.name}</div>
               <div className={styles.price}>{plan.price}<span className={styles.suffix}>kr</span></div>

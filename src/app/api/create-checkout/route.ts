@@ -1,16 +1,17 @@
 export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
-import { PLANS, getOrCreateCustomer, createCheckoutSession } from '@/lib/stripe'
+import { getOrCreateCustomer, createCheckoutSession } from '@/lib/stripe'
+import { getPlanById } from '@/lib/plans'
 import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function POST(req: NextRequest) {
   try {
     const { email, plan } = await req.json()
-    if (!email || !plan || !PLANS[plan as keyof typeof PLANS]) {
+    const selectedPlan = getPlanById(plan)
+    if (!email || !selectedPlan) {
       return NextResponse.json({ error: 'Ugyldig forespørsel' }, { status: 400 })
     }
     const supabase = getSupabaseAdmin()
-    const selectedPlan = PLANS[plan as keyof typeof PLANS]
     const customer = await getOrCreateCustomer(email)
     await supabase.from('bv_subscribers').upsert({
       email, stripe_customer_id: customer.id, plan, status: 'inactive',
