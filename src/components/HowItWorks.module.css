@@ -6,7 +6,7 @@
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
 .step { background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid rgba(10,42,61,0.07); transition: transform 0.2s, box-shadow 0.2s; }
 .step:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(10,42,61,0.1); }
-.stepNum { font-family: 'Fraunces', serif; font-size: 3rem; font-weight: 300; color: rgba(10,42,61,0.08); line-height: 1; margin-bottom: 0.75rem; }
+
 .stepIcon { width: 52px; height: 52px; background: #e8f4f8; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; }
 .stepTitle { font-size: 1.05rem; font-weight: 500; color: var(--ocean-deep); margin-bottom: 0.6rem; }
 .stepDesc { font-size: 0.9rem; color: var(--text-light); line-height: 1.65; margin-bottom: 1rem; }

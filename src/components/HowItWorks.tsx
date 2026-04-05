@@ -32,7 +32,7 @@ const steps = [
   },
   {
     num: '03',
-    title: 'Du mottar komplett rapport kl. 07:30',
+    title: 'Du mottar din daglige sjørapport',
     desc: 'Rapporten gir deg konkrete tall og en tydelig vurdering. SMS for rask oversikt, e-post for full detalj.',
     details: [],
     icon: (
@@ -60,13 +60,13 @@ export default function HowItWorks() {
   return (
     <section id="hvordan" className={styles.section}>
       <span className={styles.label}>Slik fungerer det</span>
-      <h2 className={styles.title}>Daglig sjørapport,<br/>levert kl. 07:30</h2>
+      <h2 className={styles.title}>Daglig sjørapport<br/>levert når du vil</h2>
       <p className={styles.sub}>Du velger lokasjon og mottakere — vi gjør resten. Hver morgen får du en komplett rapport med alt du trenger for å ta gode beslutninger på sjøen.</p>
 
       <div className={styles.steps}>
         {steps.map((step) => (
           <div key={step.num} className={styles.step}>
-            <div className={styles.stepNum}>{step.num}</div>
+            
             <div className={styles.stepIcon}>{step.icon}</div>
             <h3 className={styles.stepTitle}>{step.title}</h3>
             <p className={styles.stepDesc}>{step.desc}</p>

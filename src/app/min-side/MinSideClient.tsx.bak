@@ -47,16 +47,13 @@ function BrandIllustration() {
   )
 }
 
-type Sub = { id:string; email:string; plan:string; status:string; send_time?:string }
+type Sub = { id:string; email:string; plan:string; status:string }
 type Loc = { id:string; name:string; lat:number; lon:number }
 type Rec = { id:string; location_id:string; phone:string; name:string; active:boolean; sms_enabled:boolean }
 
 export default function MinSideClient() {
   const [email, setEmail] = useState('')
   const [sub, setSub] = useState<Sub|null>(null)
-  const [sendTime, setSendTime] = useState('07:30')
-  const [sendTimeSaving, setSendTimeSaving] = useState(false)
-  const [sendTimeSaved, setSendTimeSaved] = useState(false)
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
@@ -73,7 +70,7 @@ export default function MinSideClient() {
         clearTimeout(timeout)
         if (d.subscriber) {
           setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[])
-          setEmail(d.subscriber.email); setSendTime(d.subscriber.send_time||'07:30'); setView('dash')
+          setEmail(d.subscriber.email); setView('dash')
         } else {
           const saved = localStorage.getItem('bv_email')
           if (saved) {
@@ -232,6 +229,10 @@ export default function MinSideClient() {
               <p style={{margin:'0 0 0.7rem',fontSize:'0.78rem',fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'0.06em'}}>Hjelp</p>
               <div style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
                 <div style={{fontSize:'0.88rem',color:'#334155'}}>
+                  <strong>Husker du ikke e-posten?</strong> Sjekk Stripe-kvitteringen du fikk etter kjøp, eller kontakt{' '}
+                  <a href="mailto:hei@bolgevarsel.no" style={{color:'#1a6080'}}>hei@bolgevarsel.no</a>
+                </div>
+                <div style={{fontSize:'0.88rem',color:'#334155'}}>
                   <strong>Trenger du hjelp?</strong>{' '}
                   <a href="/hjelp" style={{color:'#1a6080',textDecoration:'none',fontWeight:500}}>Se hjelpesenter →</a>
                 </div>
@@ -381,30 +382,6 @@ export default function MinSideClient() {
                 <span style={{fontWeight:500,color:'#0a2a3d'}}>{planLabel[sub!.plan]}</span>
                 <span style={S.tag(sub!.status==='active')}>{sub!.status==='active'?'Aktivt':'Inaktivt'}</span>
               </div>
-            </div>
-            <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
-              <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'8px'}}>Leveringstidspunkt for daglig rapport</div>
-              <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
-                <select
-                  value={sendTime}
-                  onChange={e=>setSendTime(e.target.value)}
-                  style={{padding:'0.4rem 0.7rem',borderRadius:8,border:'1.5px solid rgba(10,42,61,0.12)',background:'white',fontSize:'0.9rem',color:'#0a2a3d',cursor:'pointer'}}
-                >
-                  {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00'].map(t=>(
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-                <button
-                  onClick={async()=>{
-                    setSendTimeSaving(true); setSendTimeSaved(false)
-                    await fetch('/api/min-side/send-time',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,send_time:sendTime})})
-                    setSendTimeSaving(false); setSendTimeSaved(true)
-                    setTimeout(()=>setSendTimeSaved(false),2500)
-                  }}
-                  style={{padding:'0.4rem 1rem',borderRadius:8,background:'#0a2a3d',color:'white',border:'none',cursor:'pointer',fontSize:'0.85rem',fontWeight:500}}
-                >{sendTimeSaving?'Lagrer...':sendTimeSaved?'Lagret!':'Lagre'}</button>
-              </div>
-              <p style={{fontSize:'0.75rem',color:'#6b8fa3',margin:'6px 0 0'}}>Velg når du vil motta rapporten — perfekt for tidlig morgenfiske</p>
             </div>
             <p style={{fontSize:'0.8rem',color:'#6b8fa3',padding:'0 0.5rem'}}>
               Spørsmål? Besøk <a href="/hjelp" style={{color:'#4da8cc'}}>hjelpesenteret</a> eller kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
