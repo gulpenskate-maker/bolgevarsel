@@ -31,7 +31,7 @@ const vindBeskrivelse = (ms: number) => {
 }
 
 const sjøStatus = (vindMs: number, bølgeM: number) => {
-  if (vindMs >= 20.8 || bølgeM >= 4.0) return { tekst: 'FAREVARSEL – Bli på land! 🚨', ikon: '🔴', fare: true }
+  if (vindMs >= 20.8 || bølgeM >= 4.0) return { tekst: 'FAREVARSEL – Bli på land!', ikon: '🔴', fare: true }
   if (vindMs >= 13.9 || bølgeM >= 2.5) return { tekst: 'Farlige forhold – ikke gå ut! ⛔', ikon: '🔴', fare: true }
   if (vindMs >= 10.8 || bølgeM >= 1.5) return { tekst: 'Kuling – kun erfarne 🌊', ikon: '🟠', fare: false }
   if (vindMs >= 8.0 || bølgeM >= 1.0)  return { tekst: 'Moderat – vær forsiktig 🏄', ikon: '🟠', fare: false }
