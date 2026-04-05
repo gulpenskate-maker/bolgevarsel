@@ -250,25 +250,77 @@ export default function MinSideClient() {
   // DASHBOARD VIEW
   return (
     <div style={S.page}>
-      <div style={{ overflow:'hidden', maxHeight:80 }}>
-        <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',display:'block'}}>
-          <defs><linearGradient id="dashSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a6080"/><stop offset="100%" stopColor="#0a2a3d"/></linearGradient></defs>
-          <rect width="1440" height="80" fill="#c8e8f5"/>
-          <circle cx="1350" cy="25" r="18" fill="#ffd580" opacity="0.6"/>
-          <path d="M0 35 Q180 20 360 35 Q540 50 720 32 Q900 15 1080 32 Q1260 49 1440 35 L1440 80 L0 80 Z" fill="url(#dashSea)"/>
-          <g opacity="0.25"><path d="M0 55 Q120 48 240 55 Q360 62 480 55 Q600 48 720 55 Q840 62 960 55 Q1080 48 1200 55 Q1320 62 1440 55" fill="none" stroke="white" strokeWidth="1.5"><animateTransform attributeName="transform" type="translate" from="0 0" to="100 0" dur="4s" repeatCount="indefinite"/></path></g>
-        </svg>
-      </div>
-      <nav style={{...S.nav, background:'#0a2a3d', borderBottom:'none', marginTop:'-1px'}}>
-        <div style={{maxWidth:680,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-          <a href="/" style={{...S.logo, color:'white'}}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a>
+      <div style={{background:'#c8e8f5', overflow:'hidden', position:'relative'}}>
+        <div style={{padding:'1.1rem 2rem', display:'flex', alignItems:'center', justifyContent:'space-between', maxWidth:720, margin:'0 auto', position:'relative', zIndex:2}}>
+          <a href="/" style={{fontFamily:'Georgia,serif', fontSize:'1.25rem', fontWeight:400, color:'#0a2a3d', textDecoration:'none', letterSpacing:'-0.01em'}}>bølge<span style={{color:'#1a6080'}}>varsel</span></a>
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
-            <span style={{...S.badge(sub!.plan), background:'rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.8)'}}>{planLabel[sub!.plan]}</span>
+            <span style={{...S.badge(sub!.plan)}}>{planLabel[sub!.plan]}</span>
             <button onClick={async()=>{await fetch('/api/auth/logout',{method:'POST'});localStorage.removeItem('bv_email');setView('login');setSub(null)}}
-              style={{background:'transparent',border:'1px solid rgba(255,255,255,0.2)',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:'0.78rem',padding:'4px 12px',borderRadius:100}}>Logg ut</button>
+              style={{background:'transparent',border:'1px solid rgba(10,42,61,0.15)',color:'rgba(10,42,61,0.4)',cursor:'pointer',fontSize:'0.78rem',padding:'4px 14px',borderRadius:100}}>Logg ut</button>
           </div>
         </div>
-      </nav>
+        <svg viewBox="0 0 1440 180" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',display:'block',marginTop:'-6px'}}>
+          <style>{`
+            .bv-sun  { animation: bv-bob  8s ease-in-out infinite; }
+            .bv-boat { animation: bv-sail 7s ease-in-out infinite; }
+            .bv-f1   { animation: bv-swim  5s ease-in-out infinite; }
+            .bv-f2   { animation: bv-swim2 7s ease-in-out 1.5s infinite; }
+            .bv-f3   { animation: bv-swim  9s ease-in-out 3s infinite reverse; }
+          `}</style>
+          <defs>
+            <linearGradient id="sky8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c8e8f5"/><stop offset="100%" stopColor="#a8d4e8"/></linearGradient>
+            <linearGradient id="sea8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a6080"/><stop offset="100%" stopColor="#0a2a3d"/></linearGradient>
+            <linearGradient id="sea8b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e5a7a"/><stop offset="100%" stopColor="#0d3350"/></linearGradient>
+          </defs>
+          <rect width="1440" height="180" fill="url(#sky8)"/>
+          {/* Sol */}
+          <g className="bv-sun"><circle cx="1340" cy="42" r="26" fill="#fff4e0" opacity="0.4"/>
+          <circle cx="1340" cy="42" r="17" fill="#ffd580" opacity="0.5"/>
+          <circle cx="1340" cy="42" r="10" fill="#ffbc40" opacity="0.72"/></g>
+          {/* Sky */}
+          <ellipse cx="200" cy="32" rx="55" ry="12" fill="white" opacity="0.2"/>
+          <ellipse cx="235" cy="22" rx="38" ry="10" fill="white" opacity="0.15"/>
+          {/* Fjell */}
+          <path d="M0 125 L180 72 L320 108 L500 58 L660 95 L820 55 L980 90 L1140 60 L1300 95 L1440 68 L1440 180 L0 180 Z" fill="#6a9ab8" opacity="0.28"/>
+          {/* Øy */}
+          <ellipse cx="380" cy="118" rx="95" ry="16" fill="#2a5a3a" opacity="0.9"/>
+          <path d="M295 118 Q338 102 380 97 Q422 102 465 118 Z" fill="#3a6a4a" opacity="0.95"/>
+          {/* Fyrtårn */}
+          <rect x="377" y="76" width="9" height="26" fill="#e8e0d0" rx="1.5"/>
+          <rect x="379" y="83" width="3" height="4" fill="#a8c8d8" rx="0.5" opacity="0.7"/>
+          <rect x="373" y="72" width="17" height="6" fill="#cc3333" rx="1.5"/>
+          <circle cx="381" cy="72" r="6" fill="#ffdd44" opacity="0.15"/>
+          <circle cx="381" cy="72" r="3.5" fill="#ffdd44" opacity="0.9"/>
+          {/* Båt */}
+          <g className="bv-boat"><path d="M820 118 Q855 130 890 118 L885 128 Q855 138 825 128 Z" fill="#0a2a3d" opacity="0.75"/>
+          <line x1="825" y1="128" x2="885" y2="128" stroke="#c8b89a" strokeWidth="1" opacity="0.45"/>
+          <line x1="855" y1="118" x2="855" y2="82" stroke="#0a2a3d" strokeWidth="1.8" strokeLinecap="round" opacity="0.7"/>
+          <line x1="843" y1="92" x2="867" y2="92" stroke="#0a2a3d" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
+          <path d="M855 84 L884 114 L855 118 Z" fill="rgba(235,228,212,0.88)"/>
+          <path d="M855 87 L829 112 L855 118 Z" fill="rgba(235,228,212,0.55)"/>
+          <path d="M855 82 L867 86 L855 90 Z" fill="#cc3333" opacity="0.9"/></g>
+          {/* Hav */}
+          <path d="M0 126 Q180 112 360 126 Q540 140 720 122 Q900 104 1080 122 Q1260 140 1440 124 L1440 180 L0 180 Z" fill="url(#sea8)"/>
+          <path d="M0 138 Q200 128 400 138 Q600 148 800 136 Q1000 124 1200 136 Q1350 144 1440 138 L1440 180 L0 180 Z" fill="url(#sea8b)" opacity="0.55"/>
+          {/* Bølgelinjer */}
+          <path d="M0 147 Q180 141 360 147 Q540 153 720 147 Q900 141 1080 147 Q1260 153 1440 147" fill="none" stroke="rgba(255,255,255,0.17)" strokeWidth="1.2"/>
+          <path d="M0 157 Q180 151 360 157 Q540 163 720 155 Q900 147 1080 155 Q1260 163 1440 157" fill="none" stroke="rgba(255,255,255,0.09)" strokeWidth="1"/>
+          {/* Fisk 1 */}
+          <g className="bv-f1"><ellipse cx="240" cy="141" rx="16" ry="6" fill="none" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2"/>
+          <path d="M224 141 L215 135 M224 141 L215 147" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2" strokeLinecap="round"/>
+          <circle cx="252" cy="139" r="1.5" fill="rgba(77,168,204,0.52)"/>
+          <path d="M238 135 Q242 130 246 135" fill="none" stroke="rgba(77,168,204,0.38)" strokeWidth="1"/></g>
+          {/* Fisk 2 */}
+          <g className="bv-f2"><ellipse cx="1060" cy="152" rx="11" ry="4.5" fill="none" stroke="rgba(77,168,204,0.36)" strokeWidth="1"/>
+          <path d="M1049 152 L1041 147 M1049 152 L1041 157" stroke="rgba(77,168,204,0.36)" strokeWidth="1" strokeLinecap="round"/>
+          <circle cx="1069" cy="150" r="1.2" fill="rgba(77,168,204,0.36)"/></g>
+          {/* Fisk 3 */}
+          <g className="bv-f3"><ellipse cx="620" cy="163" rx="8" ry="3" fill="none" stroke="rgba(77,168,204,0.2)" strokeWidth="0.9"/>
+          <path d="M612 163 L607 160 M612 163 L607 166" stroke="rgba(77,168,204,0.2)" strokeWidth="0.9" strokeLinecap="round"/></g>
+          {/* Overgang */}
+          <path d="M0 171 Q360 163 720 171 Q1080 179 1440 171 L1440 180 L0 180 Z" fill="#e8f4f8"/>
+        </svg>
+      </div>
 
       <div style={S.wrap}>
         <div style={{marginBottom:'1.5rem'}}>

@@ -23,3 +23,11 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Min side header animations */
+@keyframes bv-swim  { 0%,100%{transform:translateX(0)} 50%{transform:translateX(14px)} }
+@keyframes bv-swim2 { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-10px)} }
+@keyframes bv-bob   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+@keyframes bv-sail  { 0%,100%{transform:translateX(0) translateY(0)} 33%{transform:translateX(12px) translateY(-3px)} 66%{transform:translateX(-8px) translateY(-1px)} }
+@keyframes bv-wv1   { from{transform:translateX(0)} to{transform:translateX(-160px)} }
+@keyframes bv-wv2   { from{transform:translateX(0)} to{transform:translateX(140px)} }
