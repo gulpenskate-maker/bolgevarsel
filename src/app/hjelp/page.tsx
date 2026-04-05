@@ -1,10 +1,53 @@
 import Link from 'next/link'
 
+// Egne SVG-ikoner i Bølgevarsel-stil
+function IkonBolge() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 20 Q6 15 10 20 Q14 25 18 20 Q22 15 26 20 Q28 22 30 20" stroke="#0a2a3d" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M2 26 Q6 21 10 26 Q14 31 18 26 Q22 21 26 26 Q28 28 30 26" stroke="#4da8cc" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.5"/>
+      <circle cx="22" cy="9" r="4" fill="#ffbc40" opacity="0.8"/>
+      <path d="M4 13 Q8 9 12 11" stroke="#0a2a3d" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.3"/>
+    </svg>
+  )
+}
+
+function IkonVarsel() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 22 Q8 17 12 22 Q16 27 20 22 Q24 17 28 22" stroke="#0a2a3d" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M14 8 L14 4 M14 8 C10 8 7 11 7 15 L7 20 L21 20 L21 15 C21 11 18 8 14 8Z" stroke="#0a2a3d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      <line x1="11" y1="20" x2="17" y2="20" stroke="#4da8cc" strokeWidth="2.5" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
+function IkonKonto() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="11" r="5" stroke="#0a2a3d" strokeWidth="1.8" fill="none"/>
+      <path d="M6 26 C6 21 10 18 16 18 C22 18 26 21 26 26" stroke="#0a2a3d" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+      <path d="M20 26 Q22 22 26 22" stroke="#4da8cc" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.6"/>
+    </svg>
+  )
+}
+
+function IkonFaq() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 22 Q8 17 12 22 Q16 27 20 22 Q24 17 28 22" stroke="#4da8cc" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.5"/>
+      <circle cx="16" cy="13" r="8" stroke="#0a2a3d" strokeWidth="1.8" fill="none"/>
+      <path d="M13 10.5 C13 8.5 15 7.5 16.5 8 C18 8.5 19 10 18 11.5 C17 13 16 13 16 15" stroke="#0a2a3d" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+      <circle cx="16" cy="17.5" r="1" fill="#0a2a3d"/>
+    </svg>
+  )
+}
+
 const KATEGORIER = [
   {
     slug: 'kom-i-gang',
     tittel: 'Kom i gang',
-    ikon: '🚀',
+    Ikon: IkonBolge,
     beskrivelse: 'Alt du trenger for å sette opp ditt første bølgevarsel',
     artikler: [
       { slug: 'hva-er-bolgevarsel', tittel: 'Hva er Bølgevarsel?' },
@@ -17,7 +60,7 @@ const KATEGORIER = [
   {
     slug: 'varsler',
     tittel: 'Varsler og rapporter',
-    ikon: '🌊',
+    Ikon: IkonVarsel,
     beskrivelse: 'Forstå SMS-varslene og e-postrapportene dine',
     artikler: [
       { slug: 'nar-sendes-varsel', tittel: 'Når sendes varselet?' },
@@ -30,7 +73,7 @@ const KATEGORIER = [
   {
     slug: 'konto',
     tittel: 'Konto og abonnement',
-    ikon: '⚙️',
+    Ikon: IkonKonto,
     beskrivelse: 'Administrer kontoen din, bytt plan eller si opp',
     artikler: [
       { slug: 'logg-inn', tittel: 'Slik logger du inn' },
@@ -43,7 +86,7 @@ const KATEGORIER = [
   {
     slug: 'faq',
     tittel: 'Vanlige spørsmål',
-    ikon: '❓',
+    Ikon: IkonFaq,
     beskrivelse: 'Svar på de mest stilte spørsmålene',
     artikler: [
       { slug: 'hvor-noyaktig', tittel: 'Hvor nøyaktig er værdataene?' },
@@ -60,7 +103,7 @@ export default function HjelpPage() {
     <div style={{ minHeight:'100vh', background:'#f0f4f8', fontFamily:'DM Sans, sans-serif' }}>
       <nav style={{ padding:'1.2rem 2rem', borderBottom:'1px solid rgba(10,42,61,0.08)', background:'rgba(240,244,248,0.95)', position:'sticky' as const, top:0, zIndex:100 }}>
         <div style={{ maxWidth:900, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-          <Link href="/" style={{ fontFamily:'serif', fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' }}>
+          <Link href="/" style={{ fontFamily:'Georgia, serif', fontSize:'1.3rem', fontWeight:400, color:'#0a2a3d', textDecoration:'none', letterSpacing:'-0.01em' }}>
             bølge<span style={{color:'#4da8cc'}}>varsel</span>
           </Link>
           <Link href="/min-side" style={{ background:'#0a2a3d', color:'white', padding:'0.5rem 1.2rem', borderRadius:100, textDecoration:'none', fontSize:'0.85rem', fontWeight:500 }}>
@@ -69,39 +112,46 @@ export default function HjelpPage() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <div style={{ background:'linear-gradient(135deg,#0a2a3d,#1a6080)', padding:'4rem 2rem', textAlign:'center', color:'white' }}>
-        <p style={{ margin:'0 0 8px', fontSize:'11px', letterSpacing:'0.14em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)' }}>Hjelpesenter</p>
-        <h1 style={{ margin:'0 0 1rem', fontFamily:'serif', fontSize:'2.5rem', fontWeight:300 }}>Hvordan kan vi hjelpe deg?</h1>
-        <p style={{ margin:'0 auto 2rem', fontSize:'1.05rem', color:'rgba(255,255,255,0.7)', maxWidth:500 }}>
+      {/* Hero med bølge-SVG */}
+      <div style={{ background:'linear-gradient(160deg,#0d3350 0%,#1a6080 60%,#0a2a3d 100%)', padding:'4rem 2rem 5rem', textAlign:'center', color:'white', position:'relative', overflow:'hidden' }}>
+        <svg viewBox="0 0 1440 60" style={{ position:'absolute', bottom:0, left:0, width:'100%' }} preserveAspectRatio="none">
+          <path d="M0 30 Q180 0 360 30 Q540 60 720 30 Q900 0 1080 30 Q1260 60 1440 30 L1440 60 L0 60 Z" fill="#f0f4f8"/>
+        </svg>
+        <p style={{ margin:'0 0 8px', fontSize:'11px', letterSpacing:'0.16em', textTransform:'uppercase', color:'rgba(255,255,255,0.45)', fontWeight:600 }}>Hjelpesenter</p>
+        <h1 style={{ margin:'0 0 1rem', fontFamily:'Georgia, serif', fontSize:'2.6rem', fontWeight:400, letterSpacing:'-0.02em', lineHeight:1.2 }}>Hvordan kan vi hjelpe deg?</h1>
+        <p style={{ margin:'0 auto 2rem', fontSize:'1.05rem', color:'rgba(255,255,255,0.65)', maxWidth:480, lineHeight:1.7 }}>
           Alt du trenger for å komme i gang med daglige sjøvarsler
         </p>
         <div style={{ display:'flex', gap:'0.6rem', justifyContent:'center', flexWrap:'wrap' }}>
-          <Link href="/min-side" style={{ background:'rgba(255,255,255,0.15)', color:'white', padding:'0.6rem 1.4rem', borderRadius:100, textDecoration:'none', fontSize:'0.9rem', border:'1px solid rgba(255,255,255,0.2)' }}>
-            📬 Logg inn på Min side
+          <Link href="/min-side" style={{ background:'rgba(255,255,255,0.12)', color:'white', padding:'0.6rem 1.4rem', borderRadius:100, textDecoration:'none', fontSize:'0.88rem', border:'1px solid rgba(255,255,255,0.2)', backdropFilter:'blur(4px)' }}>
+            Logg inn på Min side
           </Link>
-          <a href="mailto:hei@bolgevarsel.no" style={{ background:'rgba(255,255,255,0.15)', color:'white', padding:'0.6rem 1.4rem', borderRadius:100, textDecoration:'none', fontSize:'0.9rem', border:'1px solid rgba(255,255,255,0.2)' }}>
-            ✉️ Kontakt oss
+          <a href="mailto:hei@bolgevarsel.no" style={{ background:'rgba(255,255,255,0.12)', color:'white', padding:'0.6rem 1.4rem', borderRadius:100, textDecoration:'none', fontSize:'0.88rem', border:'1px solid rgba(255,255,255,0.2)', backdropFilter:'blur(4px)' }}>
+            Kontakt oss
           </a>
         </div>
       </div>
 
-      {/* Kategorier */}
+      {/* Kategorikort */}
       <div style={{ maxWidth:900, margin:'0 auto', padding:'3rem 1.5rem' }}>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(380px,1fr))', gap:'1.5rem' }}>
           {KATEGORIER.map(kat => (
-            <div key={kat.slug} style={{ background:'white', borderRadius:20, padding:'1.8rem', boxShadow:'0 2px 12px rgba(10,42,61,0.06)', border:'1px solid rgba(10,42,61,0.07)' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:'0.8rem', marginBottom:'0.5rem' }}>
-                <span style={{ fontSize:'1.6rem' }}>{kat.ikon}</span>
-                <h2 style={{ margin:0, fontFamily:'serif', fontWeight:400, fontSize:'1.2rem', color:'#0a2a3d' }}>{kat.tittel}</h2>
+            <div key={kat.slug} style={{ background:'white', borderRadius:20, padding:'2rem', boxShadow:'0 2px 16px rgba(10,42,61,0.07)', border:'1px solid rgba(10,42,61,0.06)' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:'1rem', marginBottom:'0.6rem' }}>
+                <div style={{ width:48, height:48, background:'#f0f8fc', borderRadius:14, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <kat.Ikon />
+                </div>
+                <div>
+                  <h2 style={{ margin:0, fontFamily:'Georgia, serif', fontWeight:400, fontSize:'1.15rem', color:'#0a2a3d', letterSpacing:'-0.01em' }}>{kat.tittel}</h2>
+                  <p style={{ margin:'2px 0 0', fontSize:'0.82rem', color:'#6b8fa3' }}>{kat.beskrivelse}</p>
+                </div>
               </div>
-              <p style={{ margin:'0 0 1.2rem', fontSize:'0.88rem', color:'#6b8fa3' }}>{kat.beskrivelse}</p>
-              <div style={{ display:'flex', flexDirection:'column' as const, gap:'0.1rem' }}>
-                {kat.artikler.map(art => (
+              <div style={{ borderTop:'1px solid #f1f5f9', marginTop:'1rem', paddingTop:'0.8rem', display:'flex', flexDirection:'column' as const, gap:'0' }}>
+                {kat.artikler.map((art, i) => (
                   <Link key={art.slug} href={`/hjelp/${kat.slug}/${art.slug}`}
-                    style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.6rem 0.8rem', borderRadius:10, textDecoration:'none', color:'#334155', fontSize:'0.9rem' }}>
+                    style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.55rem 0.6rem', borderRadius:8, textDecoration:'none', color:'#334155', fontSize:'0.88rem', borderBottom: i < kat.artikler.length - 1 ? '1px solid #f8fbfc' : 'none' }}>
                     <span>{art.tittel}</span>
-                    <span style={{ color:'#4da8cc', fontSize:'0.8rem' }}>→</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="#4da8cc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </Link>
                 ))}
               </div>
@@ -110,10 +160,14 @@ export default function HjelpPage() {
         </div>
 
         {/* Kontaktboks */}
-        <div style={{ marginTop:'3rem', background:'linear-gradient(135deg,#0a2a3d,#1a6080)', borderRadius:20, padding:'2.5rem', textAlign:'center', color:'white' }}>
-          <h2 style={{ margin:'0 0 0.5rem', fontFamily:'serif', fontWeight:300, fontSize:'1.6rem' }}>Fant du ikke svaret?</h2>
-          <p style={{ margin:'0 0 1.5rem', color:'rgba(255,255,255,0.7)' }}>Vi svarer raskt på e-post i hverdagene</p>
-          <a href="mailto:hei@bolgevarsel.no" style={{ display:'inline-block', background:'white', color:'#0a2a3d', padding:'0.9rem 2rem', borderRadius:100, textDecoration:'none', fontWeight:600, fontSize:'0.95rem' }}>
+        <div style={{ marginTop:'3rem', background:'linear-gradient(135deg,#0d3350,#1a6080)', borderRadius:20, padding:'2.5rem', textAlign:'center', color:'white', position:'relative', overflow:'hidden' }}>
+          <svg viewBox="0 0 400 80" style={{ position:'absolute', bottom:0, right:0, opacity:0.08, width:300 }}>
+            <path d="M0 40 Q50 20 100 40 Q150 60 200 40 Q250 20 300 40 Q350 60 400 40" fill="none" stroke="white" strokeWidth="3"/>
+            <path d="M0 60 Q60 40 120 60 Q180 80 240 60 Q300 40 360 60 Q380 70 400 60" fill="none" stroke="white" strokeWidth="2"/>
+          </svg>
+          <h2 style={{ margin:'0 0 0.5rem', fontFamily:'Georgia, serif', fontWeight:400, fontSize:'1.6rem', letterSpacing:'-0.02em' }}>Fant du ikke svaret?</h2>
+          <p style={{ margin:'0 0 1.5rem', color:'rgba(255,255,255,0.65)', fontSize:'0.95rem' }}>Vi svarer raskt på e-post i hverdagene</p>
+          <a href="mailto:hei@bolgevarsel.no" style={{ display:'inline-block', background:'white', color:'#0a2a3d', padding:'0.9rem 2rem', borderRadius:100, textDecoration:'none', fontWeight:600, fontSize:'0.92rem' }}>
             Send oss en e-post →
           </a>
         </div>
