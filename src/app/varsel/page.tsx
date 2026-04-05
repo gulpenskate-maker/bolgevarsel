@@ -70,6 +70,7 @@ inp.addEventListener('keydown',e=>{
 });
 
 inp.addEventListener('blur',()=>setTimeout(()=>{dd.style.display='none';sel=-1;},300));
+dd.addEventListener('mousedown',e=>e.preventDefault());
 inp.addEventListener('focus',()=>sugg.length>0&&renderDD());
 
 function renderDD(){
