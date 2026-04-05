@@ -99,9 +99,7 @@ export default function HjelpPage() {
               <div style={{ display:'flex', flexDirection:'column' as const, gap:'0.1rem' }}>
                 {kat.artikler.map(art => (
                   <Link key={art.slug} href={`/hjelp/${kat.slug}/${art.slug}`}
-                    style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.6rem 0.8rem', borderRadius:10, textDecoration:'none', color:'#334155', fontSize:'0.9rem', transition:'background 0.15s' }}
-                    onMouseOver={e => (e.currentTarget.style.background='#f0f8fc')}
-                    onMouseOut={e => (e.currentTarget.style.background='transparent')}>
+                    style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.6rem 0.8rem', borderRadius:10, textDecoration:'none', color:'#334155', fontSize:'0.9rem' }}>
                     <span>{art.tittel}</span>
                     <span style={{ color:'#4da8cc', fontSize:'0.8rem' }}>→</span>
                   </Link>
