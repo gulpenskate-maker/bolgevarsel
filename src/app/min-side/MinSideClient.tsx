@@ -16,7 +16,6 @@ const S = {
   tag: (active: boolean) => ({ background: active?'#dcfce7':'#f1f5f9', color: active?'#16a34a':'#64748b', padding:'2px 8px', borderRadius:100, fontSize:'0.75rem', fontWeight:500 }) as React.CSSProperties,
 }
 
-// Mini SVG-illustrasjon — samme brand som forsiden
 function BrandIllustration() {
   return (
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style={{ width:'100%', display:'block', marginBottom:'-4px' }}>
@@ -25,34 +24,23 @@ function BrandIllustration() {
         <linearGradient id="loginSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a6080"/><stop offset="100%" stopColor="#0a2a3d"/></linearGradient>
       </defs>
       <rect width="600" height="180" fill="url(#loginSky)"/>
-      {/* Sol */}
       <circle cx="520" cy="55" r="30" fill="#fff4e0" opacity="0.5"/>
       <circle cx="520" cy="55" r="20" fill="#ffd580" opacity="0.6"/>
       <circle cx="520" cy="55" r="12" fill="#ffbc40" opacity="0.8"/>
-      {/* Skyer */}
       <g opacity="0.6"><ellipse cx="80" cy="40" rx="50" ry="15" fill="white"/><ellipse cx="100" cy="30" rx="35" ry="13" fill="white"/><ellipse cx="60" cy="35" rx="30" ry="12" fill="white"/></g>
       <g opacity="0.4"><ellipse cx="320" cy="30" rx="40" ry="12" fill="white"/><ellipse cx="345" cy="22" rx="28" ry="10" fill="white"/></g>
-      {/* Fjell */}
       <path d="M0 110 L80 60 L160 100 L240 55 L320 95 L400 50 L480 90 L560 60 L600 80 L600 130 L0 130 Z" fill="#2a6a8a" opacity="0.2"/>
       <path d="M0 120 L100 75 L200 105 L300 65 L400 100 L500 70 L600 90 L600 135 L0 135 Z" fill="#1e5a7a" opacity="0.25"/>
-      {/* Øy med fyr */}
       <ellipse cx="140" cy="128" rx="55" ry="14" fill="#2a5a3a" opacity="0.85"/>
       <path d="M95 128 Q120 115 140 112 Q160 115 185 128 Z" fill="#3a6a4a" opacity="0.9"/>
       <rect x="137" y="100" width="6" height="16" fill="#e8e0d0" rx="1"/>
       <rect x="135" y="98" width="10" height="4" fill="#cc3333" rx="1"/>
       <circle cx="140" cy="98" r="2.5" fill="#ffcc00" opacity="0.9"/>
-      {/* Liten båt */}
       <g><line x1="440" y1="128" x2="440" y2="114" stroke="#8a7a6a" strokeWidth="1.2"/><path d="M440 128 L425 123 L440 116 Z" fill="rgba(255,255,255,0.9)"/><path d="M440 128 L454 123 L440 120 Z" fill="rgba(255,255,255,0.65)"/><path d="M428 130 Q440 133 452 130" fill="#5a4a3a"/></g>
-      {/* Hav */}
       <path d="M0 132 Q75 126 150 132 Q225 138 300 132 Q375 126 450 132 Q525 138 600 132 L600 180 L0 180 Z" fill="url(#loginSea)"/>
-      {/* Bølger */}
       <g opacity="0.3">
-        <path d="M-50 148 Q50 142 150 148 Q250 154 350 148 Q450 142 550 148 Q580 150 650 148" fill="none" stroke="white" strokeWidth="1.5">
-          <animateTransform attributeName="transform" type="translate" from="0 0" to="100 0" dur="4s" repeatCount="indefinite"/>
-        </path>
-        <path d="M-50 160 Q60 154 160 160 Q260 166 360 160 Q460 154 560 160 Q590 162 650 160" fill="none" stroke="white" strokeWidth="1">
-          <animateTransform attributeName="transform" type="translate" from="0 0" to="-80 0" dur="5.5s" repeatCount="indefinite"/>
-        </path>
+        <path d="M-50 148 Q50 142 150 148 Q250 154 350 148 Q450 142 550 148 Q580 150 650 148" fill="none" stroke="white" strokeWidth="1.5"><animateTransform attributeName="transform" type="translate" from="0 0" to="100 0" dur="4s" repeatCount="indefinite"/></path>
+        <path d="M-50 160 Q60 154 160 160 Q260 166 360 160 Q460 154 560 160 Q590 162 650 160" fill="none" stroke="white" strokeWidth="1"><animateTransform attributeName="transform" type="translate" from="0 0" to="-80 0" dur="5.5s" repeatCount="indefinite"/></path>
       </g>
     </svg>
   )
@@ -67,13 +55,11 @@ export default function MinSideClient() {
   const [sub, setSub] = useState<Sub|null>(null)
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
-  const [loading, setLoading] = useState(false) // ikke vis spinner på innlogging
-  const [sessionSjekket, setSessionSjekket] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [view, setView] = useState<'login'|'dash'>('login')
   const [magicSendt, setMagicSendt] = useState(false)
   const [feil, setFeil] = useState('')
 
-  // Auto-login: sjekk cookie i bakgrunnen, vis skjema umiddelbart
   useEffect(() => {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 4000)
@@ -82,7 +68,7 @@ export default function MinSideClient() {
       .then(async d => {
         clearTimeout(timeout)
         if (d.subscriber) {
-          setSub(d.subscriber); setLocs(d.locations || []); setRecs(d.recipients || [])
+          setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[])
           setEmail(d.subscriber.email); setView('dash')
         } else {
           const saved = localStorage.getItem('bv_email')
@@ -91,7 +77,7 @@ export default function MinSideClient() {
             const r2 = await fetch(`/api/min-side?email=${encodeURIComponent(saved)}`)
             const d2 = await r2.json()
             if (d2.subscriber) {
-              setSub(d2.subscriber); setLocs(d2.locations || []); setRecs(d2.recipients || [])
+              setSub(d2.subscriber); setLocs(d2.locations||[]); setRecs(d2.recipients||[])
               setView('dash')
             } else localStorage.removeItem('bv_email')
           }
@@ -126,7 +112,7 @@ export default function MinSideClient() {
   async function login(e: React.FormEvent) {
     e.preventDefault(); setLoading(true); setFeil('')
     const r = await fetch('/api/auth/send-magic-link', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ email }),
     })
     const d = await r.json()
@@ -194,17 +180,13 @@ export default function MinSideClient() {
 
   const planLabel: Record<string,string> = { kyst:'Kyst', familie:'Familie', pro:'Pro' }
 
-  // === LOGIN VIEW ===
+  // LOGIN VIEW
   if (view==='login') return (
     <div style={{ minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' }}>
       <nav style={S.nav}><div style={{maxWidth:680,margin:'0 auto'}}><a href="/" style={S.logo}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a></div></nav>
+      <div style={{ overflow:'hidden', maxHeight:180 }}><BrandIllustration /></div>
 
-      {/* Illustrasjon øverst */}
-      <div style={{ overflow:'hidden', maxHeight:180 }}>
-        <BrandIllustration />
-      </div>
-
-      <div style={{ maxWidth:420, margin:'0 auto', padding:'2.5rem 1.5rem', textAlign:'center' }}>
+      <div style={{ maxWidth:440, margin:'0 auto', padding:'2rem 1.5rem', textAlign:'center' }}>
         {magicSendt ? (
           <>
             <div style={{fontSize:'3rem',marginBottom:'1rem'}}>📬</div>
@@ -216,29 +198,40 @@ export default function MinSideClient() {
           </>
         ) : (
           <>
-            <div style={{fontSize:'2.5rem',marginBottom:'0.8rem'}}>🌊</div>
+            <div style={{fontSize:'2.5rem',marginBottom:'0.6rem'}}>🌊</div>
             <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.4rem'}}>Min side</h1>
-            <p style={{color:'#6b8fa3',marginBottom:'2rem',fontSize:'0.95rem'}}>Skriv inn e-posten din — vi sender deg en innloggingslenke</p>
-            <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem'}}>
+            <p style={{color:'#6b8fa3',marginBottom:'1.5rem',fontSize:'0.95rem'}}>Skriv inn e-posten din — vi sender deg en innloggingslenke</p>
+            <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem',marginBottom:'1.5rem'}}>
               <input style={S.inp} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus />
               {feil && <p style={{color:'#ef4444',fontSize:'0.85rem',margin:0}}>{feil}</p>}
               <button style={{...S.btnPrimary,width:'100%',padding:'0.9rem',fontSize:'0.95rem'}} disabled={loading}>
                 {loading ? 'Sender...' : 'Send innloggingslenke →'}
               </button>
             </form>
-            <p style={{marginTop:'1.5rem',fontSize:'0.8rem',color:'rgba(10,42,61,0.35)'}}>
-              Ikke abonnent ennå? <a href="/registrer" style={{color:'#4da8cc',textDecoration:'none',fontWeight:500}}>Start gratis prøveperiode →</a>
-            </p>
+
+            {/* Hjelpsomme tips */}
+            <div style={{background:'white',borderRadius:16,padding:'1.2rem 1.4rem',textAlign:'left',boxShadow:'0 2px 12px rgba(10,42,61,0.06)',border:'1px solid rgba(10,42,61,0.07)'}}>
+              <p style={{margin:'0 0 0.8rem',fontSize:'0.8rem',fontWeight:600,color:'#64748b',textTransform:'uppercase',letterSpacing:'0.06em'}}>Hjelp</p>
+              <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+                <div style={{fontSize:'0.88rem',color:'#334155'}}>
+                  <strong>Husker du ikke e-posten din?</strong> Sjekk i Stripe-kvitteringen du mottok etter kjøp, eller kontakt oss på{' '}
+                  <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
+                </div>
+                <div style={{fontSize:'0.88rem',color:'#334155'}}>
+                  <strong>Ny kunde?</strong>{' '}
+                  <a href="/registrer" style={{color:'#4da8cc',textDecoration:'none',fontWeight:500}}>Start gratis prøveperiode →</a>
+                </div>
+              </div>
+            </div>
           </>
         )}
       </div>
     </div>
   )
 
-  // === DASHBOARD VIEW ===
+  // DASHBOARD VIEW
   return (
     <div style={S.page}>
-      {/* Liten bølge-header */}
       <div style={{ overflow:'hidden', maxHeight:80 }}>
         <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',display:'block'}}>
           <defs><linearGradient id="dashSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a6080"/><stop offset="100%" stopColor="#0a2a3d"/></linearGradient></defs>
@@ -248,13 +241,12 @@ export default function MinSideClient() {
           <g opacity="0.25"><path d="M0 55 Q120 48 240 55 Q360 62 480 55 Q600 48 720 55 Q840 62 960 55 Q1080 48 1200 55 Q1320 62 1440 55" fill="none" stroke="white" strokeWidth="1.5"><animateTransform attributeName="transform" type="translate" from="0 0" to="100 0" dur="4s" repeatCount="indefinite"/></path></g>
         </svg>
       </div>
-
       <nav style={{...S.nav, background:'#0a2a3d', borderBottom:'none', marginTop:'-1px'}}>
         <div style={{maxWidth:680,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <a href="/" style={{...S.logo, color:'white'}}>bølge<span style={{color:'#4da8cc'}}>varsel</span></a>
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
             <span style={{...S.badge(sub!.plan), background:'rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.8)'}}>{planLabel[sub!.plan]}</span>
-            <button onClick={async ()=>{await fetch('/api/auth/logout',{method:'POST'});localStorage.removeItem('bv_email');setView('login');setSub(null)}}
+            <button onClick={async()=>{await fetch('/api/auth/logout',{method:'POST'});localStorage.removeItem('bv_email');setView('login');setSub(null)}}
               style={{background:'transparent',border:'1px solid rgba(255,255,255,0.2)',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:'0.78rem',padding:'4px 12px',borderRadius:100}}>Logg ut</button>
           </div>
         </div>
@@ -266,7 +258,6 @@ export default function MinSideClient() {
           <p style={{color:'#6b8fa3',margin:'4px 0 0',fontSize:'0.9rem'}}>{sub!.email}</p>
         </div>
 
-        {/* LOKASJONER */}
         <div style={S.card}>
           <h2 style={S.sTitle}>🗺️ Mine lokasjoner</h2>
           {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen lokasjoner ennå.</p>}
@@ -275,7 +266,7 @@ export default function MinSideClient() {
               <div key={loc.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
                 <div>
                   <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{loc.name}</div>
-                  <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginTop:'2px'}}>{loc.lat.toFixed(4)}°N, {loc.lon.toFixed(4)}°Ø · {recs.filter(r=>r.location_id===loc.id).length} mottaker(e)</div>
+                  <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginTop:'2px'}}>{loc.lat.toFixed(4)}°N · {recs.filter(r=>r.location_id===loc.id).length} mottaker(e)</div>
                 </div>
                 <button style={S.btnDanger} onClick={()=>deleteLoc(loc.id)}>🗑</button>
               </div>
@@ -306,7 +297,6 @@ export default function MinSideClient() {
           </form>
         </div>
 
-        {/* MOTTAKERE */}
         <div style={S.card}>
           <h2 style={S.sTitle}>📱 Mine mottakere</h2>
           {recs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen mottakere ennå.</p>}
@@ -360,7 +350,6 @@ export default function MinSideClient() {
           {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.85rem'}}>Legg til en lokasjon først.</p>}
         </div>
 
-        {/* KONTO */}
         <div style={S.card}>
           <h2 style={S.sTitle}>⚙️ Min konto</h2>
           <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
@@ -376,13 +365,12 @@ export default function MinSideClient() {
               </div>
             </div>
             <p style={{fontSize:'0.8rem',color:'#6b8fa3',padding:'0 0.5rem'}}>
-              Spørsmål om abonnement? Kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
+              Spørsmål? Kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
             </p>
           </div>
         </div>
 
-        {/* BØLGE-DEKOR FOOTER */}
-        <div style={{textAlign:'center',padding:'1rem 0 0',opacity:0.4}}>
+        <div style={{textAlign:'center',padding:'1rem 0',opacity:0.4}}>
           <svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg" style={{width:120}}>
             <path d="M0 15 Q25 5 50 15 Q75 25 100 15 Q125 5 150 15 Q175 25 200 15" fill="none" stroke="#0a2a3d" strokeWidth="2"/>
           </svg>
