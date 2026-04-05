@@ -1,6 +1,114 @@
+import { useState, useEffect } from 'react'
 import styles from './Hero.module.css'
 
+const locations = [
+  {
+    name: 'Tånes',
+    date: 'fredag 3. april',
+    vær: '11°C',
+    vind: 'Svak bris 3.2 m/s fra SV',
+    bølger: '0.4m – Stille 🟢',
+    status: 'Flott dag på sjøen! ⛵',
+  },
+  {
+    name: 'Stavanger havn',
+    date: 'fredag 3. april',
+    vær: '10°C',
+    vind: 'Lett bris 4.1 m/s fra V',
+    bølger: '0.6m – Rolig 🟡',
+    status: 'Greit for erfarne 🚤',
+  },
+  {
+    name: 'Jærstrendene',
+    date: 'fredag 3. april',
+    vær: '9°C',
+    vind: 'Frisk bris 7.8 m/s fra SV',
+    bølger: '1.2m – Moderat 🟠',
+    status: 'Vær forsiktig i dag! 🏄',
+  },
+  {
+    name: 'Tananger',
+    date: 'fredag 3. april',
+    vær: '11°C',
+    vind: 'Svak bris 2.9 m/s fra S',
+    bølger: '0.3m – Stille 🟢',
+    status: 'Perfekt dag på sjøen! ⛵',
+  },
+  {
+    name: 'Karmøy',
+    date: 'fredag 3. april',
+    vær: '10°C',
+    vind: 'Lett bris 5.2 m/s fra NV',
+    bølger: '0.8m – Rolig 🟡',
+    status: 'Bra forhold i dag 🎣',
+  },
+  {
+    name: 'Haugesund',
+    date: 'fredag 3. april',
+    vær: '12°C',
+    vind: 'Svak bris 3.5 m/s fra N',
+    bølger: '0.5m – Stille 🟢',
+    status: 'Flott dag på sjøen! ⛵',
+  },
+  {
+    name: 'Kristiansand',
+    date: 'fredag 3. april',
+    vær: '13°C',
+    vind: 'Lett bris 4.4 m/s fra SØ',
+    bølger: '0.5m – Stille 🟢',
+    status: 'Flott dag på sjøen! ⛵',
+  },
+  {
+    name: 'Lillesand',
+    date: 'fredag 3. april',
+    vær: '13°C',
+    vind: 'Svak bris 2.8 m/s fra S',
+    bølger: '0.3m – Stille 🟢',
+    status: 'Perfekt skjærgårdsdag! 🏝️',
+  },
+  {
+    name: 'Grimstad',
+    date: 'fredag 3. april',
+    vær: '14°C',
+    vind: 'Svak bris 3.1 m/s fra SV',
+    bølger: '0.4m – Stille 🟢',
+    status: 'Perfekt for kajakk! 🚣',
+  },
+  {
+    name: 'Drøbak',
+    date: 'fredag 3. april',
+    vær: '12°C',
+    vind: 'Lett bris 4.8 m/s fra N',
+    bølger: '0.3m – Stille 🟢',
+    status: 'Bra dag i fjorden! ⛵',
+  },
+  {
+    name: 'Oslofjorden',
+    date: 'fredag 3. april',
+    vær: '11°C',
+    vind: 'Frisk bris 6.2 m/s fra SV',
+    bølger: '0.7m – Rolig 🟡',
+    status: 'Greit for erfarne 🚤',
+  },
+]
+
 export default function Hero() {
+  const [current, setCurrent] = useState(0)
+  const [fading, setFading] = useState(false)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFading(true)
+      setTimeout(() => {
+        setCurrent(prev => (prev + 1) % locations.length)
+        setFading(false)
+      }, 400)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const loc = locations[current]
+
   return (
     <section className={styles.hero}>
       <svg className={styles.heroBg} viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -39,14 +147,14 @@ export default function Hero() {
           <a href="#hvordan" className={styles.btnGhost}>Se hvordan det fungerer →</a>
         </div>
       </div>
-      <div className={styles.smsFloat}>
+      <div className={styles.smsFloat} style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.4s ease' }}>
         <div className={styles.smsHeader}><div className={styles.smsDot}/><span className={styles.smsLabel}>Bølgevarsel · 07:30</span></div>
         <div className={styles.smsBody}>
-          <div className={styles.smsRow}>🌊 <strong>Tånes – fredag 3. april</strong></div>
-          <div className={styles.smsRow}>⛅ Vær: 11°C</div>
-          <div className={styles.smsRow}>💨 Vind: Svak bris 3.2 m/s fra SV</div>
-          <div className={styles.smsRow}>🌊 Bølger: 0.4m – Stille 🟢</div>
-          <div className={styles.smsRow}>✅ Flott dag på sjøen! ⛵</div>
+          <div className={styles.smsRow}>🌊 <strong>{loc.name} – {loc.date}</strong></div>
+          <div className={styles.smsRow}>⛅ Vær: {loc.vær}</div>
+          <div className={styles.smsRow}>💨 Vind: {loc.vind}</div>
+          <div className={styles.smsRow}>🌊 Bølger: {loc.bølger}</div>
+          <div className={styles.smsRow}>✅ {loc.status}</div>
           <span className={styles.smsTag}>Levert kl. 07:30</span>
         </div>
       </div>
