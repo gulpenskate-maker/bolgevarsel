@@ -292,13 +292,14 @@ export default function MinSideClient() {
           <circle cx="381" cy="72" r="6" fill="#ffdd44" opacity="0.15"/>
           <circle cx="381" cy="72" r="3.5" fill="#ffdd44" opacity="0.9"/>
           {/* Båt */}
-          <g className="bv-boat"><path d="M820 118 Q855 130 890 118 L885 128 Q855 138 825 128 Z" fill="#0a2a3d" opacity="0.75"/>
-          <line x1="825" y1="128" x2="885" y2="128" stroke="#c8b89a" strokeWidth="1" opacity="0.45"/>
-          <line x1="855" y1="118" x2="855" y2="82" stroke="#0a2a3d" strokeWidth="1.8" strokeLinecap="round" opacity="0.7"/>
-          <line x1="843" y1="92" x2="867" y2="92" stroke="#0a2a3d" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
-          <path d="M855 84 L884 114 L855 118 Z" fill="rgba(235,228,212,0.88)"/>
-          <path d="M855 87 L829 112 L855 118 Z" fill="rgba(235,228,212,0.55)"/>
-          <path d="M855 82 L867 86 L855 90 Z" fill="#cc3333" opacity="0.9"/></g>
+          <g className="bv-boat"><path d="M820 98 Q855 108 890 98 L886 107 Q855 116 824 107 Z" fill="#0a2a3d" opacity="0.75"/>
+          <line x1="825" y1="107" x2="885" y2="107" stroke="#c8b89a" strokeWidth="1" opacity="0.45"/>
+          <line x1="855" y1="98" x2="855" y2="60" stroke="#0a2a3d" strokeWidth="1.8" strokeLinecap="round" opacity="0.7"/>
+          <line x1="843" y1="70" x2="867" y2="70" stroke="#0a2a3d" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
+          <path d="M855 62 L884 94 L855 98 Z" fill="rgba(235,228,212,0.88)"/>
+          <path d="M855 65 L829 92 L855 98 Z" fill="rgba(235,228,212,0.55)"/>
+          <path d="M855 60 L867 64 L855 68 Z" fill="#cc3333" opacity="0.9"/>
+          <path d="M828 109 Q855 113 882 109" fill="none" stroke="rgba(10,42,61,0.1)" strokeWidth="1.5" strokeLinecap="round"/></g>
           {/* Hav */}
           <path d="M0 126 Q180 112 360 126 Q540 140 720 122 Q900 104 1080 122 Q1260 140 1440 124 L1440 180 L0 180 Z" fill="url(#sea8)"/>
           <path d="M0 138 Q200 128 400 138 Q600 148 800 136 Q1000 124 1200 136 Q1350 144 1440 138 L1440 180 L0 180 Z" fill="url(#sea8b)" opacity="0.55"/>
