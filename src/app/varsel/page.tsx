@@ -69,7 +69,7 @@ inp.addEventListener('keydown',e=>{
   else if(e.key==='Escape'){dd.style.display='none';sel=-1;}
 });
 
-inp.addEventListener('blur',()=>setTimeout(()=>{dd.style.display='none';sel=-1;},200));
+inp.addEventListener('blur',()=>setTimeout(()=>{dd.style.display='none';sel=-1;},300));
 inp.addEventListener('focus',()=>sugg.length>0&&renderDD());
 
 function renderDD(){
