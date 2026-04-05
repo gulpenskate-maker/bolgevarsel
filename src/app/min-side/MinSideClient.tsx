@@ -390,7 +390,7 @@ export default function MinSideClient() {
                   onChange={e=>setSendTime(e.target.value)}
                   style={{padding:'0.4rem 0.7rem',borderRadius:8,border:'1.5px solid rgba(10,42,61,0.12)',background:'white',fontSize:'0.9rem',color:'#0a2a3d',cursor:'pointer'}}
                 >
-                  {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00'].map(t=>(
+                  {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
                     <option key={t} value={t}>{t}</option>
                   ))}
                 </select>
