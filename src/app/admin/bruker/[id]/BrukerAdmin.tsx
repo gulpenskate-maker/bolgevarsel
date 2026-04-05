@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 const inp: React.CSSProperties = { padding: '0.7rem 1rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: '0.9rem', fontFamily: 'inherit', outline: 'none', width: '100%', boxSizing: 'border-box' }
@@ -33,7 +33,7 @@ export default function BrukerAdmin({ sub }: { sub: any }) {
 
   async function slettLokasjon(id: string) {
     if (!confirm('Slett lokasjon og alle mottakere på den?')) return
-    await fetch('/api/min-side/location/delete', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, subscriber_id: sub.id }) })
+    await fetch('/api/admin/lokasjon', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
     vis('✅ Lokasjon slettet'); router.refresh()
   }
 
@@ -111,13 +111,7 @@ export default function BrukerAdmin({ sub }: { sub: any }) {
         <div style={sectionStyle}>
           <span style={labelStyle}>Lokasjoner ({sub.bv_locations?.length ?? 0})</span>
           {sub.bv_locations?.map((l: any) => (
-            <div key={l.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-              <div>
-                <div style={{ fontSize: '0.9rem' }}>📍 {l.name}</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)' }}>{l.lat.toFixed(4)}°N, {l.lon.toFixed(4)}°Ø</div>
-              </div>
-              <button onClick={() => slettLokasjon(l.id)} style={{ background: 'rgba(239,68,68,0.15)', color: '#f87171', padding: '4px 10px', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.78rem' }}>🗑 Slett</button>
-            </div>
+            <LokasjonRow key={l.id} l={l} onSave={() => router.refresh()} onDelete={() => slettLokasjon(l.id)} />
           ))}
         </div>
 
@@ -181,6 +175,82 @@ function RecipientRow({ r, subscriberId, onSave, onDelete }: { r: any; subscribe
           </button>
           <button onClick={onDelete} style={{ background: 'rgba(239,68,68,0.15)', color: '#f87171', padding: '4px 12px', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>🗑 Slett</button>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// Separat komponent for å redigere lokasjon inline
+function LokasjonRow({ l, onSave, onDelete }: { l: any; onSave: () => void; onDelete: () => void }) {
+  const [name, setName] = useState(l.name)
+  const [lat, setLat] = useState(String(l.lat))
+  const [lon, setLon] = useState(String(l.lon))
+  const [søk, setSøk] = useState('')
+  const [sugg, setSugg] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const timer = useRef<any>(null)
+
+  // Søk etter steder via geocoding
+  async function søkSted(q: string) {
+    setSøk(q)
+    clearTimeout(timer.current)
+    if (q.length < 2) { setSugg([]); return }
+    timer.current = setTimeout(async () => {
+      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=5&format=json`)
+      const d = await r.json()
+      setSugg((d.results || []).filter((x: any) => x.country_code === 'NO').slice(0, 4))
+    }, 300)
+  }
+
+  function velgSted(s: any) {
+    const stedNavn = s.name + (s.admin1 ? ', ' + s.admin1.replace(' Fylke', '') : '')
+    setName(stedNavn)
+    setLat(String(s.latitude))
+    setLon(String(s.longitude))
+    setSøk(''); setSugg([])
+  }
+
+  async function lagre() {
+    setLoading(true)
+    await fetch('/api/admin/lokasjon', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: l.id, name, lat: parseFloat(lat), lon: parseFloat(lon) }),
+    })
+    setLoading(false); onSave()
+  }
+
+  const minInp: React.CSSProperties = { padding: '0.5rem 0.8rem', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: '0.85rem', fontFamily: 'inherit', outline: 'none' }
+
+  return (
+    <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '0.9rem 1rem', marginBottom: '0.6rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="Stedsnavn" style={{ ...minInp, flex: 2, minWidth: 160 }} />
+        <input value={lat} onChange={e => setLat(e.target.value)} placeholder="Lat" style={{ ...minInp, width: 90 }} />
+        <input value={lon} onChange={e => setLon(e.target.value)} placeholder="Lon" style={{ ...minInp, width: 90 }} />
+      </div>
+      <div style={{ position: 'relative', marginBottom: '0.5rem' }}>
+        <input value={søk} onChange={e => søkSted(e.target.value)} placeholder="🔍 Søk etter nytt sted langs kysten..."
+          style={{ ...minInp, width: '100%', boxSizing: 'border-box' }} />
+        {sugg.length > 0 && (
+          <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#0f2535', borderRadius: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', zIndex: 999, overflow: 'hidden' }}>
+            {sugg.map((s, i) => (
+              <div key={i} onClick={() => velgSted(s)} style={{ padding: '8px 14px', cursor: 'pointer', borderBottom: i < sugg.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none', fontSize: '0.85rem' }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+                <span style={{ fontWeight: 500 }}>{s.name}</span>
+                {s.admin1 && <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.78rem' }}> – {s.admin1.replace(' Fylke', '')}</span>}
+                <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.75rem', float: 'right' }}>{s.latitude.toFixed(3)}, {s.longitude.toFixed(3)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div style={{ display: 'flex', gap: '0.4rem' }}>
+        <button onClick={lagre} disabled={loading} style={{ background: '#4da8cc', color: 'white', padding: '4px 14px', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 500 }}>
+          {loading ? '...' : '💾 Lagre'}
+        </button>
+        <button onClick={onDelete} style={{ background: 'rgba(239,68,68,0.15)', color: '#f87171', padding: '4px 12px', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>🗑 Slett</button>
       </div>
     </div>
   )
