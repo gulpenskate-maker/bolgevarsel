@@ -67,16 +67,16 @@ export default function MinSideClient() {
   const [sub, setSub] = useState<Sub|null>(null)
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
-  const [loading, setLoading] = useState(true) // starter som true mens vi sjekker session
+  const [loading, setLoading] = useState(false) // ikke vis spinner på innlogging
+  const [sessionSjekket, setSessionSjekket] = useState(false)
   const [view, setView] = useState<'login'|'dash'>('login')
   const [magicSendt, setMagicSendt] = useState(false)
   const [feil, setFeil] = useState('')
 
-  // Auto-login: sjekk cookie (magic link) først, så localStorage
+  // Auto-login: sjekk cookie i bakgrunnen, vis skjema umiddelbart
   useEffect(() => {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 3000) // 3s timeout
-
+    const timeout = setTimeout(() => controller.abort(), 4000)
     fetch('/api/min-side/session', { signal: controller.signal })
       .then(r => r.json())
       .then(async d => {
@@ -98,7 +98,6 @@ export default function MinSideClient() {
         }
       })
       .catch(() => clearTimeout(timeout))
-      .finally(() => setLoading(false))
   }, [])
 
   const [locQ, setLocQ] = useState('')
@@ -206,9 +205,7 @@ export default function MinSideClient() {
       </div>
 
       <div style={{ maxWidth:420, margin:'0 auto', padding:'2.5rem 1.5rem', textAlign:'center' }}>
-        {loading ? (
-          <p style={{color:'#6b8fa3'}}>Laster inn...</p>
-        ) : magicSendt ? (
+        {magicSendt ? (
           <>
             <div style={{fontSize:'3rem',marginBottom:'1rem'}}>📬</div>
             <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Sjekk innboksen!</h1>
