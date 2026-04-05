@@ -1,9 +1,9 @@
 import styles from './Pricing.module.css'
 
 const plans = [
-  { name: 'Basis', price: '49', features: ['1 lokasjon', '1 mottaker', 'Daglig SMS kl. 07:30', 'Bølge, vind og temperatur'], featured: false },
-  { name: 'Familie', price: '99', features: ['1 lokasjon', 'Opptil 3 mottakere', 'Daglig SMS kl. 07:30', 'Bølge, vind og temperatur', 'Farevarsel ved kuling'], featured: true },
-  { name: 'Pro', price: '199', features: ['5 lokasjoner', 'Opptil 5 mottakere', 'Daglig SMS kl. 07:30', 'Ukentlig rapport', 'Farevarsel ved kuling'], featured: false },
+  { name: 'Basis', price: '49', features: ['1 lokasjon', '1 mottaker', 'Daglig SMS kl. 07:30', 'Bølge, vind og temperatur', 'Farevarsel ved ekstremvær'], featured: false },
+  { name: 'Familie', price: '99', features: ['1 lokasjon', 'Opptil 3 mottakere', 'Daglig SMS kl. 07:30', 'Bølge, vind og temperatur', 'Farevarsel ved kuling', 'Farevarsel ved ekstremvær'], featured: true },
+  { name: 'Pro', price: '199', features: ['5 lokasjoner', 'Opptil 5 mottakere', 'Daglig SMS kl. 07:30', 'Ukentlig rapport', 'Farevarsel ved kuling', 'Farevarsel ved ekstremvær'], featured: false },
 ]
 
 export default function Pricing() {
