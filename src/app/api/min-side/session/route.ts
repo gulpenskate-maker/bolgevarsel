@@ -7,8 +7,20 @@ export async function GET(req: NextRequest) {
   if (!sessionEmail) return NextResponse.json({ subscriber: null })
 
   const supabase = getSupabaseAdmin()
-  const { data: subscriber } = await supabase.from('bv_subscribers').select('*').eq('email', sessionEmail).single()
-  if (!subscriber) return NextResponse.json({ subscriber: null })
+
+  // Bruk maybeSingle() i stedet for single() — returnerer null istedenfor 406 om ikke funnet
+  const { data: subscriber } = await supabase
+    .from('bv_subscribers')
+    .select('*')
+    .eq('email', sessionEmail)
+    .maybeSingle()
+
+  if (!subscriber) {
+    // Slett ugyldig cookie
+    const res = NextResponse.json({ subscriber: null })
+    res.cookies.delete('bv_session')
+    return res
+  }
 
   const { data: locations } = await supabase.from('bv_locations').select('*').eq('subscriber_id', subscriber.id)
   const { data: recipients } = await supabase.from('bv_recipients').select('*').eq('subscriber_id', subscriber.id)

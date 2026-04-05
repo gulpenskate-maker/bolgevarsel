@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bolgevarsel.no'
 
   // Finn abonnenten
-  const { data: sub } = await supabase.from('bv_subscribers').select('id, email, status').eq('email', email).single()
+  const { data: sub } = await supabase.from('bv_subscribers').select('id, email, status').eq('email', email).maybeSingle()
   if (!sub) return NextResponse.json({ error: 'Ingen konto funnet for denne e-postadressen' }, { status: 404 })
   if (sub.status === 'inactive' || sub.status === 'cancelled') return NextResponse.json({ error: 'Kontoen er deaktivert' }, { status: 403 })
 
