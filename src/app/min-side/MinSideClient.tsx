@@ -18,7 +18,7 @@ const S = {
 
 type Sub = { id:string; email:string; plan:string; status:string }
 type Loc = { id:string; name:string; lat:number; lon:number }
-type Rec = { id:string; location_id:string; phone:string; name:string; active:boolean }
+type Rec = { id:string; location_id:string; phone:string; name:string; active:boolean; sms_enabled:boolean }
 
 export default function MinSideClient() {
   const [email, setEmail] = useState('')
@@ -130,6 +130,13 @@ export default function MinSideClient() {
   async function toggleRec(rec: Rec) {
     const r = await fetch('/api/min-side/recipient/update', { method:'PATCH', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ id:rec.id, subscriber_id:sub!.id, active:!rec.active }) })
+    const d = await r.json()
+    if (d.recipient) setRecs(recs.map(r=>r.id===rec.id ? d.recipient : r))
+  }
+
+  async function toggleSms(rec: Rec) {
+    const r = await fetch('/api/min-side/recipient/update', { method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id:rec.id, subscriber_id:sub!.id, sms_enabled:!rec.sms_enabled }) })
     const d = await r.json()
     if (d.recipient) setRecs(recs.map(r=>r.id===rec.id ? d.recipient : r))
   }
@@ -249,10 +256,16 @@ export default function MinSideClient() {
                         {rec.name&&<span>{rec.phone} · </span>}
                         <span>{locs.find(l=>l.id===rec.location_id)?.name||'Ukjent lokasjon'}</span>
                         <span style={S.tag(rec.active)}>{rec.active?'Aktiv':'Pauset'}</span>
+                        <span style={{...S.tag(rec.sms_enabled !== false), fontSize:'0.7rem'}} title={rec.sms_enabled !== false ? 'SMS aktivert' : 'SMS deaktivert (kun farevarsel)'}>
+                          {rec.sms_enabled !== false ? '📱 SMS på' : '🔕 SMS av'}
+                        </span>
                       </div>
                     </div>
                     <div style={{display:'flex',gap:'0.4rem'}}>
                       <button style={S.btnGhost} onClick={()=>toggleRec(rec)}>{rec.active?'⏸ Pause':'▶ Aktiver'}</button>
+                      <button style={{...S.btnGhost, background: rec.sms_enabled !== false ? '#f0fdf4' : '#fef9c3', color: rec.sms_enabled !== false ? '#16a34a' : '#854d0e'}} onClick={()=>toggleSms(rec)} title={rec.sms_enabled !== false ? 'Klikk for å skru av daglig SMS' : 'Klikk for å skru på daglig SMS'}>
+                        {rec.sms_enabled !== false ? '📱 SMS' : '🔕 SMS'}
+                      </button>
                       <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}}>✏️</button>
                       <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)}>🗑</button>
                     </div>
