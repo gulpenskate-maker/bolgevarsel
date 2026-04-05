@@ -6,28 +6,28 @@ const personas = [
     imgAlt: 'Familie på sjøen',
     tag: 'For familier',
     tittel: 'Når ungene vil ut — og du vil sove godt',
-    beskrivelse: 'Det er fredag ettermiddag og tenåringen vil ut med båten i morgen tidlig. Du vil si ja — men du er usikker på været. Med Bølgevarsel får du varselet klokken 07:30, med eksakt informasjon om bølger, vind og forhold akkurat der de skal dra. Du kan si ja med trygghet. Eller nei med fakta i hånden.',
+    beskrivelse: 'Det er lørdag morgen og sønnen din vil ut med båten. Du vil si ja — men du vet ikke hva sjøen gjør. Med Bølgevarsel har du allerede fått varselet klokken 07:30. Du vet om bølgehøyde, vind og forhold akkurat der han skal. Du kan si ja med ro i magen — eller nei med fakta i hånden.',
   },
   {
     img: '/images/baateier.jpg',
     imgAlt: 'Fritidsbåteier på fjorden',
     tag: 'For båteiere',
     tittel: 'Planlegg helgeturen — ikke gå glipp av de beste dagene',
-    beskrivelse: 'Du har båten liggende i havna, helgen nærmer seg og du lurer på om det er verdt å dra ut. I stedet for å sjekke fem ulike værtjenester og prøve å tolke symboler og prognoser, får du ett enkelt varsel tilpasset din kystlokasjon. Ingen gjetting. Bare en klar beskjed om hva sjøen gjør i morgen.',
+    beskrivelse: 'Båten ligger klar. Helgen er her. Men er sjøen det? I stedet for å tolke symboler og prognoser fra fem ulike tjenester, får du ett enkelt varsel — skreddersydd for din havn, din kyst, din tur.',
   },
   {
     img: '/images/fisker.jpg',
     imgAlt: 'Fisker tidlig morgen',
     tag: 'For fiskeentusiaster',
     tittel: 'Opp klokken fem — men bare når det er verdt det',
-    beskrivelse: 'Den perfekte fiskemorgenen starter kvelden før. Du setter alarmen bare hvis forholdene er riktige — rolig sjø, passe vind, riktig temperatur. Bølgevarsel gir deg akkurat det du trenger for å ta den avgjørelsen. Sov godt, vit at du får beskjed i tide, og møt opp på sjøen når det faktisk lønner seg.',
+    beskrivelse: 'God fisk henger ikke i kalenderen — den henger i forholdene. Riktig bølgehøyde, riktig vind, riktig tidspunkt. Bølgevarsel forteller deg når det stemmer.',
   },
   {
     img: '/images/surfer.jpg',
     imgAlt: 'Surfer på bølgene',
     tag: 'For aktive på vannet',
     tittel: 'Bølgehøyde, periode og retning — rett i lomma',
-    beskrivelse: 'Enten du surfer, padler kajakk eller driver med kitesurfing, er presis sjødata gull verdt. Bølgehøyde, periode og vindretning fra akkurat din lokasjon — ikke et gjennomsnittsvarsel for hele kysten. Du vet om det er verdt å pakke brettet før du i det hele tatt har stått opp.',
+    beskrivelse: 'De beste øktene skjer ikke ved en tilfeldighet. De skjer fordi du sjekket forholdene dagen før — og visste at i morgen blir bra.',
   },
 ]
 
