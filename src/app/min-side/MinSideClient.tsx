@@ -302,9 +302,7 @@ export default function MinSideClient() {
           {/* Hav */}
           <path d="M0 126 Q180 112 360 126 Q540 140 720 122 Q900 104 1080 122 Q1260 140 1440 124 L1440 180 L0 180 Z" fill="url(#sea8)"/>
           <path d="M0 138 Q200 128 400 138 Q600 148 800 136 Q1000 124 1200 136 Q1350 144 1440 138 L1440 180 L0 180 Z" fill="url(#sea8b)" opacity="0.55"/>
-          {/* Bølgelinjer */}
-          <path d="M0 147 Q180 141 360 147 Q540 153 720 147 Q900 141 1080 147 Q1260 153 1440 147" fill="none" stroke="rgba(255,255,255,0.17)" strokeWidth="1.2"/>
-          <path d="M0 157 Q180 151 360 157 Q540 163 720 155 Q900 147 1080 155 Q1260 163 1440 157" fill="none" stroke="rgba(255,255,255,0.09)" strokeWidth="1"/>
+
           {/* Fisk 1 */}
           <g className="bv-f1"><ellipse cx="240" cy="141" rx="16" ry="6" fill="none" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2"/>
           <path d="M224 141 L215 135 M224 141 L215 147" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2" strokeLinecap="round"/>
