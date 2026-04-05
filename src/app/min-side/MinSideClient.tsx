@@ -316,8 +316,8 @@ export default function MinSideClient() {
           {/* Fisk 3 */}
           <g className="bv-f3"><ellipse cx="620" cy="163" rx="8" ry="3" fill="none" stroke="rgba(77,168,204,0.2)" strokeWidth="0.9"/>
           <path d="M612 163 L607 160 M612 163 L607 166" stroke="rgba(77,168,204,0.2)" strokeWidth="0.9" strokeLinecap="round"/></g>
-          {/* Overgang */}
-          <path d="M0 171 Q360 163 720 171 Q1080 179 1440 171 L1440 180 L0 180 Z" fill="#e8f4f8"/>
+          {/* Overgang — rett linje */}
+          <rect x="0" y="172" width="1440" height="8" fill="#e8f4f8"/>
         </svg>
       </div>
 
