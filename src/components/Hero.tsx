@@ -2,10 +2,18 @@
 import { useState, useEffect } from 'react'
 import styles from './Hero.module.css'
 
+const dagNavn = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag']
+const månedNavn = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember']
+
+function getDagensDato() {
+  const nå = new Date()
+  return `${dagNavn[nå.getDay()]} ${nå.getDate()}. ${månedNavn[nå.getMonth()]}`
+}
+
 const locations = [
   {
     name: 'Tånes',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '11°C',
     vind: 'Svak bris 3.2 m/s fra SV',
     bølger: '0.4m – Stille 🟢',
@@ -13,7 +21,7 @@ const locations = [
   },
   {
     name: 'Stavanger havn',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '10°C',
     vind: 'Lett bris 4.1 m/s fra V',
     bølger: '0.6m – Rolig 🟡',
@@ -21,7 +29,7 @@ const locations = [
   },
   {
     name: 'Jærstrendene',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '9°C',
     vind: 'Frisk bris 7.8 m/s fra SV',
     bølger: '1.2m – Moderat 🟠',
@@ -29,7 +37,7 @@ const locations = [
   },
   {
     name: 'Tananger',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '11°C',
     vind: 'Svak bris 2.9 m/s fra S',
     bølger: '0.3m – Stille 🟢',
@@ -37,7 +45,7 @@ const locations = [
   },
   {
     name: 'Karmøy',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '10°C',
     vind: 'Lett bris 5.2 m/s fra NV',
     bølger: '0.8m – Rolig 🟡',
@@ -45,7 +53,7 @@ const locations = [
   },
   {
     name: 'Haugesund',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '12°C',
     vind: 'Svak bris 3.5 m/s fra N',
     bølger: '0.5m – Stille 🟢',
@@ -53,7 +61,7 @@ const locations = [
   },
   {
     name: 'Kristiansand',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '13°C',
     vind: 'Lett bris 4.4 m/s fra SØ',
     bølger: '0.5m – Stille 🟢',
@@ -61,7 +69,7 @@ const locations = [
   },
   {
     name: 'Lillesand',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '13°C',
     vind: 'Svak bris 2.8 m/s fra S',
     bølger: '0.3m – Stille 🟢',
@@ -69,7 +77,7 @@ const locations = [
   },
   {
     name: 'Grimstad',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '14°C',
     vind: 'Svak bris 3.1 m/s fra SV',
     bølger: '0.4m – Stille 🟢',
@@ -77,7 +85,7 @@ const locations = [
   },
   {
     name: 'Drøbak',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '12°C',
     vind: 'Lett bris 4.8 m/s fra N',
     bølger: '0.3m – Stille 🟢',
@@ -85,7 +93,7 @@ const locations = [
   },
   {
     name: 'Oslofjorden',
-    date: 'fredag 3. april',
+    date: getDagensDato(),
     vær: '11°C',
     vind: 'Frisk bris 6.2 m/s fra SV',
     bølger: '0.7m – Rolig 🟡',
@@ -103,8 +111,8 @@ export default function Hero() {
       setTimeout(() => {
         setCurrent(prev => (prev + 1) % locations.length)
         setFading(false)
-      }, 400)
-    }, 3000)
+      }, 500)
+    }, 5000)
     return () => clearInterval(interval)
   }, [])
 
