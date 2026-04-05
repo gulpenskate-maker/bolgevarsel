@@ -63,8 +63,8 @@ export default function VarselKlient() {
     setSugg([]); setApent(false); setLaster(true); setFeil(''); setVarsel(null)
     try {
       const [w, m] = await Promise.all([
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${sted.latitude}&longitude=${sted.longitude}&current=temperature_2m,wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=Europe/Oslo`).then(r => r.json()),
-        fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${sted.latitude}&longitude=${sted.longitude}&current=wave_height,wave_period,wave_direction,sea_surface_temperature&timezone=Europe/Oslo`).then(r => r.json()),
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${Math.round(sted.latitude*10000)/10000}&longitude=${Math.round(sted.longitude*10000)/10000}&current=temperature_2m,wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=Europe/Oslo`).then(r => r.json()),
+        fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${Math.round(sted.latitude*10000)/10000}&longitude=${Math.round(sted.longitude*10000)/10000}&current=wave_height,wave_period,wave_direction,sea_surface_temperature&timezone=Europe/Oslo`).then(r => r.json()),
       ])
       setVarsel({
         navn: sted.name + (sted.admin1 ? `, ${sted.admin1.replace(' Fylke','')}` : ''),

@@ -67,7 +67,7 @@ type LiveData = {
 async function fetchLocation(loc: typeof LOCATIONS[0]): Promise<LiveData> {
   try {
     const res = await fetch(
-      `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${loc.lat}&lon=${loc.lon}`,
+      `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${Math.round(loc.lat*10000)/10000}&lon=${Math.round(loc.lon*10000)/10000}`,
       { headers: { 'User-Agent': 'bolgevarsel.no kontakt@bolgevarsel.no' } }
     )
     const data = await res.json()

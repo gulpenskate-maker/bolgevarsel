@@ -12,7 +12,7 @@ export default function Footer() {
         &nbsp;·&nbsp;<a href="mailto:hei@bolgevarsel.no">Kontakt</a>
       </p>
       <p className={styles.links} style={{fontSize:'0.78rem', opacity:0.5}}>
-        Data fra <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> og <a href="https://met.no" target="_blank" rel="noopener">met.no</a>
+        Data fra <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> og <a href="https://met.no" target="_blank" rel="noopener">MET Norge</a> · Værvarselsdata fra MET Norge er lisensiert under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>
       </p>
       <p className={styles.copy}>© 2026 Stå på Pinne AS</p>
     </footer>
