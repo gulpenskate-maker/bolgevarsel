@@ -168,12 +168,12 @@ export default function Hero() {
         <g><line x1="900" y1="550" x2="900" y2="520" stroke="#8a7a6a" strokeWidth="1.5"/><path d="M900 550 L878 545 L900 525 Z" fill="rgba(255,255,255,0.85)"/><path d="M900 550 L920 545 L900 535 Z" fill="rgba(255,255,255,0.6)"/><path d="M882 550 Q900 554 918 550" fill="#5a4a3a"/></g>
       </svg>
       <div className={styles.content}>
-        <div className={styles.eyebrow}><span className={styles.line}/>Sjøvarseltjeneste for norskekysten<span className={styles.line}/></div>
-        <h1 className={styles.h1}>Vet hva sjøen<br/>gjør i <em>morgen</em></h1>
-        <p className={styles.sub}>Daglig bølge- og værvarsel direkte på SMS — skreddersydd for din kystlokasjon. Enkelt, pålitelig, norsk.</p>
+        <div className={styles.eyebrow}><span className={styles.line}/>Live sjødata · norskekysten<span className={styles.line}/></div>
+        <h1 className={styles.h1}>Vet hva sjøen gjør —<br/>før du <em>reiser ut</em></h1>
+        <p className={styles.sub}>Daglig SMS-varsel med bølger, vind og sjøtemperatur — pluss full rapport på e-post og kritisk farevarsel når forholdene endrer seg. Skreddersydd for din kystlokasjon.</p>
         <div className={styles.actions}>
           <a href="/registrer" className={styles.btnPrimary}>Start gratis prøveperiode</a>
-          <a href="#hvordan" className={styles.btnGhost}>Se hvordan det fungerer →</a>
+          <a href="#hvordan" className={styles.btnGhost}>Se eksempel på varsel →</a>
         </div>
       </div>
       <div className={styles.smsFloat} style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.5s ease' }}>
