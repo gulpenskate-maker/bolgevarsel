@@ -112,7 +112,7 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
             </thead>
             <tbody>
               {filtrert.map(s => (
-                <tr key={s.id} style={{ borderTop: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }} onClick={() => setValgt(valgt?.id === s.id ? null : s)}>
+                <tr key={s.id} style={{ borderTop: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }} onClick={() => window.location.href = `/admin/bruker/${s.id}`}>
                   <td style={{ padding: '0.75rem 0.8rem', fontSize: '0.9rem' }}>{s.email}</td>
                   <td style={{ padding: '0.75rem 0.8rem' }}><span style={S.planBadge(s.plan)}>{s.plan}</span></td>
                   <td style={{ padding: '0.75rem 0.8rem' }}><span style={S.badge(s.status === 'active')}>{s.status}</span></td>
