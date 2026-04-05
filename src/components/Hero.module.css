@@ -12,7 +12,7 @@
 .btnPrimary:hover { background: var(--ocean-light); transform: translateY(-2px); }
 .btnGhost { color: var(--text-mid); font-size: 0.95rem; text-decoration: none; transition: color 0.2s; }
 .btnGhost:hover { color: var(--ocean-deep); }
-.smsFloat { position: absolute; bottom: 8%; right: 6%; z-index: 12; background: var(--white); border-radius: 20px; padding: 1.2rem 1.5rem; max-width: 260px; box-shadow: 0 16px 48px rgba(10,42,61,0.18); animation: float 4s ease-in-out infinite; border: 1px solid rgba(10,42,61,0.06); }
+.smsFloat { position: absolute; bottom: 8%; right: 6%; z-index: 12; background: var(--white); border-radius: 20px; padding: 1.2rem 1.5rem; max-width: 320px; box-shadow: 0 16px 48px rgba(10,42,61,0.18); animation: float 4s ease-in-out infinite; border: 1px solid rgba(10,42,61,0.06); }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .smsHeader { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(10,42,61,0.06); }
 .smsDot { width: 8px; height: 8px; border-radius: 50%; background: #4cd964; }
