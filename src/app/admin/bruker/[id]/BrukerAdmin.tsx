@@ -13,8 +13,22 @@ export default function BrukerAdmin({ sub }: { sub: any }) {
   const [nyEpost, setNyEpost] = useState(sub.email)
   const [notater, setNotater] = useState(sub.notes || '')
   const [loading, setLoading] = useState<string | null>(null)
+  const [linkSendt, setLinkSendt] = useState(false)
 
   const vis = (tekst: string, ok = true) => { setMelding({ tekst, ok }); setTimeout(() => setMelding(null), 3500) }
+
+  async function sendInnloggingslenke() {
+    setLoading('login-link')
+    const r = await fetch('/api/admin/send-login-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subscriber_id: sub.id, email: sub.email }),
+    })
+    const d = await r.json()
+    setLoading(null)
+    if (d.ok) { vis('✅ Innloggingslenke sendt til ' + sub.email); setLinkSendt(true) }
+    else vis('❌ Feil: ' + d.error, false)
+  }
 
   async function patch(felt: string, verdi: any) {
     setLoading(felt)
@@ -71,6 +85,10 @@ export default function BrukerAdmin({ sub }: { sub: any }) {
               {sub.locked ? '🔓 Lås opp konto' : '🔒 Sperre konto'}
             </button>
             <button onClick={() => patch('status', 'cancelled')} style={btn('#7f1d1d', '')}>🚫 Kanseller</button>
+            <button onClick={sendInnloggingslenke} disabled={loading === 'login-link' || linkSendt}
+              style={{ ...btn('#4da8cc', ''), opacity: linkSendt ? 0.5 : 1 }}>
+              {loading === 'login-link' ? '...' : linkSendt ? '✅ Lenke sendt' : '🔗 Send innloggingslenke'}
+            </button>
           </div>
           {sub.locked && <p style={{ margin: '0.8rem 0 0', fontSize: '0.82rem', color: '#f87171' }}>⚠️ Kontoen er sperret — abonnenten kan ikke logge inn eller motta varsler.</p>}
         </div>
