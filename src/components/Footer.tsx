@@ -5,7 +5,8 @@ export default function Footer() {
     <footer className={styles.footer}>
       <p className={styles.name}><strong>bølgevarsel.no</strong> — daglig sjøvarsel på SMS</p>
       <p className={styles.links}>
-        <a href="/hjelp">Hjelpesenter</a>
+        <a href="/varsel">Sjekk bølger</a>
+        &nbsp;·&nbsp;<a href="/hjelp">Hjelpesenter</a>
         &nbsp;·&nbsp;<a href="/hjelp/faq/hvor-noyaktig">FAQ</a>
         &nbsp;·&nbsp;<a href="/personvern">Personvern</a>
         &nbsp;·&nbsp;<a href="mailto:hei@bolgevarsel.no">Kontakt</a>

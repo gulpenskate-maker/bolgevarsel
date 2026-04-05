@@ -8,6 +8,7 @@ export default function Nav() {
       <ul className={styles.links}>
         <li><a href="#hvordan">Hvordan det fungerer</a></li>
         <li><a href="#pris">Priser</a></li>
+        <li><a href="/varsel">Sjekk bølger</a></li>
         <li><a href="/hjelp">Hjelp</a></li>
         <li><a href="/min-side">Min side</a></li>
       </ul>
