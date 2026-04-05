@@ -168,7 +168,6 @@ export default function Hero() {
         <g><line x1="900" y1="550" x2="900" y2="520" stroke="#8a7a6a" strokeWidth="1.5"/><path d="M900 550 L878 545 L900 525 Z" fill="rgba(255,255,255,0.85)"/><path d="M900 550 L920 545 L900 535 Z" fill="rgba(255,255,255,0.6)"/><path d="M882 550 Q900 554 918 550" fill="#5a4a3a"/></g>
       </svg>
       <div className={styles.content}>
-        <div className={styles.eyebrow}><span className={styles.line}/>Live sjødata · norskekysten<span className={styles.line}/></div>
         <h1 className={styles.h1}>Vet hva sjøen gjør —<br/>før du <em>reiser ut</em></h1>
         <p className={styles.sub}>Daglig SMS-varsel med bølger, vind og sjøtemperatur — pluss full rapport på e-post og kritisk farevarsel når forholdene endrer seg. Skreddersydd for din kystlokasjon.</p>
         <div className={styles.actions}>
