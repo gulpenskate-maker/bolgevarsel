@@ -69,7 +69,7 @@ inp.addEventListener('keydown',e=>{
   else if(e.key==='Escape'){dd.style.display='none';sel=-1;}
 });
 
-inp.addEventListener('blur',()=>setTimeout(()=>{dd.style.display='none';sel=-1;},300));
+inp.addEventListener('blur',()=>setTimeout(()=>{dd.style.display='none';sel=-1;},500));
 dd.addEventListener('mousedown',e=>e.preventDefault());
 inp.addEventListener('focus',()=>sugg.length>0&&renderDD());
 
@@ -77,8 +77,9 @@ function renderDD(){
   if(!sugg.length){dd.style.display='none';return}
   dd.innerHTML=sugg.map((s,i)=>'<div class="sug" data-i="'+i+'" style="padding:10px 16px;cursor:pointer;font-size:14px;background:'+(i===sel?'#f0f8fc':'white')+';border-bottom:1px solid #f0f4f8"><span style="font-weight:500;color:#0a2a3d">'+s.name+'</span>'+(s.admin1?'<span style="color:#6b8fa3"> – '+s.admin1.replace(' Fylke','')+'</span>':'')+'</div>').join('');
   dd.querySelectorAll('.sug').forEach(el=>{
-    el.addEventListener('mousedown',e=>{e.preventDefault();pick(sugg[+el.dataset.i]);});
-    el.addEventListener('mouseenter',()=>{sel=+el.dataset.i;renderDD();});
+  el.addEventListener('mousedown',e=>{e.preventDefault();pick(sugg[+el.dataset.i]);});
+  el.addEventListener('mouseenter',()=>{sel=+el.dataset.i;renderDD();});
+  el.addEventListener('touchstart',e=>{e.preventDefault();pick(sugg[+el.dataset.i]);},{passive:false});
   });
   dd.style.display='block';
 }
