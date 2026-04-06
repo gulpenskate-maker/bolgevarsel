@@ -115,32 +115,60 @@ export default function LeggTilLokasjon({ onAdd, onCancel }: Props) {
     <div style={S.overlay}>
       <div style={S.modal}>
         <div style={S.head}>
-          <div>
-            <div style={{ fontSize:14, fontWeight:500, color:'#0a2a3d' }}>Legg til lokasjon</div>
-            <div style={{ fontSize:11, color:'#6b8fa3', marginTop:1 }}>Søk etter sted eller plasser pin på kart</div>
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <div style={{width:32,height:32,borderRadius:8,background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1C5.2 1 3 3.2 3 6C3 9.5 8 15 8 15C8 15 13 9.5 13 6C13 3.2 10.8 1 8 1Z" stroke="#1a6080" strokeWidth="1.4" fill="none" strokeLinejoin="round"/>
+                <circle cx="8" cy="6" r="1.8" fill="#1a6080"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize:14, fontWeight:500, color:'#0a2a3d' }}>Legg til lokasjon</div>
+              <div style={{ fontSize:11, color:'#6b8fa3', marginTop:1 }}>Søk eller plasser pin på kart</div>
+            </div>
           </div>
-          <button onClick={onCancel} style={{ background:'none', border:'none', cursor:'pointer', color:'#6b8fa3', fontSize:18, lineHeight:1 }}>×</button>
+          <button onClick={onCancel} style={{ background:'none', border:'none', cursor:'pointer', color:'#94a3b8', width:28, height:28, borderRadius:6, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          </button>
         </div>
 
         <div style={S.tabs}>
           <button style={S.tab(tab==='sok')} onClick={()=>setTab('sok')}>
-            🔍 Søk etter sted
+            <span style={{display:'inline-flex',alignItems:'center',gap:6}}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <circle cx="6" cy="6" r="4.2" stroke="currentColor" strokeWidth="1.3"/>
+                <path d="M9.5 9.5L12 12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+              </svg>
+              Søk etter sted
+            </span>
           </button>
           <button style={S.tab(tab==='kart')} onClick={()=>setTab('kart')}>
-            📍 Plasser pin på kart
+            <span style={{display:'inline-flex',alignItems:'center',gap:6}}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1.5C4.8 1.5 3 3.3 3 5.5C3 8.2 7 12.5 7 12.5C7 12.5 11 8.2 11 5.5C11 3.3 9.2 1.5 7 1.5Z" stroke="currentColor" strokeWidth="1.3" fill="none" strokeLinejoin="round"/>
+                <circle cx="7" cy="5.5" r="1.3" fill="currentColor"/>
+              </svg>
+              Plasser pin på kart
+            </span>
           </button>
         </div>
 
         <div style={S.body}>
           {tab === 'sok' && (<>
             <div style={{ position:'relative', marginBottom:8 }}>
+              <div style={{position:'absolute',left:10,top:'50%',transform:'translateY(-50%)',pointerEvents:'none'}}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <circle cx="6" cy="6" r="4.2" stroke="#94a3b8" strokeWidth="1.3"/>
+                  <path d="M9.5 9.5L12 12" stroke="#94a3b8" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+              </div>
               <input
-                style={S.inp} autoFocus
+                style={{...S.inp, paddingLeft:32}} autoFocus
                 placeholder="Søk etter sted langs kysten..."
                 value={query}
                 onChange={e => { setQuery(e.target.value); setValgt(null) }}
               />
-              {loading && <div style={{ position:'absolute', right:10, top:10, fontSize:11, color:'#6b8fa3' }}>Søker...</div>}
+              {loading && <div style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', fontSize:11, color:'#6b8fa3' }}>Søker...</div>}
             </div>
             {sugg.length > 0 && !valgt && (
               <div style={S.sugg}>
