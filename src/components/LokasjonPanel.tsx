@@ -16,7 +16,7 @@ type HourlyPoint = {
 }
 
 const SCORE_COLORS = ['#94a3b8','#16a34a','#65a30d','#ca8a04','#ea580c','#dc2626']
-const SCORE_LABELS = ['Laster...','Stille hav','Lett krusning','Moderat','Kuling','Farevarsel']
+const SCORE_LABELS = ['Rolig hav','Stille hav','Lett krusning','Moderat','Kuling','Farevarsel']
 
 function ratingScore(wave: number, wind: number) {
   if (wind >= 24.5 || wave >= 4.0) return 5
