@@ -10,8 +10,6 @@ export default function Pricing() {
         <div className={styles.plans}>
           {PLANS.map((plan) => (
             <div key={plan.id} className={`${styles.plan} ${plan.featured ? styles.featured : ''}`}>
-              {plan.featured && <div className={styles.badge}>Mest populær</div>}
-              {!plan.smsEnabled && <div className={styles.badgeEmail}>Kun e-post</div>}
               <div className={styles.planName}>{plan.name}</div>
               <div className={styles.priceRow}>
                 <div className={styles.price}>{plan.price}<span className={styles.suffix}>kr</span></div>
