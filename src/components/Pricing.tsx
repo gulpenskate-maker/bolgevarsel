@@ -17,7 +17,7 @@ export default function Pricing() {
               </div>
               <div className={styles.per}>per måned</div>
               <ul className={styles.features}>{plan.features.map((f) => <li key={f}>{f}</li>)}</ul>
-              <a href={`/registrer?plan=${plan.id}`} className={styles.planBtn}>Kom i gang</a>
+              <a href={`/registrer?plan=${plan.id}`} className={styles.planBtn}>Start 7 dager gratis</a>
 
             </div>
           ))}
