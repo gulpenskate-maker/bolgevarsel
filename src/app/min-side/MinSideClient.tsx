@@ -628,52 +628,90 @@ export default function MinSideClient() {
               )}
 
               {showAddRec && locs.length > 0 && (
-                <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
-                  <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Legg til mottaker</div>
-                  <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
-                    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}}>
-                      <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Navn</div><input style={S.inp} placeholder="Ola Nordmann" value={newName} onChange={e=>setNewName(e.target.value)} /></div>
-                      <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Telefonnummer</div><input style={S.inp} placeholder="+47 000 00 000" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required /></div>
+                <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.75rem',marginBottom:'1rem'}}>
+
+                  {/* ── Seksjon 1: Mottakerinformasjon ── */}
+                  <div style={{fontSize:11,fontWeight:500,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.06em',display:'flex',alignItems:'center',gap:6}}>
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="4.5" r="2.3" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M1.5 11.5c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" fill="none"/></svg>
+                    Mottakerinformasjon
+                  </div>
+                  <div style={{background:'white',borderRadius:10,border:'0.5px solid rgba(10,42,61,0.1)',overflow:'hidden'}}>
+                    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:0}}>
+                      <div style={{padding:'10px 12px',borderRight:'0.5px solid rgba(10,42,61,0.07)'}}>
+                        <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Navn</div>
+                        <input style={{...S.inp,borderRadius:6}} placeholder="Ola Nordmann" value={newName} onChange={e=>setNewName(e.target.value)} />
+                      </div>
+                      <div style={{padding:'10px 12px'}}>
+                        <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Telefonnummer</div>
+                        <input style={{...S.inp,borderRadius:6}} placeholder="+47 000 00 000" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required />
+                      </div>
                     </div>
-                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>E-postadresse (valgfritt)</div><input style={S.inp} placeholder="ola@eksempel.no" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} /></div>
-                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Lokasjon</div>
-                      <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
+                    <div style={{padding:'10px 12px',borderTop:'0.5px solid rgba(10,42,61,0.07)'}}>
+                      <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Lokasjon</div>
+                      <select style={{...S.inp,borderRadius:6}} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
                         <option value="">Velg lokasjon</option>
                         {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
                       </select>
                     </div>
-                    {/* Kritisk farevarsel — alltid på */}
-                    <div style={{background:'#fef9f9',borderRadius:8,padding:'10px 12px',border:'0.5px solid rgba(220,38,38,0.15)'}}>
-                      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:4}}>
+                  </div>
+
+                  {/* ── Seksjon 2: SMS-varsling ── */}
+                  <div style={{fontSize:11,fontWeight:500,color:'#1a6080',textTransform:'uppercase',letterSpacing:'0.06em',display:'flex',alignItems:'center',gap:6}}>
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="9" rx="1.5" stroke="#1a6080" strokeWidth="1.2" fill="none"/><path d="M3 5.5h7M3 7.5h4" stroke="#1a6080" strokeWidth="1" strokeLinecap="round"/></svg>
+                    SMS-varsling
+                  </div>
+                  <div style={{background:'white',borderRadius:10,border:'1px solid rgba(26,96,128,0.18)',overflow:'hidden'}}>
+                    {/* Kritisk farevarsel */}
+                    <div style={{padding:'10px 12px',background:'#fef9f9',borderBottom:'0.5px solid rgba(220,38,38,0.1)'}}>
+                      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
                         <div style={{display:'flex',alignItems:'center',gap:7}}>
                           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2.5v3M6.5 9h.01" stroke="#dc2626" strokeWidth="1.2" strokeLinecap="round"/></svg>
                           <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Kritisk farevarsel</span>
                         </div>
                         <span style={{fontSize:10,fontWeight:600,padding:'2px 8px',borderRadius:100,background:'#fef2f2',color:'#991b1b'}}>Alltid på</span>
                       </div>
-                      <div style={{fontSize:11,color:'#6b7280'}}>Sendes automatisk ved farlige forhold — kan ikke skrus av.</div>
+                      <div style={{fontSize:11,color:'#9ca3af'}}>Sendes automatisk ved farlige forhold — kan ikke skrus av.</div>
                     </div>
-                    {/* Daglig SMS — av som standard */}
-                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0'}}>
-                      <div>
-                        <div style={{fontSize:13,color:'#0a2a3d'}}>Daglig SMS-rapport</div>
-                        <div style={{fontSize:11,color:'#6b8fa3'}}>Av som standard — skru på om ønskelig</div>
+                    {/* Daglig SMS */}
+                    <div style={{padding:'10px 12px',borderBottom:'0.5px solid rgba(10,42,61,0.07)'}}>
+                      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
+                        <div style={{display:'flex',alignItems:'center',gap:7}}>
+                          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="8" rx="1.5" stroke="#1a6080" strokeWidth="1.1" fill="none"/><path d="M3 5h7M3 7h4" stroke="#1a6080" strokeWidth="1" strokeLinecap="round"/></svg>
+                          <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Daglig rapport på SMS</span>
+                        </div>
+                        <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewSmsEnabled(!newSmsEnabled)}>
+                          <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
+                          <div style={{position:'absolute',width:14,height:14,top:3,left:newSmsEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
+                        </div>
                       </div>
-                      <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewSmsEnabled(!newSmsEnabled)}>
-                        <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
-                        <div style={{position:'absolute',width:14,height:14,top:3,left:newSmsEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
-                      </div>
+                      <div style={{fontSize:11,color:'#6b8fa3'}}>Daglig sjøoppsummering. Av som standard — skru på om ønskelig.</div>
                     </div>
-                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt (valgfritt)</div>
-                      <select style={S.inp} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
+                    {/* Leveringstidspunkt */}
+                    <div style={{padding:'10px 12px'}}>
+                      <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt for SMS</div>
+                      <select style={{...S.inp,borderRadius:6}} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
                         <option value="">Samme som abonnementet ({sendTime})</option>
                         {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
                           <option key={t} value={t}>{t}</option>
                         ))}
                       </select>
                     </div>
-                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil (valgfritt)</div>
-                      <select style={S.inp} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
+                  </div>
+
+                  {/* ── Seksjon 3: E-postrapport ── */}
+                  <div style={{fontSize:11,fontWeight:500,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.06em',display:'flex',alignItems:'center',gap:6}}>
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 3h10l-5 4.5L1.5 3z" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinejoin="round"/><path d="M1.5 3v7.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V3" stroke="currentColor" strokeWidth="1.2" fill="none"/></svg>
+                    E-postrapport (valgfritt)
+                  </div>
+                  <div style={{background:'white',borderRadius:10,border:'0.5px solid rgba(10,42,61,0.1)',overflow:'hidden'}}>
+                    <div style={{padding:'10px 12px',borderBottom:'0.5px solid rgba(10,42,61,0.07)'}}>
+                      <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>E-postadresse</div>
+                      <input style={{...S.inp,borderRadius:6}} placeholder="ola@eksempel.no — la stå tom for ingen e-post" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} />
+                      <div style={{fontSize:10,color:'#94a3b8',marginTop:3}}>Detaljert HTML-rapport sendes hit. Valgfritt.</div>
+                    </div>
+                    <div style={{padding:'10px 12px'}}>
+                      <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil</div>
+                      <select style={{...S.inp,borderRadius:6}} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
                         <option value="">Generell sjørapport (ingen spesialprofil)</option>
                         <option value="surfer">🏄 Surfer</option>
                         <option value="kitesurfer">🪁 Kitesurfer</option>
@@ -685,13 +723,15 @@ export default function MinSideClient() {
                         <option value="seiler">⛵ Seiler</option>
                         <option value="fridykker">🤿 Fridykker / snorkling</option>
                       </select>
+                      <div style={{fontSize:10,color:'#94a3b8',marginTop:3}}>Tilpasser både SMS og e-postrapporten til aktiviteten.</div>
                     </div>
-                    <div style={{display:'flex',gap:'8px'}}>
-                      <button style={{...S.btnPrimary,flex:1}} type="submit">+ Legg til mottaker</button>
-                      <button style={S.btnGhost} type="button" onClick={()=>setShowAddRec(false)}>Avbryt</button>
-                    </div>
-                  </form>
-                </div>
+                  </div>
+
+                  <div style={{display:'flex',gap:'8px'}}>
+                    <button style={{...S.btnPrimary,flex:1}} type="submit">+ Legg til mottaker</button>
+                    <button style={S.btnGhost} type="button" onClick={()=>setShowAddRec(false)}>Avbryt</button>
+                  </div>
+                </form>
               )}
 
               {showCsvImport && locs.length > 0 && (
