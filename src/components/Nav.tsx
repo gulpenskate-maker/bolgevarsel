@@ -19,7 +19,7 @@ export default function Nav() {
         <li><a href="/hjelp">Hjelp</a></li>
         <li><a href="/min-side">Min side</a></li>
       </ul>
-      <a href="/registrer" className={styles.cta}>Kom i gang</a>
+      <a href="/registrer" className={styles.cta}>Start 7 dager gratis</a>
     </nav>
   )
 }
