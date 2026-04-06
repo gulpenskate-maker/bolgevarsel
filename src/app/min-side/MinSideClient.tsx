@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import LokasjonPanel from '@/components/LokasjonPanel'
 import LeggTilLokasjon from '@/components/LeggTilLokasjon'
+import RapportTab from '@/components/RapportTab'
 
 const S = {
   page: { minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' } as React.CSSProperties,
@@ -61,7 +62,7 @@ export default function MinSideClient() {
   const [sendTimeSaved, setSendTimeSaved] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showAddLoc, setShowAddLoc] = useState(false)
-  const [activeTab, setActiveTab] = useState<'lokasjoner'|'mottakere'|'konto'>('lokasjoner')
+  const [activeTab, setActiveTab] = useState<'lokasjoner'|'mottakere'|'rapport'|'konto'>('lokasjoner')
   const [accountLoading, setAccountLoading] = useState<string|null>(null)
   const [showAddRec, setShowAddRec] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
@@ -302,6 +303,7 @@ export default function MinSideClient() {
   const tabs = [
     { key: 'lokasjoner', label: 'Lokasjoner', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C4.8 1.5 3 3.3 3 5.5C3 8.2 7 12.5 7 12.5C7 12.5 11 8.2 11 5.5C11 3.3 9.2 1.5 7 1.5Z" stroke="currentColor" strokeWidth="1.2" fill="none"/><circle cx="7" cy="5.5" r="1.3" fill="currentColor"/></svg>, count: locs.length },
     { key: 'mottakere', label: 'Mottakere', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="1" width="6" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M5.5 10h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/></svg>, count: recs.length },
+    { key: 'rapport', label: 'Rapport', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M1 5.5h12" stroke="currentColor" strokeWidth="1.2"/><path d="M4.5 1v2M9.5 1v2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>, count: null },
     { key: 'konto', label: 'Konto', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M2 12.5c0-2.8 2.2-4.5 5-4.5s5 1.7 5 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" fill="none"/></svg>, count: null },
   ] as const
 
@@ -603,6 +605,11 @@ export default function MinSideClient() {
                 </div>
               )}
             </div>
+          )}
+
+          {/* ===== TAB: RAPPORT ===== */}
+          {activeTab === 'rapport' && (
+            <RapportTab locs={locs} subEmail={sub!.email} />
           )}
 
           {/* ===== TAB: KONTO ===== */}
