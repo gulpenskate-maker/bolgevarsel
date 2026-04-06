@@ -61,6 +61,7 @@ export default function MinSideClient() {
   const [sendTimeSaved, setSendTimeSaved] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showAddLoc, setShowAddLoc] = useState(false)
+  const [activeTab, setActiveTab] = useState<'lokasjoner'|'mottakere'|'konto'>('lokasjoner')
   const [accountLoading, setAccountLoading] = useState<string|null>(null)
   const [showAddRec, setShowAddRec] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
@@ -298,6 +299,12 @@ export default function MinSideClient() {
   )
 
   // DASHBOARD VIEW
+  const tabs = [
+    { key: 'lokasjoner', label: 'Lokasjoner', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C4.8 1.5 3 3.3 3 5.5C3 8.2 7 12.5 7 12.5C7 12.5 11 8.2 11 5.5C11 3.3 9.2 1.5 7 1.5Z" stroke="currentColor" strokeWidth="1.2" fill="none"/><circle cx="7" cy="5.5" r="1.3" fill="currentColor"/></svg>, count: locs.length },
+    { key: 'mottakere', label: 'Mottakere', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="1" width="6" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M5.5 10h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/></svg>, count: recs.length },
+    { key: 'konto', label: 'Konto', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M2 12.5c0-2.8 2.2-4.5 5-4.5s5 1.7 5 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" fill="none"/></svg>, count: null },
+  ] as const
+
   return (
     <div style={S.page}>
       <div style={{background:'#c8e8f5', overflow:'hidden', position:'relative'}}>
@@ -323,405 +330,350 @@ export default function MinSideClient() {
             <linearGradient id="sea8b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e5a7a"/><stop offset="100%" stopColor="#0d3350"/></linearGradient>
           </defs>
           <rect width="1440" height="180" fill="url(#sky8)"/>
-          {/* Sol */}
-          <g className="bv-sun"><circle cx="1340" cy="42" r="26" fill="#fff4e0" opacity="0.4"/>
-          <circle cx="1340" cy="42" r="17" fill="#ffd580" opacity="0.5"/>
-          <circle cx="1340" cy="42" r="10" fill="#ffbc40" opacity="0.72"/></g>
-          {/* Sky */}
+          <g className="bv-sun"><circle cx="1340" cy="42" r="26" fill="#fff4e0" opacity="0.4"/><circle cx="1340" cy="42" r="17" fill="#ffd580" opacity="0.5"/><circle cx="1340" cy="42" r="10" fill="#ffbc40" opacity="0.72"/></g>
           <ellipse cx="200" cy="32" rx="55" ry="12" fill="white" opacity="0.2"/>
           <ellipse cx="235" cy="22" rx="38" ry="10" fill="white" opacity="0.15"/>
-          {/* Fjell */}
           <path d="M0 125 L180 72 L320 108 L500 58 L660 95 L820 55 L980 90 L1140 60 L1300 95 L1440 68 L1440 180 L0 180 Z" fill="#6a9ab8" opacity="0.28"/>
-          {/* Øy */}
           <ellipse cx="380" cy="118" rx="95" ry="16" fill="#2a5a3a" opacity="0.9"/>
           <path d="M295 118 Q338 102 380 97 Q422 102 465 118 Z" fill="#3a6a4a" opacity="0.95"/>
-          {/* Fyrtårn */}
           <rect x="377" y="76" width="9" height="26" fill="#e8e0d0" rx="1.5"/>
-          <rect x="379" y="83" width="3" height="4" fill="#a8c8d8" rx="0.5" opacity="0.7"/>
           <rect x="373" y="72" width="17" height="6" fill="#cc3333" rx="1.5"/>
-          <circle cx="381" cy="72" r="6" fill="#ffdd44" opacity="0.15"/>
           <circle cx="381" cy="72" r="3.5" fill="#ffdd44" opacity="0.9"/>
-          {/* Båt */}
           <g className="bv-boat"><path d="M820 98 Q855 108 890 98 L886 107 Q855 116 824 107 Z" fill="#0a2a3d" opacity="0.75"/>
-          <line x1="825" y1="107" x2="885" y2="107" stroke="#c8b89a" strokeWidth="1" opacity="0.45"/>
           <line x1="855" y1="98" x2="855" y2="60" stroke="#0a2a3d" strokeWidth="1.8" strokeLinecap="round" opacity="0.7"/>
-          <line x1="843" y1="70" x2="867" y2="70" stroke="#0a2a3d" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
           <path d="M855 62 L884 94 L855 98 Z" fill="rgba(235,228,212,0.88)"/>
-          <path d="M855 65 L829 92 L855 98 Z" fill="rgba(235,228,212,0.55)"/>
-          <path d="M855 60 L867 64 L855 68 Z" fill="#cc3333" opacity="0.9"/>
-          <path d="M828 109 Q855 113 882 109" fill="none" stroke="rgba(10,42,61,0.1)" strokeWidth="1.5" strokeLinecap="round"/></g>
-          {/* Hav */}
+          <path d="M855 65 L829 92 L855 98 Z" fill="rgba(235,228,212,0.55)"/></g>
           <path d="M0 126 Q180 112 360 126 Q540 140 720 122 Q900 104 1080 122 Q1260 140 1440 124 L1440 180 L0 180 Z" fill="url(#sea8)"/>
           <path d="M0 138 Q200 128 400 138 Q600 148 800 136 Q1000 124 1200 136 Q1350 144 1440 138 L1440 180 L0 180 Z" fill="url(#sea8b)" opacity="0.55"/>
-
-          {/* Fisk 1 */}
-          <g className="bv-f1"><ellipse cx="240" cy="141" rx="16" ry="6" fill="none" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2"/>
-          <path d="M224 141 L215 135 M224 141 L215 147" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2" strokeLinecap="round"/>
-          <circle cx="252" cy="139" r="1.5" fill="rgba(77,168,204,0.52)"/>
-          <path d="M238 135 Q242 130 246 135" fill="none" stroke="rgba(77,168,204,0.38)" strokeWidth="1"/></g>
-          {/* Fisk 2 */}
-          <g className="bv-f2"><ellipse cx="1060" cy="152" rx="11" ry="4.5" fill="none" stroke="rgba(77,168,204,0.36)" strokeWidth="1"/>
-          <path d="M1049 152 L1041 147 M1049 152 L1041 157" stroke="rgba(77,168,204,0.36)" strokeWidth="1" strokeLinecap="round"/>
-          <circle cx="1069" cy="150" r="1.2" fill="rgba(77,168,204,0.36)"/></g>
-          {/* Fisk 3 */}
-          <g className="bv-f3"><ellipse cx="620" cy="163" rx="8" ry="3" fill="none" stroke="rgba(77,168,204,0.2)" strokeWidth="0.9"/>
-          <path d="M612 163 L607 160 M612 163 L607 166" stroke="rgba(77,168,204,0.2)" strokeWidth="0.9" strokeLinecap="round"/></g>
-          {/* Overgang — rett linje */}
+          <g className="bv-f1"><ellipse cx="240" cy="141" rx="16" ry="6" fill="none" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2"/><path d="M224 141 L215 135 M224 141 L215 147" stroke="rgba(77,168,204,0.52)" strokeWidth="1.2" strokeLinecap="round"/></g>
           <rect x="0" y="172" width="1440" height="8" fill="#e8f4f8"/>
         </svg>
       </div>
 
       <div style={S.wrap}>
-        <div style={{marginBottom:'1.5rem'}}>
+        {/* Header */}
+        <div style={{marginBottom:'1.2rem'}}>
           <h1 style={{fontFamily:'Fraunces, Georgia, serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',margin:0,letterSpacing:'-0.02em'}}>
             Hei!{' '}
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style={{display:'inline-block',verticalAlign:'middle',marginBottom:'4px'}}>
               <path d="M10 6 C10 6 8 4 6.5 5.5 C5 7 7 9 7 9 L11 14" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
               <path d="M13 5 C13 5 11 3 9.5 4.5 C8 6 10 8 10 8 L14 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
               <path d="M16 5.5 C16 5.5 14.5 3.5 13 5 C11.5 6.5 13 8.5 13 8.5 L17 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              <path d="M19 7 C19 7 17.5 5 16 6.5 C14.5 8 16 10 16 10 L20 15" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
               <path d="M7 9 L11 18 C11 18 12 21 14 21 C16 21 18 19 18 17 L20 15 L17 13 L14 13 L11 14 Z" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="rgba(77,168,204,0.12)"/>
             </svg>
           </h1>
           <p style={{color:'#6b8fa3',margin:'4px 0 0',fontSize:'0.9rem'}}>{sub!.email}</p>
         </div>
 
-        <div style={S.card}>
-          <h2 style={S.sTitle}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.52 1.5 3.5 3.52 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.48-2.02-4.5-4.5-4.5z" stroke="#1a6080" strokeWidth="1.3" fill="none" strokeLinejoin="round"/><circle cx="8" cy="6" r="1.5" stroke="#1a6080" strokeWidth="1.2" fill="none"/></svg>Mine lokasjoner</span></h2>
-          {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen lokasjoner ennå.</p>}
-          {locs.length>0 && <LokasjonPanel locations={locs} />}
-          <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:locs.length?'1.2rem':0}}>
-            {locs.map(loc => (
-              <div key={loc.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
-                <div>
-                  <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{loc.name}</div>
-                  <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginTop:'2px'}}>{loc.lat.toFixed(4)}°N · {recs.filter(r=>r.location_id===loc.id).length} mottaker(e)</div>
-                </div>
-                <button style={S.btnDanger} onClick={()=>deleteLoc(loc.id)}><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
-              </div>
+        {/* Tab-navigasjon */}
+        <div style={S.card as React.CSSProperties}>
+          {/* Tab-bar */}
+          <div style={{display:'flex',borderBottom:'1px solid rgba(10,42,61,0.07)',marginBottom:'1.2rem',gap:0}}>
+            {tabs.map(tab => (
+              <button key={tab.key} onClick={()=>setActiveTab(tab.key as any)}
+                style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'10px 8px',
+                  background:'none',border:'none',cursor:'pointer',fontSize:'13px',fontWeight:500,
+                  color:activeTab===tab.key?'#1a6080':'#6b8fa3',
+                  borderBottom:activeTab===tab.key?'2px solid #1a6080':'2px solid transparent',
+                  transition:'all 0.15s',fontFamily:'inherit',
+                }}>
+                {tab.icon}
+                {tab.label}
+                {tab.count !== null && tab.count > 0 && (
+                  <span style={{background:activeTab===tab.key?'#1a6080':'rgba(10,42,61,0.1)',color:activeTab===tab.key?'white':'#6b8fa3',fontSize:'10px',fontWeight:600,padding:'1px 6px',borderRadius:100,minWidth:16,textAlign:'center',transition:'all 0.15s'}}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
             ))}
           </div>
-          <button style={{...S.btnPrimary,width:'100%',padding:'0.85rem'}} onClick={()=>setShowAddLoc(true)}>
-            + Legg til lokasjon
-          </button>
-          {showAddLoc && (
-            <LeggTilLokasjon
-              onAdd={async (loc) => {
-                const r = await fetch('/api/min-side/location', { method:'POST', headers:{'Content-Type':'application/json'},
-                  body: JSON.stringify({ subscriber_id: sub!.id, name: loc.name, lat: loc.lat, lon: loc.lon }) })
-                const d = await r.json()
-                if (d.location) setLocs([...locs, d.location])
-                setShowAddLoc(false)
-              }}
-              onCancel={() => setShowAddLoc(false)}
-            />
-          )}
-        </div>
 
-        <div style={S.card}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1rem'}}>
-            <h2 style={{...S.sTitle,margin:0}}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="4.5" y="1" width="7" height="13" rx="1.5" stroke="#1a6080" strokeWidth="1.3" fill="none"/><path d="M6.5 11h3" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/></svg>Mine mottakere</span></h2>
-            {locs.length>0 && <div style={{display:'flex',gap:'8px'}}>
-              <button style={{...S.btnGhost,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowCsvImport(!showCsvImport);setShowAddRec(false)}}>
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 10h11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/></svg>
-                Importer CSV
-              </button>
-              <button style={{...S.btnPrimary,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowAddRec(!showAddRec);setShowCsvImport(false)}}>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="white" strokeWidth="1.4" strokeLinecap="round"/></svg>
-                Legg til
-              </button>
-            </div>}
-          </div>
-          {recs.length===0 && !showAddRec && !showCsvImport && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen mottakere ennå. Legg til mottakere med knappene over.</p>}
-
-          {recs.length>0 && (
-            <div style={{overflowX:'auto',marginBottom:'1rem'}}>
-              <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.85rem'}}>
-                <thead>
-                  <tr>
-                    {['Navn','Telefon','E-post','SMS','Tidspunkt','Profil',''].map(h=>(
-                      <th key={h} style={{textAlign:'left',color:'#6b8fa3',fontWeight:500,fontSize:'0.72rem',letterSpacing:'0.06em',textTransform:'uppercase',padding:'0 10px 8px'}}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {recs.map(rec=>(
-                    <tr key={rec.id} style={{borderTop:'1px solid rgba(10,42,61,0.06)'}}>
-                      {editRec?.id===rec.id ? (
-                        <td colSpan={5} style={{padding:'8px 0'}}>
-                          <form onSubmit={saveEditRec} style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
-                            <input style={{...S.inp,flex:1,minWidth:120}} placeholder="Navn" value={editName} onChange={e=>setEditName(e.target.value)} />
-                            <input style={{...S.inp,flex:1,minWidth:140}} placeholder="Telefon" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
-                            <button style={{...S.btnPrimary,padding:'6px 12px'}} type="submit">Lagre</button>
-                            <button style={{...S.btnGhost,padding:'6px 12px'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
-                          </form>
-                        </td>
-                      ) : (<>
-                        <td style={{padding:'10px 10px'}}>
-                          <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
-                            <div style={{width:28,height:28,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:500,color:'#1a6080',flexShrink:0}}>
-                              {(rec.name||rec.phone).slice(0,2).toUpperCase()}
-                            </div>
-                            <span style={{fontWeight:500,color:'#0a2a3d'}}>{rec.name||'—'}</span>
-                          </div>
-                        </td>
-                        <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{rec.phone}</td>
-                        <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{(rec as any).email||'—'}</td>
-                        <td style={{padding:'10px'}}>
-                          <span style={{display:'inline-flex',alignItems:'center',gap:4,fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:rec.sms_enabled!==false?'#e8f5ed':'#f1f5f9',color:rec.sms_enabled!==false?'#1a7a50':'#6b8fa3'}}>
-                            {rec.sms_enabled!==false?'På':'Av'}
-                          </span>
-                        </td>
-                        <td style={{padding:'10px'}}>
-                          <span style={{fontSize:'12px',color:'#6b8fa3'}}>{rec.send_time||'Standard'}</span>
-                        </td>
-                        <td style={{padding:'10px'}}>
-                          {rec.profile ? (
-                            <span style={{fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:'#e8f4f8',color:'#1a6080'}}>
-                              {({'surfer':'Surfer','fisker':'Fisker','familie':'Barn/ungdom m/båt','baatforer':'Båtfører','kajakk':'Padler','kitesurfer':'Kiting','windsurfer':'Windsurfer','seiler':'Seiler','fridykker':'Fridykker'}[rec.profile]||rec.profile)}
-                            </span>
-                          ) : <span style={{fontSize:'12px',color:'#6b8fa3'}}>Standard</span>}
-                        </td>
-                        <td style={{padding:'10px',textAlign:'right',whiteSpace:'nowrap'}}>
-                          <button style={S.btnGhost} onClick={()=>toggleSms(rec)} title={rec.sms_enabled!==false?'Skru av SMS':'Skru på SMS'}>
-                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3 5h7M3 7.5h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/></svg>
-                          </button>
-                          <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}} title="Rediger">
-                            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L5 11H3v-2l6.5-6.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                          </button>
-                          <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)} title="Slett">
-                            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                          </button>
-                        </td>
-                      </>)}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {showAddRec && locs.length>0 && (
-            <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
-              <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Legg til mottaker</div>
-              <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}}>
-                  <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Navn</div><input style={S.inp} placeholder="Ola Nordmann" value={newName} onChange={e=>setNewName(e.target.value)} /></div>
-                  <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Telefonnummer</div><input style={S.inp} placeholder="+47 000 00 000" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required /></div>
-                </div>
-                <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>E-postadresse (valgfritt)</div><input style={S.inp} placeholder="ola@eksempel.no" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} /></div>
-                <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Lokasjon</div>
-                  <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
-                    <option value="">Velg lokasjon</option>
-                    {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
-                  </select>
-                </div>
-                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0'}}>
-                  <div>
-                    <div style={{fontSize:'13px',color:'#0a2a3d'}}>SMS-varsel</div>
-                    <div style={{fontSize:'11px',color:'#6b8fa3'}}>Mottaker får daglig SMS og farevarsler</div>
-                  </div>
-                  <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewSmsEnabled(!newSmsEnabled)}>
-                    <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
-                    <div style={{position:'absolute',width:14,height:14,top:3,left:newSmsEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
-                  </div>
-                </div>
-                <div>
-                  <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt (valgfritt — standard: abonnementets tidspunkt)</div>
-                  <select style={S.inp} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
-                    <option value="">Standard ({sendTime})</option>
-                    {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil (valgfritt)</div>
-                  <select style={S.inp} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
-                    <option value="">Standard rapport</option>
-                    <option value="surfer">🏄 Surfer</option>
-                    <option value="kitesurfer">🪁 Kitesurfer</option>
-                    <option value="windsurfer">🏄 Windsurfer</option>
-                    <option value="fisker">🎣 Fisker</option>
-                    <option value="familie">⛵ Barn/ungdom med båt</option>
-                    <option value="baatforer">⛵ Båtfører</option>
-                    <option value="kajakk">🛶 Padler / kajakk</option>
-                    <option value="seiler">⛵ Seiler</option>
-                    <option value="fridykker">🤿 Fridykker / snorkling</option>
-                  </select>
-                </div>
-                <div style={{display:'flex',gap:'8px'}}>
-                  <button style={{...S.btnPrimary,flex:1}} type="submit">+ Legg til mottaker</button>
-                  <button style={S.btnGhost} type="button" onClick={()=>setShowAddRec(false)}>Avbryt</button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          {showCsvImport && locs.length>0 && (
-            <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
-              <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Importer fra CSV</div>
-              <div style={{marginBottom:'0.75rem'}}>
-                <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Velg lokasjon for alle importerte mottakere</div>
-                <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)}>
-                  <option value="">Velg lokasjon</option>
-                  {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
-                </select>
-              </div>
-              <label style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'8px',border:'1px dashed rgba(10,42,61,0.2)',borderRadius:10,padding:'1.5rem',cursor:'pointer',background:'white',textAlign:'center'}}>
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4v16M8 14l6 6 6-6" stroke="#1a6080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 22h20" stroke="#1a6080" strokeWidth="1.5" strokeLinecap="round" opacity="0.4"/></svg>
-                <span style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d'}}>{csvFileName || 'Velg CSV-fil'}</span>
-                <span style={{fontSize:'0.78rem',color:'#6b8fa3'}}>Kolonner: navn, telefon, epost, sms</span>
-                <a href="/bolgevarsel-mottakere-eksempel.csv" download style={{fontSize:'0.75rem',color:'#1a6080'}}>Last ned eksempelfil →</a>
-                <input type="file" accept=".csv" style={{display:'none'}} onChange={e=>{if(e.target.files?.[0]) handleCsvFile(e.target.files[0])}} />
-              </label>
-              {csvRows.length>0 && !csvResult && (
-                <div style={{marginTop:'0.75rem',background:'white',borderRadius:8,padding:'0.75rem',border:'1px solid rgba(10,42,61,0.07)'}}>
-                  <div style={{display:'flex',justifyContent:'space-between',marginBottom:'6px'}}>
-                    <span style={{fontSize:'12px',fontWeight:500,color:'#0a2a3d'}}>{csvFileName}</span>
-                    <span style={{fontSize:'11px',color:'#6b8fa3'}}>{csvRows.length} rader funnet</span>
-                  </div>
-                  {csvRows.slice(0,3).map((r,i)=>(
-                    <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6,fontSize:'11px',color:'#6b8fa3',borderTop:'1px solid #f0f4f8',padding:'4px 0'}}>
-                      <span>{r.navn||r.name||'—'}</span>
-                      <span>{r.telefon||r.phone||'—'}</span>
-                      <span>{r.epost||r.email||'—'}</span>
+          {/* ===== TAB: LOKASJONER ===== */}
+          {activeTab === 'lokasjoner' && (
+            <div>
+              {locs.length === 0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen lokasjoner ennå.</p>}
+              {locs.length > 0 && <LokasjonPanel locations={locs} />}
+              <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',marginBottom:locs.length?'1rem':0}}>
+                {locs.map(loc => (
+                  <div key={loc.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.7rem 0.9rem',background:'#f8fbfc',borderRadius:10}}>
+                    <div>
+                      <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.9rem'}}>{loc.name}</div>
+                      <div style={{fontSize:'0.72rem',color:'#6b8fa3',marginTop:'1px'}}>{loc.lat.toFixed(4)}°N · {recs.filter(r=>r.location_id===loc.id).length} mottaker(e)</div>
                     </div>
-                  ))}
-                  {csvRows.length>3 && <div style={{fontSize:'11px',color:'#6b8fa3',padding:'4px 0'}}>+ {csvRows.length-3} til...</div>}
-                </div>
-              )}
-              {csvResult && (
-                <div style={{marginTop:'0.75rem',background:csvResult.imported>0?'#f0fdf4':'#fef2f2',borderRadius:8,padding:'0.75rem',border:`1px solid ${csvResult.imported>0?'#bbf7d0':'#fecaca'}`}}>
-                  <div style={{fontSize:'13px',fontWeight:500,color:csvResult.imported>0?'#1a7a50':'#dc2626',marginBottom:'4px'}}>
-                    {csvResult.imported} av {csvResult.total} importert
+                    <button style={S.btnDanger} onClick={()=>deleteLoc(loc.id)}>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
                   </div>
-                  {csvResult.results.filter(r=>!r.ok).map((r,i)=>(
-                    <div key={i} style={{fontSize:'11px',color:'#dc2626'}}>Rad {r.row}: {r.error}</div>
-                  ))}
-                </div>
-              )}
-              <div style={{display:'flex',gap:'8px',marginTop:'0.75rem'}}>
-                <button style={{...S.btnPrimary,flex:1,opacity:(!csvRows.length||!newLocId)?0.4:1}} onClick={importCsv} disabled={!csvRows.length||!newLocId||csvImporting}>
-                  {csvImporting?'Importerer...':`Importer ${csvRows.length} mottakere`}
-                </button>
-                <button style={S.btnGhost} onClick={()=>{setShowCsvImport(false);setCsvRows([]);setCsvFileName('');setCsvResult(null)}}>Avbryt</button>
+                ))}
               </div>
+              <button style={{...S.btnPrimary,width:'100%',padding:'0.8rem'}} onClick={()=>setShowAddLoc(true)}>
+                + Legg til lokasjon
+              </button>
+              {showAddLoc && (
+                <LeggTilLokasjon
+                  onAdd={async (loc) => {
+                    const r = await fetch('/api/min-side/location', { method:'POST', headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify({ subscriber_id: sub!.id, name: loc.name, lat: loc.lat, lon: loc.lon }) })
+                    const d = await r.json()
+                    if (d.location) setLocs([...locs, d.location])
+                    setShowAddLoc(false)
+                  }}
+                  onCancel={() => setShowAddLoc(false)}
+                />
+              )}
             </div>
           )}
 
-          {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.85rem'}}>Legg til en lokasjon først.</p>}
-        </div>
-
-        <div style={S.card}>
-          <h2 style={S.sTitle}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="#1a6080" strokeWidth="1.3" fill="none"/><path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l0.9 0.9M11.7 11.7l0.9 0.9M3.4 12.6l0.9-0.9M11.7 4.3l0.9-0.9" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/></svg>Min konto</span></h2>
-          <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
-            <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
-              <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'2px'}}>E-postadresse</div>
-              <div style={{fontWeight:500,color:'#0a2a3d'}}>{sub!.email}</div>
-            </div>
-            <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
-              <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'2px'}}>Abonnement</div>
-              <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
-                <span style={{fontWeight:500,color:'#0a2a3d'}}>{planLabel[sub!.plan]}</span>
-                <span style={S.tag(sub!.status==='active')}>{sub!.status==='active'?'Aktivt':'Inaktivt'}</span>
+          {/* ===== TAB: MOTTAKERE ===== */}
+          {activeTab === 'mottakere' && (
+            <div>
+              <div style={{display:'flex',justifyContent:'flex-end',gap:'8px',marginBottom:'1rem'}}>
+                {locs.length > 0 && <>
+                  <button style={{...S.btnGhost,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowCsvImport(!showCsvImport);setShowAddRec(false)}}>
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 10h11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/></svg>
+                    Importer CSV
+                  </button>
+                  <button style={{...S.btnPrimary,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowAddRec(!showAddRec);setShowCsvImport(false)}}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="white" strokeWidth="1.4" strokeLinecap="round"/></svg>
+                    Legg til
+                  </button>
+                </>}
               </div>
+
+              {recs.length === 0 && !showAddRec && !showCsvImport && (
+                <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen mottakere ennå. Bruk knappene over for å legge til.</p>
+              )}
+              {locs.length === 0 && <p style={{color:'#6b8fa3',fontSize:'0.85rem'}}>Legg til en lokasjon i «Lokasjoner»-fanen først.</p>}
+
+              {recs.length > 0 && (
+                <div style={{overflowX:'auto',marginBottom:'1rem'}}>
+                  <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.85rem'}}>
+                    <thead>
+                      <tr>
+                        {['Navn','Telefon','E-post','SMS','Tidspunkt','Profil',''].map(h=>(
+                          <th key={h} style={{textAlign:'left',color:'#6b8fa3',fontWeight:500,fontSize:'0.72rem',letterSpacing:'0.06em',textTransform:'uppercase',padding:'0 10px 8px'}}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recs.map(rec=>(
+                        <tr key={rec.id} style={{borderTop:'1px solid rgba(10,42,61,0.06)'}}>
+                          {editRec?.id===rec.id ? (
+                            <td colSpan={7} style={{padding:'8px 0'}}>
+                              <form onSubmit={saveEditRec} style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
+                                <input style={{...S.inp,flex:1,minWidth:120}} placeholder="Navn" value={editName} onChange={e=>setEditName(e.target.value)} />
+                                <input style={{...S.inp,flex:1,minWidth:140}} placeholder="Telefon" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
+                                <button style={{...S.btnPrimary,padding:'6px 12px'}} type="submit">Lagre</button>
+                                <button style={{...S.btnGhost,padding:'6px 12px'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
+                              </form>
+                            </td>
+                          ) : (<>
+                            <td style={{padding:'10px'}}>
+                              <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+                                <div style={{width:28,height:28,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:500,color:'#1a6080',flexShrink:0}}>
+                                  {(rec.name||rec.phone).slice(0,2).toUpperCase()}
+                                </div>
+                                <span style={{fontWeight:500,color:'#0a2a3d'}}>{rec.name||'—'}</span>
+                              </div>
+                            </td>
+                            <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{rec.phone}</td>
+                            <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{(rec as any).email||'—'}</td>
+                            <td style={{padding:'10px'}}>
+                              <span style={{fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:rec.sms_enabled!==false?'#e8f5ed':'#f1f5f9',color:rec.sms_enabled!==false?'#1a7a50':'#6b8fa3'}}>
+                                {rec.sms_enabled!==false?'På':'Av'}
+                              </span>
+                            </td>
+                            <td style={{padding:'10px',color:'#6b8fa3',fontSize:'12px'}}>{rec.send_time||'Standard'}</td>
+                            <td style={{padding:'10px'}}>
+                              {rec.profile ? (
+                                <span style={{fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:'#e8f4f8',color:'#1a6080'}}>
+                                  {({'surfer':'Surfer','fisker':'Fisker','familie':'Barn/ungdom m/båt','baatforer':'Båtfører','kajakk':'Padler','kitesurfer':'Kiting','windsurfer':'Windsurfer','seiler':'Seiler','fridykker':'Fridykker'}[rec.profile]||rec.profile)}
+                                </span>
+                              ) : <span style={{fontSize:'12px',color:'#6b8fa3'}}>Standard</span>}
+                            </td>
+                            <td style={{padding:'10px',textAlign:'right',whiteSpace:'nowrap'}}>
+                              <button style={S.btnGhost} onClick={()=>toggleSms(rec)} title="Skru SMS av/på">
+                                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3 5h7M3 7.5h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/></svg>
+                              </button>
+                              <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}} title="Rediger">
+                                <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L5 11H3v-2l6.5-6.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                              </button>
+                              <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)} title="Slett">
+                                <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                              </button>
+                            </td>
+                          </>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {showAddRec && locs.length > 0 && (
+                <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
+                  <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Legg til mottaker</div>
+                  <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+                    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}}>
+                      <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Navn</div><input style={S.inp} placeholder="Ola Nordmann" value={newName} onChange={e=>setNewName(e.target.value)} /></div>
+                      <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Telefonnummer</div><input style={S.inp} placeholder="+47 000 00 000" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required /></div>
+                    </div>
+                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>E-postadresse (valgfritt)</div><input style={S.inp} placeholder="ola@eksempel.no" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} /></div>
+                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Lokasjon</div>
+                      <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
+                        <option value="">Velg lokasjon</option>
+                        {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
+                      </select>
+                    </div>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0'}}>
+                      <div><div style={{fontSize:'13px',color:'#0a2a3d'}}>SMS-varsel</div><div style={{fontSize:'11px',color:'#6b8fa3'}}>Mottaker får daglig SMS og farevarsler</div></div>
+                      <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewSmsEnabled(!newSmsEnabled)}>
+                        <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
+                        <div style={{position:'absolute',width:14,height:14,top:3,left:newSmsEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
+                      </div>
+                    </div>
+                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt (valgfritt)</div>
+                      <select style={S.inp} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
+                        <option value="">Standard ({sendTime})</option>
+                        {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil (valgfritt)</div>
+                      <select style={S.inp} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
+                        <option value="">Standard rapport</option>
+                        <option value="surfer">🏄 Surfer</option>
+                        <option value="kitesurfer">🪁 Kitesurfer</option>
+                        <option value="windsurfer">🏄 Windsurfer</option>
+                        <option value="fisker">🎣 Fisker</option>
+                        <option value="familie">⛵ Barn/ungdom med båt</option>
+                        <option value="baatforer">⛵ Båtfører</option>
+                        <option value="kajakk">🛶 Padler / kajakk</option>
+                        <option value="seiler">⛵ Seiler</option>
+                        <option value="fridykker">🤿 Fridykker / snorkling</option>
+                      </select>
+                    </div>
+                    <div style={{display:'flex',gap:'8px'}}>
+                      <button style={{...S.btnPrimary,flex:1}} type="submit">+ Legg til mottaker</button>
+                      <button style={S.btnGhost} type="button" onClick={()=>setShowAddRec(false)}>Avbryt</button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {showCsvImport && locs.length > 0 && (
+                <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
+                  <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Importer fra CSV</div>
+                  <div style={{marginBottom:'0.75rem'}}>
+                    <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Velg lokasjon for alle importerte mottakere</div>
+                    <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)}>
+                      <option value="">Velg lokasjon</option>
+                      {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
+                    </select>
+                  </div>
+                  <label style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'8px',border:'1px dashed rgba(10,42,61,0.2)',borderRadius:10,padding:'1.5rem',cursor:'pointer',background:'white',textAlign:'center'}}>
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4v16M8 14l6 6 6-6" stroke="#1a6080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 22h20" stroke="#1a6080" strokeWidth="1.5" strokeLinecap="round" opacity="0.4"/></svg>
+                    <span style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d'}}>{csvFileName || 'Velg CSV-fil'}</span>
+                    <span style={{fontSize:'0.78rem',color:'#6b8fa3'}}>Kolonner: navn, telefon, epost, sms</span>
+                    <a href="/bolgevarsel-mottakere-eksempel.csv" download style={{fontSize:'0.75rem',color:'#1a6080'}}>Last ned eksempelfil →</a>
+                    <input type="file" accept=".csv" style={{display:'none'}} onChange={e=>{if(e.target.files?.[0]) handleCsvFile(e.target.files[0])}} />
+                  </label>
+                  {csvRows.length > 0 && !csvResult && (
+                    <div style={{marginTop:'0.75rem',background:'white',borderRadius:8,padding:'0.75rem',border:'1px solid rgba(10,42,61,0.07)'}}>
+                      <div style={{display:'flex',justifyContent:'space-between',marginBottom:'6px'}}>
+                        <span style={{fontSize:'12px',fontWeight:500,color:'#0a2a3d'}}>{csvFileName}</span>
+                        <span style={{fontSize:'11px',color:'#6b8fa3'}}>{csvRows.length} rader funnet</span>
+                      </div>
+                    </div>
+                  )}
+                  {csvResult && (
+                    <div style={{marginTop:'0.75rem',background:csvResult.imported>0?'#f0fdf4':'#fef2f2',borderRadius:8,padding:'0.75rem',border:`1px solid ${csvResult.imported>0?'#bbf7d0':'#fecaca'}`}}>
+                      <div style={{fontSize:'13px',fontWeight:500,color:csvResult.imported>0?'#1a7a50':'#dc2626'}}>
+                        {csvResult.imported} av {csvResult.total} importert
+                      </div>
+                    </div>
+                  )}
+                  <div style={{display:'flex',gap:'8px',marginTop:'0.75rem'}}>
+                    <button style={{...S.btnPrimary,flex:1,opacity:(!csvRows.length||!newLocId)?0.4:1}} onClick={importCsv} disabled={!csvRows.length||!newLocId||csvImporting}>
+                      {csvImporting?'Importerer...':`Importer ${csvRows.length} mottakere`}
+                    </button>
+                    <button style={S.btnGhost} onClick={()=>{setShowCsvImport(false);setCsvRows([]);setCsvFileName('');setCsvResult(null)}}>Avbryt</button>
+                  </div>
+                </div>
+              )}
             </div>
-            <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
-              <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'8px'}}>Abonnementsstatus</div>
-              <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+          )}
+
+          {/* ===== TAB: KONTO ===== */}
+          {activeTab === 'konto' && (
+            <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+              <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+                <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'2px'}}>E-postadresse</div>
+                <div style={{fontWeight:500,color:'#0a2a3d'}}>{sub!.email}</div>
+              </div>
+              <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+                <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'2px'}}>Abonnement</div>
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <span style={{fontWeight:500,color:'#0a2a3d'}}>{planLabel[sub!.plan]}</span>
+                  <span style={S.tag(sub!.status==='active')}>{sub!.status==='active'?'Aktivt':'Inaktivt'}</span>
+                </div>
+              </div>
+              <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+                <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'8px'}}>Abonnementsstatus</div>
                 {sub!.status === 'active' ? (
-                  <button
-                    onClick={async()=>{
-                      setAccountLoading('pause')
-                      await fetch('/api/min-side/frys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,action:'pause'})})
-                      setSub({...sub!,status:'paused'})
-                      setAccountLoading(null)
-                    }}
-                    style={{padding:'0.5rem 1rem',borderRadius:8,background:'#fff',border:'1px solid rgba(10,42,61,0.15)',color:'#0a2a3d',cursor:'pointer',fontSize:'0.82rem',fontWeight:500,display:'flex',alignItems:'center',gap:'6px'}}
-                  >
+                  <button onClick={async()=>{setAccountLoading('pause');await fetch('/api/min-side/frys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,action:'pause'})});setSub({...sub!,status:'paused'});setAccountLoading(null)}}
+                    style={{padding:'0.5rem 1rem',borderRadius:8,background:'#fff',border:'1px solid rgba(10,42,61,0.15)',color:'#0a2a3d',cursor:'pointer',fontSize:'0.82rem',fontWeight:500,display:'inline-flex',alignItems:'center',gap:'6px'}}>
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="2" width="3.5" height="9" rx="0.5" fill="currentColor"/><rect x="7.5" y="2" width="3.5" height="9" rx="0.5" fill="currentColor"/></svg>
                     {accountLoading==='pause'?'Fryser...':'Frys abonnement'}
                   </button>
                 ) : sub!.status === 'paused' ? (
-                  <button
-                    onClick={async()=>{
-                      setAccountLoading('resume')
-                      await fetch('/api/min-side/frys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,action:'resume'})})
-                      setSub({...sub!,status:'active'})
-                      setAccountLoading(null)
-                    }}
-                    style={{padding:'0.5rem 1rem',borderRadius:8,background:'#1a6080',border:'none',color:'white',cursor:'pointer',fontSize:'0.82rem',fontWeight:500,display:'flex',alignItems:'center',gap:'6px'}}
-                  >
+                  <button onClick={async()=>{setAccountLoading('resume');await fetch('/api/min-side/frys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,action:'resume'})});setSub({...sub!,status:'active'});setAccountLoading(null)}}
+                    style={{padding:'0.5rem 1rem',borderRadius:8,background:'#1a6080',border:'none',color:'white',cursor:'pointer',fontSize:'0.82rem',fontWeight:500,display:'inline-flex',alignItems:'center',gap:'6px'}}>
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 2l8 4.5-8 4.5V2z" fill="currentColor"/></svg>
                     {accountLoading==='resume'?'Aktiverer...':'Reaktiver abonnement'}
                   </button>
                 ) : null}
+                {sub!.status === 'paused' && <p style={{fontSize:'0.75rem',color:'#6b8fa3',margin:'6px 0 0'}}>Abonnementet er frosset. Reaktiver når du er klar.</p>}
               </div>
-              {sub!.status === 'paused' && (
-                <p style={{fontSize:'0.75rem',color:'#6b8fa3',margin:'6px 0 0'}}>Abonnementet er frosset — ingen varsler sendes. Reaktiver når du er klar.</p>
-              )}
-            </div>
-
-            <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
-              <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'8px'}}>Leveringstidspunkt for daglig rapport</div>
-              <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
-                <select
-                  value={sendTime}
-                  onChange={e=>setSendTime(e.target.value)}
-                  style={{padding:'0.4rem 0.7rem',borderRadius:8,border:'1.5px solid rgba(10,42,61,0.12)',background:'white',fontSize:'0.9rem',color:'#0a2a3d',cursor:'pointer'}}
-                >
-                  {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-                <button
-                  onClick={async()=>{
-                    setSendTimeSaving(true); setSendTimeSaved(false)
-                    await fetch('/api/min-side/send-time',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,send_time:sendTime})})
-                    setSendTimeSaving(false); setSendTimeSaved(true)
-                    setTimeout(()=>setSendTimeSaved(false),2500)
-                  }}
-                  style={{padding:'0.4rem 1rem',borderRadius:8,background:'#0a2a3d',color:'white',border:'none',cursor:'pointer',fontSize:'0.85rem',fontWeight:500}}
-                >{sendTimeSaving?'Lagrer...':sendTimeSaved?'Lagret!':'Lagre'}</button>
-              </div>
-              <p style={{fontSize:'0.75rem',color:'#6b8fa3',margin:'6px 0 0'}}>Velg når du vil motta rapporten — perfekt for tidlig morgenfiske</p>
-            </div>
-            <p style={{fontSize:'0.8rem',color:'#6b8fa3',padding:'0 0.5rem'}}>
-              Spørsmål? Besøk <a href="/hjelp" style={{color:'#4da8cc'}}>hjelpesenteret</a> eller kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
-            </p>
-
-            <div style={{borderTop:'1px solid rgba(10,42,61,0.07)',paddingTop:'0.75rem',marginTop:'0.25rem'}}>
-              {!showDeleteConfirm ? (
-                <button
-                  onClick={()=>setShowDeleteConfirm(true)}
-                  style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:'0.8rem',padding:'0 0.5rem',textDecoration:'underline',textUnderlineOffset:'2px'}}
-                >Slett konto</button>
-              ) : (
-                <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:10,padding:'0.85rem 1rem'}}>
-                  <p style={{fontSize:'0.85rem',color:'#991b1b',fontWeight:500,margin:'0 0 0.3rem'}}>Er du sikker?</p>
-                  <p style={{fontSize:'0.78rem',color:'#b91c1c',margin:'0 0 0.75rem',lineHeight:1.5}}>Stripe-abonnementet kanselleres umiddelbart. Data slettes permanent etter 30 dager.</p>
-                  <div style={{display:'flex',gap:'0.5rem'}}>
-                    <button
-                      onClick={async()=>{
-                        setAccountLoading('delete')
-                        await fetch('/api/min-side/slett-konto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id})})
-                        await fetch('/api/auth/logout',{method:'POST'})
-                        localStorage.removeItem('bv_email')
-                        setView('login')
-                        setSub(null)
-                      }}
-                      style={{padding:'0.45rem 1rem',borderRadius:8,background:'#ef4444',border:'none',color:'white',cursor:'pointer',fontSize:'0.82rem',fontWeight:500}}
-                    >{accountLoading==='delete'?'Sletter...':'Ja, slett kontoen'}</button>
-                    <button
-                      onClick={()=>setShowDeleteConfirm(false)}
-                      style={{padding:'0.45rem 1rem',borderRadius:8,background:'white',border:'1px solid #fecaca',color:'#991b1b',cursor:'pointer',fontSize:'0.82rem'}}
-                    >Avbryt</button>
-                  </div>
+              <div style={{padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
+                <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginBottom:'8px'}}>Leveringstidspunkt for daglig rapport</div>
+                <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                  <select value={sendTime} onChange={e=>setSendTime(e.target.value)}
+                    style={{padding:'0.4rem 0.7rem',borderRadius:8,border:'1.5px solid rgba(10,42,61,0.12)',background:'white',fontSize:'0.9rem',color:'#0a2a3d',cursor:'pointer'}}>
+                    {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <button onClick={async()=>{setSendTimeSaving(true);setSendTimeSaved(false);await fetch('/api/min-side/send-time',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id,send_time:sendTime})});setSendTimeSaving(false);setSendTimeSaved(true);setTimeout(()=>setSendTimeSaved(false),2500)}}
+                    style={{padding:'0.4rem 1rem',borderRadius:8,background:'#0a2a3d',color:'white',border:'none',cursor:'pointer',fontSize:'0.85rem',fontWeight:500}}>
+                    {sendTimeSaving?'Lagrer...':sendTimeSaved?'Lagret!':'Lagre'}
+                  </button>
                 </div>
-              )}
+                <p style={{fontSize:'0.75rem',color:'#6b8fa3',margin:'6px 0 0'}}>Velg når du vil motta rapporten — perfekt for tidlig morgenfiske</p>
+              </div>
+              <p style={{fontSize:'0.8rem',color:'#6b8fa3',padding:'0 0.5rem'}}>
+                Spørsmål? Besøk <a href="/hjelp" style={{color:'#4da8cc'}}>hjelpesenteret</a> eller kontakt oss på <a href="mailto:hei@bolgevarsel.no" style={{color:'#4da8cc'}}>hei@bolgevarsel.no</a>
+              </p>
+              <div style={{borderTop:'1px solid rgba(10,42,61,0.07)',paddingTop:'0.75rem',marginTop:'0.25rem'}}>
+                {!showDeleteConfirm ? (
+                  <button onClick={()=>setShowDeleteConfirm(true)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:'0.8rem',padding:'0 0.5rem',textDecoration:'underline',textUnderlineOffset:'2px'}}>Slett konto</button>
+                ) : (
+                  <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:10,padding:'0.85rem 1rem'}}>
+                    <p style={{fontSize:'0.85rem',color:'#991b1b',fontWeight:500,margin:'0 0 0.3rem'}}>Er du sikker?</p>
+                    <p style={{fontSize:'0.78rem',color:'#b91c1c',margin:'0 0 0.75rem',lineHeight:1.5}}>Data slettes permanent etter 30 dager.</p>
+                    <div style={{display:'flex',gap:'0.5rem'}}>
+                      <button onClick={async()=>{setAccountLoading('delete');await fetch('/api/min-side/slett-konto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:sub!.id})});await fetch('/api/auth/logout',{method:'POST'});localStorage.removeItem('bv_email');setView('login');setSub(null)}}
+                        style={{padding:'0.45rem 1rem',borderRadius:8,background:'#ef4444',border:'none',color:'white',cursor:'pointer',fontSize:'0.82rem',fontWeight:500}}>
+                        {accountLoading==='delete'?'Sletter...':'Ja, slett kontoen'}
+                      </button>
+                      <button onClick={()=>setShowDeleteConfirm(false)} style={{padding:'0.45rem 1rem',borderRadius:8,background:'white',border:'1px solid #fecaca',color:'#991b1b',cursor:'pointer',fontSize:'0.82rem'}}>Avbryt</button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div style={{textAlign:'center',padding:'1rem 0',opacity:0.4}}>
