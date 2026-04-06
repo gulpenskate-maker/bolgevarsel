@@ -59,6 +59,14 @@ export default function MinSideClient() {
   const [sendTimeSaved, setSendTimeSaved] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [accountLoading, setAccountLoading] = useState<string|null>(null)
+  const [showAddRec, setShowAddRec] = useState(false)
+  const [showCsvImport, setShowCsvImport] = useState(false)
+  const [csvRows, setCsvRows] = useState<any[]>([])
+  const [csvFileName, setCsvFileName] = useState('')
+  const [csvImporting, setCsvImporting] = useState(false)
+  const [csvResult, setCsvResult] = useState<{imported:number;total:number;results:any[]}|null>(null)
+  const [newEmail, setNewEmail] = useState('')
+  const [newSmsEnabled, setNewSmsEnabled] = useState(true)
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
@@ -150,9 +158,40 @@ export default function MinSideClient() {
   async function addRec(e: React.FormEvent) {
     e.preventDefault()
     const r = await fetch('/api/min-side/recipient', { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName }) })
+      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:newSmsEnabled }) })
     const d = await r.json()
-    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId('') }
+    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setShowAddRec(false) }
+  }
+  function parseCsv(text: string) {
+    const lines = text.trim().split(/\r?\n/)
+    if (lines.length < 2) return []
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase())
+    return lines.slice(1).map(line => {
+      const vals = line.split(',').map(v => v.trim())
+      const obj: any = {}
+      headers.forEach((h, i) => { obj[h] = vals[i] || '' })
+      return obj
+    }).filter(r => Object.values(r).some(v => v))
+  }
+  function handleCsvFile(file: File) {
+    setCsvFileName(file.name); setCsvResult(null)
+    const reader = new FileReader()
+    reader.onload = e => { setCsvRows(parseCsv(e.target?.result as string)) }
+    reader.readAsText(file)
+  }
+  async function importCsv() {
+    if (!csvRows.length || !newLocId) return
+    setCsvImporting(true)
+    const r = await fetch('/api/min-side/import-csv', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ subscriber_id: sub!.id, location_id: newLocId, rows: csvRows }) })
+    const d = await r.json()
+    setCsvResult(d)
+    setCsvImporting(false)
+    if (d.ok) {
+      const updated = await fetch(`/api/min-side?email=${encodeURIComponent(sub!.email)}`)
+      const ud = await updated.json()
+      if (ud.recipients) setRecs(ud.recipients)
+    }
   }
 
   async function deleteRec(id: string) {
@@ -378,55 +417,163 @@ export default function MinSideClient() {
         </div>
 
         <div style={S.card}>
-          <h2 style={S.sTitle}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="4.5" y="1" width="7" height="13" rx="1.5" stroke="#1a6080" strokeWidth="1.3" fill="none"/><path d="M6.5 11h3" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/></svg>Mine mottakere</span></h2>
-          {recs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen mottakere ennå.</p>}
-          <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:locs.length?'1.2rem':0}}>
-            {recs.map(rec => (
-              <div key={rec.id}>
-                {editRec?.id===rec.id ? (
-                  <form onSubmit={saveEditRec} style={{background:'#f0f8fc',borderRadius:12,padding:'1rem',display:'flex',flexDirection:'column',gap:'0.5rem'}}>
-                    <input style={S.inp} placeholder="Navn (valgfritt)" value={editName} onChange={e=>setEditName(e.target.value)} />
-                    <input style={S.inp} placeholder="Telefon (+4799...)" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
-                    <div style={{display:'flex',gap:'0.5rem'}}>
-                      <button style={{...S.btnPrimary,flex:1,padding:'0.7rem'}} type="submit"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg> Lagre</button>
-                      <button style={{...S.btnGhost,padding:'0.7rem 1rem'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
-                    </div>
-                  </form>
-                ) : (
-                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
-                    <div>
-                      <div style={{fontWeight:500,color:'#0a2a3d',fontSize:'0.95rem'}}>{rec.name||rec.phone}</div>
-                      <div style={{fontSize:'0.75rem',color:'#6b8fa3',marginTop:'2px',display:'flex',alignItems:'center',gap:'6px'}}>
-                        {rec.name&&<span>{rec.phone} · </span>}
-                        <span>{locs.find(l=>l.id===rec.location_id)?.name||'Ukjent lokasjon'}</span>
-                        <span style={S.tag(rec.active)}>{rec.active?'Aktiv':'Pauset'}</span>
-                        <span style={{...S.tag(rec.sms_enabled!==false),fontSize:'0.7rem'}}>{rec.sms_enabled!==false?'SMS på':'SMS av'}</span>
-                      </div>
-                    </div>
-                    <div style={{display:'flex',gap:'0.4rem'}}>
-                      <button style={S.btnGhost} onClick={()=>toggleRec(rec)}>{rec.active?(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2" y="2" width="3" height="8" rx="0.5" fill="currentColor"/><rect x="7" y="2" width="3" height="8" rx="0.5" fill="currentColor"/></svg></>):(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 2l7 4-7 4V2z" fill="currentColor"/></svg></>)}</button>
-                      <button style={{...S.btnGhost,background:rec.sms_enabled!==false?'#f0fdf4':'#fef9c3',color:rec.sms_enabled!==false?'#16a34a':'#854d0e'}} onClick={()=>toggleSms(rec)}>
-                        {rec.sms_enabled!==false?(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2.5" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3.5 5.5h5M3.5 7.5h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/></svg></>):(<><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2.5" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3 3.5l6 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/></svg></>)}
-                      </button>
-                      <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}}><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L5 11H3v-2l6.5-6.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
-                      <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)}><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1rem'}}>
+            <h2 style={{...S.sTitle,margin:0}}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="4.5" y="1" width="7" height="13" rx="1.5" stroke="#1a6080" strokeWidth="1.3" fill="none"/><path d="M6.5 11h3" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/></svg>Mine mottakere</span></h2>
+            {locs.length>0 && <div style={{display:'flex',gap:'8px'}}>
+              <button style={{...S.btnGhost,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowCsvImport(!showCsvImport);setShowAddRec(false)}}>
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 10h11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/></svg>
+                Importer CSV
+              </button>
+              <button style={{...S.btnPrimary,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowAddRec(!showAddRec);setShowCsvImport(false)}}>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="white" strokeWidth="1.4" strokeLinecap="round"/></svg>
+                Legg til
+              </button>
+            </div>}
           </div>
-          {locs.length>0 && (
-            <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
-              <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
-                <option value="">Velg lokasjon for varselet</option>
-                {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
-              </select>
-              <input style={S.inp} placeholder="Navn på mottaker (valgfritt)" value={newName} onChange={e=>setNewName(e.target.value)} />
-              <input style={S.inp} placeholder="Telefonnummer (+4799...)" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required />
-              <button style={{...S.btnPrimary,padding:'0.85rem',width:'100%'}} type="submit">+ Legg til mottaker</button>
-            </form>
+          {recs.length===0 && !showAddRec && !showCsvImport && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen mottakere ennå. Legg til mottakere med knappene over.</p>}
+
+          {recs.length>0 && (
+            <div style={{overflowX:'auto',marginBottom:'1rem'}}>
+              <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.85rem'}}>
+                <thead>
+                  <tr>
+                    {['Navn','Telefon','E-post','SMS',''].map(h=>(
+                      <th key={h} style={{textAlign:'left',color:'#6b8fa3',fontWeight:500,fontSize:'0.72rem',letterSpacing:'0.06em',textTransform:'uppercase',padding:'0 10px 8px'}}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {recs.map(rec=>(
+                    <tr key={rec.id} style={{borderTop:'1px solid rgba(10,42,61,0.06)'}}>
+                      {editRec?.id===rec.id ? (
+                        <td colSpan={5} style={{padding:'8px 0'}}>
+                          <form onSubmit={saveEditRec} style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
+                            <input style={{...S.inp,flex:1,minWidth:120}} placeholder="Navn" value={editName} onChange={e=>setEditName(e.target.value)} />
+                            <input style={{...S.inp,flex:1,minWidth:140}} placeholder="Telefon" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
+                            <button style={{...S.btnPrimary,padding:'6px 12px'}} type="submit">Lagre</button>
+                            <button style={{...S.btnGhost,padding:'6px 12px'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
+                          </form>
+                        </td>
+                      ) : (<>
+                        <td style={{padding:'10px 10px'}}>
+                          <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+                            <div style={{width:28,height:28,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:500,color:'#1a6080',flexShrink:0}}>
+                              {(rec.name||rec.phone).slice(0,2).toUpperCase()}
+                            </div>
+                            <span style={{fontWeight:500,color:'#0a2a3d'}}>{rec.name||'—'}</span>
+                          </div>
+                        </td>
+                        <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{rec.phone}</td>
+                        <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{(rec as any).email||'—'}</td>
+                        <td style={{padding:'10px'}}>
+                          <span style={{display:'inline-flex',alignItems:'center',gap:4,fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:rec.sms_enabled!==false?'#e8f5ed':'#f1f5f9',color:rec.sms_enabled!==false?'#1a7a50':'#6b8fa3'}}>
+                            {rec.sms_enabled!==false?'På':'Av'}
+                          </span>
+                        </td>
+                        <td style={{padding:'10px',textAlign:'right',whiteSpace:'nowrap'}}>
+                          <button style={S.btnGhost} onClick={()=>toggleSms(rec)} title={rec.sms_enabled!==false?'Skru av SMS':'Skru på SMS'}>
+                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3 5h7M3 7.5h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/></svg>
+                          </button>
+                          <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}} title="Rediger">
+                            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L5 11H3v-2l6.5-6.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          </button>
+                          <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)} title="Slett">
+                            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 3.5l.5 7h3l.5-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          </button>
+                        </td>
+                      </>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
+
+          {showAddRec && locs.length>0 && (
+            <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
+              <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Legg til mottaker</div>
+              <form onSubmit={addRec} style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}}>
+                  <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Navn</div><input style={S.inp} placeholder="Ola Nordmann" value={newName} onChange={e=>setNewName(e.target.value)} /></div>
+                  <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Telefonnummer</div><input style={S.inp} placeholder="+47 000 00 000" value={newPhone} onChange={e=>setNewPhone(e.target.value)} required /></div>
+                </div>
+                <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>E-postadresse (valgfritt)</div><input style={S.inp} placeholder="ola@eksempel.no" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} /></div>
+                <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Lokasjon</div>
+                  <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)} required>
+                    <option value="">Velg lokasjon</option>
+                    {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
+                  </select>
+                </div>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0'}}>
+                  <div>
+                    <div style={{fontSize:'13px',color:'#0a2a3d'}}>SMS-varsel</div>
+                    <div style={{fontSize:'11px',color:'#6b8fa3'}}>Mottaker får daglig SMS og farevarsler</div>
+                  </div>
+                  <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewSmsEnabled(!newSmsEnabled)}>
+                    <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
+                    <div style={{position:'absolute',width:14,height:14,top:3,left:newSmsEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
+                  </div>
+                </div>
+                <div style={{display:'flex',gap:'8px'}}>
+                  <button style={{...S.btnPrimary,flex:1}} type="submit">+ Legg til mottaker</button>
+                  <button style={S.btnGhost} type="button" onClick={()=>setShowAddRec(false)}>Avbryt</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {showCsvImport && locs.length>0 && (
+            <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
+              <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Importer fra CSV</div>
+              <div style={{marginBottom:'0.75rem'}}>
+                <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Velg lokasjon for alle importerte mottakere</div>
+                <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)}>
+                  <option value="">Velg lokasjon</option>
+                  {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
+                </select>
+              </div>
+              <label style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'8px',border:'1px dashed rgba(10,42,61,0.2)',borderRadius:10,padding:'1.5rem',cursor:'pointer',background:'white',textAlign:'center'}}>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4v16M8 14l6 6 6-6" stroke="#1a6080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 22h20" stroke="#1a6080" strokeWidth="1.5" strokeLinecap="round" opacity="0.4"/></svg>
+                <span style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d'}}>{csvFileName || 'Velg CSV-fil'}</span>
+                <span style={{fontSize:'0.78rem',color:'#6b8fa3'}}>Kolonner: navn, telefon, epost, sms</span>
+                <a href="/bolgevarsel-mottakere-eksempel.csv" download style={{fontSize:'0.75rem',color:'#1a6080'}}>Last ned eksempelfil →</a>
+                <input type="file" accept=".csv" style={{display:'none'}} onChange={e=>{if(e.target.files?.[0]) handleCsvFile(e.target.files[0])}} />
+              </label>
+              {csvRows.length>0 && !csvResult && (
+                <div style={{marginTop:'0.75rem',background:'white',borderRadius:8,padding:'0.75rem',border:'1px solid rgba(10,42,61,0.07)'}}>
+                  <div style={{display:'flex',justifyContent:'space-between',marginBottom:'6px'}}>
+                    <span style={{fontSize:'12px',fontWeight:500,color:'#0a2a3d'}}>{csvFileName}</span>
+                    <span style={{fontSize:'11px',color:'#6b8fa3'}}>{csvRows.length} rader funnet</span>
+                  </div>
+                  {csvRows.slice(0,3).map((r,i)=>(
+                    <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6,fontSize:'11px',color:'#6b8fa3',borderTop:'1px solid #f0f4f8',padding:'4px 0'}}>
+                      <span>{r.navn||r.name||'—'}</span>
+                      <span>{r.telefon||r.phone||'—'}</span>
+                      <span>{r.epost||r.email||'—'}</span>
+                    </div>
+                  ))}
+                  {csvRows.length>3 && <div style={{fontSize:'11px',color:'#6b8fa3',padding:'4px 0'}}>+ {csvRows.length-3} til...</div>}
+                </div>
+              )}
+              {csvResult && (
+                <div style={{marginTop:'0.75rem',background:csvResult.imported>0?'#f0fdf4':'#fef2f2',borderRadius:8,padding:'0.75rem',border:`1px solid ${csvResult.imported>0?'#bbf7d0':'#fecaca'}`}}>
+                  <div style={{fontSize:'13px',fontWeight:500,color:csvResult.imported>0?'#1a7a50':'#dc2626',marginBottom:'4px'}}>
+                    {csvResult.imported} av {csvResult.total} importert
+                  </div>
+                  {csvResult.results.filter(r=>!r.ok).map((r,i)=>(
+                    <div key={i} style={{fontSize:'11px',color:'#dc2626'}}>Rad {r.row}: {r.error}</div>
+                  ))}
+                </div>
+              )}
+              <div style={{display:'flex',gap:'8px',marginTop:'0.75rem'}}>
+                <button style={{...S.btnPrimary,flex:1,opacity:(!csvRows.length||!newLocId)?0.4:1}} onClick={importCsv} disabled={!csvRows.length||!newLocId||csvImporting}>
+                  {csvImporting?'Importerer...':`Importer ${csvRows.length} mottakere`}
+                </button>
+                <button style={S.btnGhost} onClick={()=>{setShowCsvImport(false);setCsvRows([]);setCsvFileName('');setCsvResult(null)}}>Avbryt</button>
+              </div>
+            </div>
+          )}
+
           {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.85rem'}}>Legg til en lokasjon først.</p>}
         </div>
 

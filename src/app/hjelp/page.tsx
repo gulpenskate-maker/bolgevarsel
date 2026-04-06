@@ -68,6 +68,7 @@ const KATEGORIER = [
       { slug: 'registrering', tittel: 'Slik registrerer du deg' },
       { slug: 'legg-til-lokasjon', tittel: 'Legg til din kystlokasjon' },
       { slug: 'legg-til-mottakere', tittel: 'Legg til mottakere (barn, ektefelle)' },
+      { slug: 'csv-import', tittel: 'Importer mottakere fra CSV' },
     ],
   },
   {

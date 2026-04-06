@@ -99,6 +99,58 @@ export const ARTIKLER: Record<string, Artikkel> = {
 `,
   },
 
+
+  'kom-i-gang/csv-import': {
+    tittel: 'Importer mottakere fra CSV',
+    kategori: 'Kom i gang',
+    html: `
+<p>Har du mange mottakere? Med CSV-import kan du laste opp en liste med navn, telefonnummer og e-postadresser på én gang. Perfekt for bedrifter, hytteforeninger eller familier med mange mottakere.</p>
+
+<h2>Slik bruker du CSV-import</h2>
+<ol>
+<li>Logg inn på <a href="/min-side" style="color:#4da8cc">Min side</a></li>
+<li>Gå til <strong>Mine mottakere</strong></li>
+<li>Klikk på <strong>Importer CSV</strong></li>
+<li>Velg hvilken lokasjon alle mottakerne skal knyttes til</li>
+<li>Last opp CSV-filen din</li>
+<li>Sjekk forhåndsvisningen og klikk <strong>Importer</strong></li>
+</ol>
+
+<h2>Format på CSV-filen</h2>
+<p>Filen må ha følgende kolonner i første rad (rekkefølge spiller ingen rolle):</p>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0">
+<tr style="background:#f8fbfc">
+  <th style="text-align:left;padding:8px 12px;border-bottom:1px solid #e2e8f0;font-size:13px">Kolonne</th>
+  <th style="text-align:left;padding:8px 12px;border-bottom:1px solid #e2e8f0;font-size:13px">Beskrivelse</th>
+  <th style="text-align:left;padding:8px 12px;border-bottom:1px solid #e2e8f0;font-size:13px">Påkrevd</th>
+</tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px"><code>navn</code></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px">Fullt navn på mottaker</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px">Nei</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px"><code>telefon</code></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px">Norsk mobilnummer (+47, 47 eller 8 siffer)</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px">Ja</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px"><code>epost</code></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px">E-postadresse</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px">Nei</td></tr>
+<tr><td style="padding:8px 12px;font-size:13px"><code>sms</code></td><td style="padding:8px 12px;font-size:13px">ja/nei — om mottaker skal ha SMS-varsel</td><td style="padding:8px 12px;font-size:13px">Nei (standard: ja)</td></tr>
+</table>
+
+<h2>Eksempel på CSV-fil</h2>
+<pre style="background:#f8fbfc;border-radius:8px;padding:1rem;font-size:13px;overflow-x:auto">navn,telefon,epost,sms
+Ola Nordmann,+4798765432,ola@eksempel.no,ja
+Kari Nordmann,98765432,,ja
+Barn uten epost,+4791234567,,nei
+Bestefar,004747123456,bestefar@mail.no,ja</pre>
+
+<p><a href="/bolgevarsel-mottakere-eksempel.csv" download style="color:#4da8cc;font-weight:500">Last ned eksempelfil (.csv) →</a></p>
+
+<h2>Støttede telefonnummerformater</h2>
+<ul>
+<li><code>+4798765432</code> — internasjonalt format</li>
+<li><code>4798765432</code> — uten plusstegn</li>
+<li><code>98765432</code> — 8-sifret norsk nummer</li>
+<li><code>0047 987 65 432</code> — med 00-prefix og mellomrom</li>
+</ul>
+
+<h2>Feil ved import</h2>
+<p>Dersom en rad har ugyldig telefonnummer eller mangler påkrevde felt, hoppes den over og du får en tydelig feilmelding. Gyldige rader importeres uansett.</p>
+`,
+  },
   'kom-i-gang/legg-til-mottakere': {
     tittel: 'Legg til mottakere',
     kategori: 'Kom i gang',
