@@ -50,7 +50,7 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
     <div style={S.page}>
       <nav style={S.nav}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-          <span style={{ fontFamily: 'serif', fontSize: '1.3rem', fontWeight: 600 }}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: '1.3rem', fontWeight: 600 }}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="rgba(125,211,240,0.55)" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
               <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="white" letterSpacing="-0.8">bølgevarsel<tspan fill="#7dd3fc" fontWeight="400">.no</tspan></text>
@@ -98,7 +98,7 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
         {/* ABONNENTER */}
         <div style={S.card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <h2 style={{ margin: 0, fontFamily: 'serif', fontWeight: 400, fontSize: '1.2rem' }}>👥 Abonnenter ({subscribers.length})</h2>
+            <h2 style={{ margin: 0, fontFamily: "'Fraunces', Georgia, serif", fontWeight: 400, fontSize: '1.2rem' }}>👥 Abonnenter ({subscribers.length})</h2>
             <input placeholder="Søk e-post..." value={søk} onChange={e => setSøk(e.target.value)}
               style={{ padding: '0.5rem 1rem', borderRadius: 100, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: '0.88rem', fontFamily: 'inherit', outline: 'none', width: 220 }} />
           </div>

@@ -49,7 +49,7 @@ function LoggInnContent() {
 
 const page: React.CSSProperties = { minHeight: '100vh', background: '#f0f4f8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'DM Sans, sans-serif' }
 const box: React.CSSProperties = { background: 'white', borderRadius: 20, padding: '3rem 2.5rem', textAlign: 'center', boxShadow: '0 4px 24px rgba(10,42,61,0.08)', maxWidth: 400, width: '100%' }
-const h1: React.CSSProperties = { margin: '0 0 0.5rem', fontFamily: 'serif', fontWeight: 400, fontSize: '1.6rem', color: '#0a2a3d' }
+const h1: React.CSSProperties = { margin: '0 0 0.5rem', fontFamily: "'Fraunces', Georgia, serif", fontWeight: 400, fontSize: '1.6rem', color: '#0a2a3d' }
 const sub: React.CSSProperties = { margin: '0 0 1.5rem', color: '#64748b', fontSize: '0.95rem' }
 const btn: React.CSSProperties = { display: 'inline-block', background: '#0a2a3d', color: 'white', padding: '0.8rem 1.8rem', borderRadius: 100, textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500 }
 

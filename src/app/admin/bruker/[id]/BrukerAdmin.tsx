@@ -58,7 +58,7 @@ export default function BrukerAdmin({ sub }: { sub: any }) {
     <div style={{ minHeight: '100vh', background: '#071622', fontFamily: 'DM Sans, sans-serif', color: 'white' }}>
       <nav style={{ padding: '1rem 2rem', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <a href="/admin" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontSize: '0.85rem' }}>← Admin</a>
-        <span style={{ fontFamily: 'serif', fontSize: '1.2rem', fontWeight: 600 }}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: '1.2rem', fontWeight: 600 }}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="rgba(125,211,240,0.55)" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
               <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="white" letterSpacing="-0.8">bølgevarsel<tspan fill="#7dd3fc" fontWeight="400">.no</tspan></text>
@@ -71,7 +71,7 @@ export default function BrukerAdmin({ sub }: { sub: any }) {
         {/* HEADER */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h1 style={{ margin: '0 0 0.3rem', fontFamily: 'serif', fontWeight: 400, fontSize: '1.6rem' }}>{sub.email}</h1>
+            <h1 style={{ margin: '0 0 0.3rem', fontFamily: "'Fraunces', Georgia, serif", fontWeight: 400, fontSize: '1.6rem' }}>{sub.email}</h1>
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               <span style={{ background: planFarger[sub.plan] + '22', color: planFarger[sub.plan], padding: '3px 10px', borderRadius: 100, fontSize: '0.75rem', fontWeight: 600 }}>{sub.plan}</span>
               <span style={{ background: statusFarge + '22', color: statusFarge, padding: '3px 10px', borderRadius: 100, fontSize: '0.75rem', fontWeight: 600 }}>{sub.locked ? '🔒 Sperret' : sub.status}</span>

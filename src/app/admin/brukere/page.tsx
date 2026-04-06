@@ -4,7 +4,7 @@ export default function AdminBrukere() {
   return (
     <div style={{minHeight:'100vh',background:'#071622',fontFamily:'DM Sans, sans-serif'}}>
       <nav style={{padding:'1rem 2rem',borderBottom:'1px solid rgba(255,255,255,0.08)',display:'flex',alignItems:'center',gap:'0.8rem'}}>
-        <a href="/" style={{fontFamily:'serif',fontSize:'1.3rem',fontWeight:600,color:'white',textDecoration:'none'}}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <a href="/" style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'1.3rem',fontWeight:600,color:'white',textDecoration:'none'}}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="rgba(125,211,240,0.55)" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
               <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="white" letterSpacing="-0.8">bølgevarsel<tspan fill="#7dd3fc" fontWeight="400">.no</tspan></text>
@@ -14,7 +14,7 @@ export default function AdminBrukere() {
       </nav>
 
       <div style={{maxWidth:700,margin:'0 auto',padding:'2.5rem 1.5rem'}}>
-        <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'1.5rem'}}>👥 Brukere</h1>
+        <h1 style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'1.5rem'}}>👥 Brukere</h1>
         <div id="søk" style={{display:'flex',gap:'0.6rem',marginBottom:'1.5rem'}}>
           <input id="sokInput" placeholder="Søk på e-postadresse..." autoComplete="off"
             style={{flex:1,padding:'0.85rem 1.2rem',borderRadius:100,border:'1px solid rgba(255,255,255,0.12)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:'0.95rem',fontFamily:'inherit',outline:'none'}} />

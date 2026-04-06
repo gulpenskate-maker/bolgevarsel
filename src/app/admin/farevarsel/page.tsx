@@ -6,7 +6,7 @@ export default function FarevarselAdmin() {
     <div style={{minHeight:'100vh',background:'#0a2a3d',fontFamily:'DM Sans, sans-serif'}}>
       <nav style={{padding:'1.2rem 2rem',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
         <div style={{display:'flex',alignItems:'center',maxWidth:640,margin:'0 auto'}}>
-          <a href="/" style={{fontFamily:'serif',fontSize:'1.3rem',fontWeight:600,color:'white',textDecoration:'none'}}>
+          <a href="/" style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'1.3rem',fontWeight:600,color:'white',textDecoration:'none'}}>
             <svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="rgba(125,211,240,0.55)" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
@@ -20,7 +20,7 @@ export default function FarevarselAdmin() {
       <div style={{maxWidth:580,margin:'0 auto',padding:'3rem 1.5rem'}}>
         <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
           <span style={{fontSize:'3rem',display:'block',marginBottom:'0.8rem'}}>🚨</span>
-          <h1 style={{fontFamily:'serif',fontSize:'2.2rem',fontWeight:300,color:'white',marginBottom:'0.5rem'}}>Send farevarsel</h1>
+          <h1 style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'2.2rem',fontWeight:300,color:'white',marginBottom:'0.5rem'}}>Send farevarsel</h1>
           <p style={{color:'rgba(255,255,255,0.5)'}}>Sender SMS til alle aktive abonnenter</p>
         </div>
 

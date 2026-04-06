@@ -1,19 +1,26 @@
-/* Artikkel innhold styling */
 .artikkel-innhold h2 {
-  font-family: serif;
-  font-size: 1.25rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.3rem;
   font-weight: 400;
   color: #0a2a3d;
-  margin: 1.8rem 0 0.6rem;
-  padding-top: 1.2rem;
+  margin: 2rem 0 0.7rem;
+  padding-top: 1.4rem;
   border-top: 1px solid #f1f5f9;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
 }
 .artikkel-innhold h2:first-child { border-top: none; padding-top: 0; margin-top: 0; }
-.artikkel-innhold p { color: #334155; line-height: 1.7; margin: 0 0 1rem; }
-.artikkel-innhold ul, .artikkel-innhold ol { color: #334155; line-height: 1.7; margin: 0 0 1rem; padding-left: 1.4rem; }
-.artikkel-innhold li { margin-bottom: 0.4rem; }
-.artikkel-innhold a { color: #4da8cc; }
-.artikkel-innhold code { background: #f0f8fc; padding: 2px 6px; border-radius: 6px; font-size: 0.88em; color: #0a2a3d; }
-.artikkel-innhold table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
-.artikkel-innhold th { background: #f0f8fc; padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #0a2a3d; }
-.artikkel-innhold td { padding: 10px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+.artikkel-innhold p { font-family: 'DM Sans', system-ui, sans-serif; color: #334155; line-height: 1.75; margin: 0 0 1.1rem; font-size: 0.97rem; }
+.artikkel-innhold ul, .artikkel-innhold ol { font-family: 'DM Sans', system-ui, sans-serif; color: #334155; line-height: 1.75; margin: 0 0 1.1rem; padding-left: 1.4rem; font-size: 0.97rem; }
+.artikkel-innhold li { margin-bottom: 0.5rem; }
+.artikkel-innhold a { color: #1a6080; text-decoration: underline; text-underline-offset: 2px; }
+.artikkel-innhold a:hover { color: #0a2a3d; }
+.artikkel-innhold strong { font-weight: 600; color: #0a2a3d; }
+.artikkel-innhold code { background: #f0f8fc; padding: 2px 7px; border-radius: 6px; font-size: 0.87em; color: #0a2a3d; font-family: 'SF Mono', 'Fira Code', monospace; }
+.artikkel-innhold pre { background: #f8fbfc; border: 1px solid rgba(10,42,61,0.08); border-radius: 10px; padding: 1rem 1.2rem; overflow-x: auto; margin: 0 0 1.1rem; }
+.artikkel-innhold pre code { background: none; padding: 0; font-size: 0.88rem; line-height: 1.7; }
+.artikkel-innhold table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.9rem; }
+.artikkel-innhold th { background: #f0f8fc; padding: 10px 14px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #0a2a3d; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.artikkel-innhold td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+.artikkel-innhold ol { list-style-type: decimal; }
+.artikkel-innhold ol li { padding-left: 0.3rem; }

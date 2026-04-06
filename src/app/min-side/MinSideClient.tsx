@@ -7,10 +7,10 @@ import RapportTab from '@/components/RapportTab'
 const S = {
   page: { minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' } as React.CSSProperties,
   nav: { padding:'1.2rem 2rem', borderBottom:'1px solid rgba(10,42,61,0.08)', background:'rgba(232,244,248,0.95)', position:'sticky' as const, top:0, zIndex:100 },
-  logo: { fontFamily:'serif', fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' } as React.CSSProperties,
+  logo: { fontFamily:"'Fraunces', Georgia, serif", fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' } as React.CSSProperties,
   wrap: { maxWidth:1100, margin:'0 auto', padding:'2.5rem 1.5rem' },
   card: { background:'white', borderRadius:20, padding:'1.5rem', border:'1px solid rgba(10,42,61,0.07)', marginBottom:'1.2rem', boxShadow:'0 2px 12px rgba(10,42,61,0.06)' } as React.CSSProperties,
-  sTitle: { fontFamily:'serif', fontSize:'1.2rem', fontWeight:400, color:'#0a2a3d', marginBottom:'1rem', paddingBottom:'0.6rem', borderBottom:'1px solid rgba(10,42,61,0.07)' } as React.CSSProperties,
+  sTitle: { fontFamily:"'Fraunces', Georgia, serif", fontSize:'1.2rem', fontWeight:400, color:'#0a2a3d', marginBottom:'1rem', paddingBottom:'0.6rem', borderBottom:'1px solid rgba(10,42,61,0.07)' } as React.CSSProperties,
   inp: { width:'100%', padding:'0.75rem 1rem', borderRadius:100, border:'1.5px solid rgba(10,42,61,0.12)', background:'#f8fbfc', fontSize:'0.9rem', color:'#0a2a3d', outline:'none', fontFamily:'inherit', boxSizing:'border-box' as const },
   btnPrimary: { background:'#0a2a3d', color:'white', padding:'0.7rem 1.2rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.88rem', fontWeight:500 } as React.CSSProperties,
   btnDanger: { background:'#fee2e2', color:'#ef4444', padding:'0.5rem 0.9rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:500 } as React.CSSProperties,
@@ -256,7 +256,7 @@ export default function MinSideClient() {
 
       {/* Nav over illustrasjonen */}
       <nav style={{ position:'relative', zIndex:10, padding:'1.2rem 2rem', display:'flex', alignItems:'center' }}>
-        <a href="/" style={{ fontFamily:'serif', fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' }}>
+        <a href="/" style={{ fontFamily:"'Fraunces', Georgia, serif", fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' }}>
           bølge<span style={{color:'#1a6080'}}>varsel</span>
         </a>
       </nav>
@@ -273,7 +273,7 @@ export default function MinSideClient() {
                 </svg>
               </div>
             </div>
-            <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Sjekk innboksen!</h1>
+            <h1 style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Sjekk innboksen!</h1>
             <p style={{color:'#6b8fa3',marginBottom:'0.3rem'}}>Vi har sendt en innloggingslenke til</p>
             <p style={{color:'#0a2a3d',fontWeight:600,marginBottom:'1.5rem'}}>{email}</p>
             <p style={{color:'#6b8fa3',fontSize:'0.85rem',marginBottom:'1.5rem'}}>Lenken er gyldig i 1 time. Sjekk eventuelt søppelpost.</p>
@@ -283,7 +283,7 @@ export default function MinSideClient() {
           <>
             {/* Hovedkort — glassmorphism */}
             <div style={{ background:'rgba(255,255,255,0.82)', backdropFilter:'blur(16px)', borderRadius:24, padding:'2.5rem 2rem', boxShadow:'0 8px 40px rgba(10,42,61,0.15)', marginBottom:'1rem' }}>
-              <h1 style={{fontFamily:'serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.4rem'}}>Min side</h1>
+              <h1 style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'2rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.4rem'}}>Min side</h1>
               <p style={{color:'#6b8fa3',marginBottom:'1.5rem',fontSize:'0.95rem'}}>Skriv inn e-posten din — vi sender deg en innloggingslenke</p>
               <form onSubmit={login} style={{display:'flex',flexDirection:'column',gap:'0.7rem'}}>
                 <input style={{...S.inp, background:'rgba(248,251,252,0.9)'}} type="email" placeholder="din@epost.no" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus />

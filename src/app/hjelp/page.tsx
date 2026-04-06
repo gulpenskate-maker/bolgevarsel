@@ -156,7 +156,7 @@ export default function HjelpPage() {
           <path d="M0 30 Q180 0 360 30 Q540 60 720 30 Q900 0 1080 30 Q1260 60 1440 30 L1440 60 L0 60 Z" fill="#f0f4f8"/>
         </svg>
         <p style={{ margin:'0 0 8px', fontSize:'11px', letterSpacing:'0.16em', textTransform:'uppercase', color:'rgba(255,255,255,0.45)', fontWeight:600 }}>Hjelpesenter</p>
-        <h1 style={{ margin:'0 0 1rem', fontFamily:'Georgia, serif', fontSize:'2.6rem', fontWeight:400, letterSpacing:'-0.02em', lineHeight:1.2 }}>Hvordan kan vi hjelpe deg?</h1>
+        <h1 style={{ margin:'0 0 1rem', fontFamily:"'Fraunces', Georgia, serif", fontSize:'2.6rem', fontWeight:400, letterSpacing:'-0.02em', lineHeight:1.2 }}>Hvordan kan vi hjelpe deg?</h1>
         <p style={{ margin:'0 auto 2rem', fontSize:'1.05rem', color:'rgba(255,255,255,0.65)', maxWidth:480, lineHeight:1.7 }}>
           Alt du trenger for å komme i gang med daglige sjøvarsler
         </p>
@@ -180,7 +180,7 @@ export default function HjelpPage() {
                   <kat.Ikon />
                 </div>
                 <div>
-                  <h2 style={{ margin:0, fontFamily:'Georgia, serif', fontWeight:400, fontSize:'1.15rem', color:'#0a2a3d', letterSpacing:'-0.01em' }}>{kat.tittel}</h2>
+                  <h2 style={{ margin:0, fontFamily:"'Fraunces', Georgia, serif", fontWeight:400, fontSize:'1.15rem', color:'#0a2a3d', letterSpacing:'-0.01em' }}>{kat.tittel}</h2>
                   <p style={{ margin:'2px 0 0', fontSize:'0.82rem', color:'#6b8fa3' }}>{kat.beskrivelse}</p>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function HjelpPage() {
             <path d="M0 40 Q50 20 100 40 Q150 60 200 40 Q250 20 300 40 Q350 60 400 40" fill="none" stroke="white" strokeWidth="3"/>
             <path d="M0 60 Q60 40 120 60 Q180 80 240 60 Q300 40 360 60 Q380 70 400 60" fill="none" stroke="white" strokeWidth="2"/>
           </svg>
-          <h2 style={{ margin:'0 0 0.5rem', fontFamily:'Georgia, serif', fontWeight:400, fontSize:'1.6rem', letterSpacing:'-0.02em' }}>Fant du ikke svaret?</h2>
+          <h2 style={{ margin:'0 0 0.5rem', fontFamily:"'Fraunces', Georgia, serif", fontWeight:400, fontSize:'1.6rem', letterSpacing:'-0.02em' }}>Fant du ikke svaret?</h2>
           <p style={{ margin:'0 0 1.5rem', color:'rgba(255,255,255,0.65)', fontSize:'0.95rem' }}>Vi svarer raskt på e-post i hverdagene</p>
           <a href="mailto:hei@bolgevarsel.no" style={{ display:'inline-block', background:'white', color:'#0a2a3d', padding:'0.9rem 2rem', borderRadius:100, textDecoration:'none', fontWeight:600, fontSize:'0.92rem' }}>
             Send oss en e-post →

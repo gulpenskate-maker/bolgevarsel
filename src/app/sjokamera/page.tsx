@@ -90,7 +90,7 @@ export default function Sjokamera() {
     <div style={{minHeight:'100vh',background:'#e8f4f8',fontFamily:'DM Sans, sans-serif'}}>
       <nav style={{padding:'1.2rem 2.5rem',borderBottom:'1px solid rgba(10,42,61,0.08)',background:'rgba(232,244,248,0.92)',backdropFilter:'blur(12px)',position:'sticky',top:0,zIndex:100}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',maxWidth:1200,margin:'0 auto'}}>
-          <a href="/" style={{fontFamily:'serif',fontSize:'1.3rem',fontWeight:600,color:'#0a2a3d',textDecoration:'none'}}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <a href="/" style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'1.3rem',fontWeight:600,color:'#0a2a3d',textDecoration:'none'}}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="#0a2a3d" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="#1a6080" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
               <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="#0a2a3d" letterSpacing="-0.8">bølgevarsel<tspan fill="#1a6080" fontWeight="400">.no</tspan></text>
@@ -101,14 +101,14 @@ export default function Sjokamera() {
       <div style={{maxWidth:1200,margin:'0 auto',padding:'3rem 1.5rem'}}>
         <div style={{textAlign:'center',marginBottom:'3rem'}}>
           <span style={{fontSize:'0.75rem',fontWeight:500,letterSpacing:'0.12em',textTransform:'uppercase',color:'#4da8cc',display:'block',marginBottom:'0.8rem'}}>Live kameraer</span>
-          <h1 style={{fontFamily:'serif',fontSize:'clamp(2rem,4vw,3rem)',fontWeight:300,color:'#0a2a3d',letterSpacing:'-0.02em',marginBottom:'1rem'}}>Se sjøen live<br/>langs norskekysten</h1>
+          <h1 style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'clamp(2rem,4vw,3rem)',fontWeight:300,color:'#0a2a3d',letterSpacing:'-0.02em',marginBottom:'1rem'}}>Se sjøen live<br/>langs norskekysten</h1>
           <p style={{color:'#6b8fa3',fontSize:'0.9rem'}}>Oppdateres automatisk hvert minutt{time && ` · Sist oppdatert ${time}`}</p>
         </div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'1.5rem'}}>
           {cameras.map(cam => <CameraCard key={cam.id} cam={cam} />)}
         </div>
         <div style={{textAlign:'center',marginTop:'4rem',background:'#0a2a3d',borderRadius:24,padding:'3rem 2rem'}}>
-          <h2 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'0.8rem'}}>Bølgevarsel rett i lomma</h2>
+          <h2 style={{fontFamily:"'Fraunces', Georgia, serif",fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'0.8rem'}}>Bølgevarsel rett i lomma</h2>
           <p style={{color:'rgba(255,255,255,0.6)',marginBottom:'1.5rem'}}>Bølger, vind og temperatur for din kystlokasjon — levert på SMS og e-post når du vil.</p>
           <a href="/registrer" style={{display:'inline-block',background:'#4da8cc',color:'white',padding:'0.85rem 2rem',borderRadius:'100px',textDecoration:'none',fontWeight:500}}>Kom i gang — fra 49 kr/mnd →</a>
         </div>
