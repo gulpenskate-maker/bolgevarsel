@@ -8,7 +8,7 @@ export default function Footer() {
         {/* Venstre — logo + tagline */}
         <div className={styles.brand}>
           <a href="/" className={styles.logoLink}>
-            <svg width="160" height="26" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="200" height="32" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="rgba(125,211,240,0.55)" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
               <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="white" letterSpacing="-0.8">bølgevarsel<tspan fill="#7dd3fc" fontWeight="400">.no</tspan></text>
