@@ -218,7 +218,7 @@ export default function Hero() {
             </span>
             <span>{loc.status}</span>
           </div>
-          <span className={styles.smsTag}>Levert kl. 07:30</span>
+          <span className={styles.smsTag}>Levert når du vil</span>
         </div>
       </div>
     </section>
