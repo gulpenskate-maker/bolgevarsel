@@ -100,7 +100,7 @@ export default function LeggTilLokasjon({ onAdd, onCancel }: Props) {
     modal: { background:'white', borderRadius:16, width:'100%', maxWidth:480, overflow:'hidden' as const },
     head: { padding:'1.1rem 1.3rem', borderBottom:'1px solid #f0f4f8', display:'flex', alignItems:'center', justifyContent:'space-between' },
     tabs: { display:'flex', borderBottom:'1px solid #f0f4f8' },
-    tab: (active: boolean) => ({ flex:1, padding:'10px 12px', fontSize:13, textAlign:'center' as const, cursor:'pointer', color: active ? '#1a6080' : '#6b8fa3', borderBottom: active ? '2px solid #1a6080' : '2px solid transparent', fontWeight: active ? 500 : 400, background:'none', border:'none', borderBottom: active ? '2px solid #1a6080' : '2px solid transparent' }),
+    tab: (active: boolean): React.CSSProperties => ({ flex:1, padding:'10px 12px', fontSize:13, textAlign:'center', cursor:'pointer', color: active ? '#1a6080' : '#6b8fa3', borderBottom: active ? '2px solid #1a6080' : '2px solid transparent', fontWeight: active ? 500 : 400, background:'none', border:'none' }),
     body: { padding:'1.1rem 1.3rem' },
     inp: { width:'100%', padding:'9px 12px', borderRadius:8, border:'1px solid rgba(10,42,61,0.12)', fontSize:13, outline:'none', background:'#f8fbfc', color:'#0a2a3d' },
     sugg: { background:'white', border:'1px solid rgba(10,42,61,0.1)', borderRadius:8, marginTop:4, overflow:'hidden' as const },

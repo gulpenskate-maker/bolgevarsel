@@ -1,10 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseAdmin } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 function parsePhone(raw: string): string | null {
   const cleaned = raw.replace(/\s+/g, '').replace(/^00/, '+')
@@ -28,8 +23,8 @@ export async function POST(req: Request) {
     const name = (row.navn || row.name || '').trim()
     const phoneRaw = (row.telefon || row.phone || '').trim()
     const email = (row.epost || row.email || '').trim() || null
-    const smsRaw = (row.sms || 'ja').toString().toLowerCase().trim()
-    const sms_enabled = !['nei', 'no', 'false', '0'].includes(smsRaw)
+    const smsRaw = (row.sms || '').toString().toLowerCase().trim()
+    const sms_daily = ['ja', 'yes', 'true', '1'].includes(smsRaw)
 
     const phone = parsePhone(phoneRaw)
     if (!phone) {
@@ -37,13 +32,14 @@ export async function POST(req: Request) {
       continue
     }
 
-    const { error } = await supabase.from('bv_recipients').insert({
+    const { error } = await getSupabaseAdmin().from('bv_recipients').insert({
       subscriber_id,
       location_id,
       name: name || null,
       phone,
       email,
-      sms_enabled,
+      sms_enabled: true,
+      sms_daily,
       active: true,
     })
 
