@@ -113,6 +113,7 @@ const KATEGORIER = [
       { slug: 'flere-lokasjoner', tittel: 'Kan jeg ha flere lokasjoner?' },
       { slug: 'datakilder', tittel: 'Hvilke datakilder bruker dere?' },
       { slug: 'aktivitetsprofil-sms', tittel: 'Hva betyr aktivitetsprofil på SMS?' },
+      { slug: 'aktivitetsprofil-sms', tittel: 'Hva betyr aktivitetsprofil på SMS?' },
     ],
   },
 ]
