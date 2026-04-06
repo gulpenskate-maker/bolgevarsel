@@ -884,10 +884,7 @@ export default function MinSideClient() {
         </div>{/* end hoveddel + S.card */}
         </div>{/* end bv-dashboard */}
 
-        <div style={{textAlign:'center',padding:'1rem 0',opacity:0.4}}>
-          <svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg" style={{width:120}}>
-            <path d="M0 15 Q25 5 50 15 Q75 25 100 15 Q125 5 150 15 Q175 25 200 15" fill="none" stroke="#0a2a3d" strokeWidth="2"/>
-          </svg>
+        <div style={{textAlign:'center',padding:'1rem 0'}}>
         </div>
       </div>
     </div>
