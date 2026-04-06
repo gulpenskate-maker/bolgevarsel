@@ -382,6 +382,7 @@ export default function MinSideClient() {
         <div style={S.card}>
           <h2 style={S.sTitle}><span style={{display:'inline-flex',alignItems:'center',gap:'0.5rem'}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.52 1.5 3.5 3.52 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.48-2.02-4.5-4.5-4.5z" stroke="#1a6080" strokeWidth="1.3" fill="none" strokeLinejoin="round"/><circle cx="8" cy="6" r="1.5" stroke="#1a6080" strokeWidth="1.2" fill="none"/></svg>Mine lokasjoner</span></h2>
           {locs.length===0 && <p style={{color:'#6b8fa3',fontSize:'0.9rem',marginBottom:'1rem'}}>Ingen lokasjoner ennå.</p>}
+          {locs.length>0 && <LokasjonPanel locations={locs} />}
           <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:locs.length?'1.2rem':0}}>
             {locs.map(loc => (
               <div key={loc.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12}}>
