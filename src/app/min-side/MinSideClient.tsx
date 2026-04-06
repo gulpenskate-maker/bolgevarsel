@@ -478,7 +478,7 @@ export default function MinSideClient() {
                         <td style={{padding:'10px'}}>
                           {rec.profile ? (
                             <span style={{fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:'#e8f4f8',color:'#1a6080'}}>
-                              {({'surfer':'Surfer','fisker':'Fisker','familie':'Barn/ungdom m/båt','baatforer':'Båtfører','kajakk':'Padler','kitesurfer':'Kiting','windsurfer':'Windsurfer'}[rec.profile]||rec.profile)}
+                              {({'surfer':'Surfer','fisker':'Fisker','familie':'Barn/ungdom m/båt','baatforer':'Båtfører','kajakk':'Padler','kitesurfer':'Kiting','windsurfer':'Windsurfer','seiler':'Seiler','fridykker':'Fridykker'}[rec.profile]||rec.profile)}
                             </span>
                           ) : <span style={{fontSize:'12px',color:'#6b8fa3'}}>Standard</span>}
                         </td>
@@ -546,6 +546,8 @@ export default function MinSideClient() {
                     <option value="familie">⛵ Barn/ungdom med båt</option>
                     <option value="baatforer">⛵ Båtfører</option>
                     <option value="kajakk">🛶 Padler / kajakk</option>
+                    <option value="seiler">⛵ Seiler</option>
+                    <option value="fridykker">🤿 Fridykker / snorkling</option>
                   </select>
                 </div>
                 <div style={{display:'flex',gap:'8px'}}>
