@@ -9,7 +9,7 @@ export const ARTIKLER: Record<string, Artikkel> = {
     tittel: 'Hva er Bølgevarsel?',
     kategori: 'Kom i gang',
     html: `
-<p>Bølgevarsel er en norsk tjeneste som sender deg daglige sjø- og værvarsler tilpasset kyststeder i Norge. Hver morgen kl. 07:30 mottar du en rapport med bølgehøyde, vindstyrke, vindretning og temperatur — slik at du vet hva som venter deg på havet eller ved sjøen.</p>
+<p>Bølgevarsel er en norsk tjeneste som sender deg daglige sjø- og værvarsler tilpasset kyststeder i Norge. Daglig mottar du en rapport (kl. du bestemmer selv) med bølgehøyde, vindstyrke, vindretning og temperatur — slik at du vet hva som venter deg på havet eller ved sjøen.</p>
 <h2>Hvem passer tjenesten for?</h2>
 <ul>
 <li><strong>Båteiere</strong> som vil vite om det er trygt å legge ut</li>
@@ -70,7 +70,7 @@ export const ARTIKLER: Record<string, Artikkel> = {
 <p>Etter betaling sender vi deg en velkomste-post med en innloggingslenke. Klikk lenken for å komme til Min side.</p>
 <h2>Steg 5 — Legg til lokasjon og mottakere</h2>
 <p>På Min side legger du til kyststedet du vil følge og telefonnumrene som skal motta SMS-varsler. Ferdig!</p>
-<p style="margin-top:1.5rem;padding:1rem;background:#f0f8fc;border-radius:12px;font-size:0.9rem">💡 <strong>Tips:</strong> Du begynner å motta daglige varsler fra neste morgen kl. 07:30.</p>
+<p style="margin-top:1.5rem;padding:1rem;background:#f0f8fc;border-radius:12px;font-size:0.9rem">💡 <strong>Tips:</strong> Du begynner å motta daglige varsler fra neste morgen, kl. du har valgt.</p>
 `,
   },
 
@@ -271,7 +271,7 @@ bolgevarsel.no
     tittel: 'Hva er et farevarsel?',
     kategori: 'Varsler og rapporter',
     html: `
-<p>Et farevarsel sendes automatisk når vi registrerer ekstreme sjø- eller værforhold ved en av dine lokasjoner. Dette er et ekstraordinært varsel utenom den daglige kl. 07:30-utsendingen.</p>
+<p>Et farevarsel sendes automatisk når vi registrerer ekstreme sjø- eller værforhold ved en av dine lokasjoner. Dette er et ekstraordinært varsel utenom den daglige rapporten.</p>
 <h2>Hva utløser et farevarsel?</h2>
 <ul>
 <li>Bølgehøyde over 2 meter</li>
@@ -545,7 +545,7 @@ bolgevarsel.no
 <ul>
 <li>Far jobber nattskift → mottar rapporten kl. 06:00 etter jobb</li>
 <li>Mor vil ha rapporten til frokost → kl. 08:00</li>
-<li>Hytta har fellesrapporten → kl. 07:30</li>
+<li>Hytta har fellesrapporten → kl. 12:00 (standard)</li>
 </ul>
 <h2>Tilgjengelige tidspunkter</h2>
 <p>Du kan velge mellom 04:00 og 12:00 i halvtimes-intervaller.</p>

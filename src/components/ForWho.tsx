@@ -7,7 +7,7 @@ const personas = [
     imgAlt: 'Familie på sjøen',
     tag: 'For familier',
     tittel: 'Når ungene vil ut — og du vil sove godt',
-    beskrivelse: 'Det er lørdag morgen og sønnen din vil ut med båten. Du vil si ja — men du vet ikke hva sjøen gjør. Med Bølgevarsel har du allerede fått varselet klokken 07:30. Du vet om bølgehøyde, vind og forhold akkurat der han skal. Du kan si ja med ro i magen — eller nei med fakta i hånden.',
+    beskrivelse: 'Det er lørdag morgen og sønnen din vil ut med båten. Du vil si ja — men du vet ikke hva sjøen gjør. Med Bølgevarsel har du allerede fått varselet om morgenen. Du vet om bølgehøyde, vind og forhold akkurat der han skal. Du kan si ja med ro i magen — eller nei med fakta i hånden.',
   },
   {
     img: '/images/baateier.png',

@@ -169,8 +169,8 @@ export default function VarselKlient() {
             {v.tekst}
           </div>
           <div style={{ textAlign:'center', paddingTop:12, borderTop:'1px solid #f0f4f8' }}>
-            <p style={{ fontSize:13, color:'#6b8fa3', marginBottom:8 }}>Vil du ha dette daglig på SMS kl. 07:30?</p>
-            <a href="/registrer" style={{ display:'inline-block', background:'#0a2a3d', color:'white', padding:'8px 20px', borderRadius:100, textDecoration:'none', fontSize:13, fontWeight:500 }}>Start gratis prøveperiode →</a>
+            <p style={{ fontSize:13, color:'#6b8fa3', marginBottom:8 }}>Vil du ha dette daglig på SMS — levert når du vil?</p>
+            <a href="/registrer" style={{ display:'inline-block', background:'#0a2a3d', color:'white', padding:'8px 20px', borderRadius:100, textDecoration:'none', fontSize:13, fontWeight:500 }}>7 dager gratis — kom i gang →</a>
           </div>
         </div>
       )}

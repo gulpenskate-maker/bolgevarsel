@@ -304,7 +304,7 @@ export default function MinSideClient() {
                 </div>
                 <div style={{fontSize:'0.88rem',color:'#334155'}}>
                   <strong>Ny kunde?</strong>{' '}
-                  <a href="/registrer" style={{color:'#1a6080',textDecoration:'none',fontWeight:500}}>Start gratis prøveperiode →</a>
+                  <a href="/registrer" style={{color:'#1a6080',textDecoration:'none',fontWeight:500}}>Kom i gang — fra 49 kr/mnd →</a>
                 </div>
               </div>
             </div>

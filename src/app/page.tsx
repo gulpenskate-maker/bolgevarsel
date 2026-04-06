@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bolgevarsel.no' },
   openGraph: {
     title: 'Bølgevarsel – Daglig sjøvarsel på SMS',
-    description: 'Daglig sjøvarsel på SMS for norskekysten. Velg lokasjon, få rapport kl. 07:30.',
+    description: 'Daglig sjøvarsel på SMS for norskekysten. Velg lokasjon og tidspunkt — vi gjør resten.',
     url: 'https://bolgevarsel.no',
   },
 }
