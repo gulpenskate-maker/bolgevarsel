@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     headers: {
       'User-Agent': 'Bolgevarsel/1.0 bolgevarsel.no kontakt@bolgevarsel.no',
     },
-    next: { revalidate: 3600 }, // cache 1 time
+    cache: 'no-store',
   })
 
   if (!res.ok) return NextResponse.json([])
@@ -68,7 +68,5 @@ export async function GET(req: NextRequest) {
     type: translateType(r.type, r.class),
   }))
 
-  return NextResponse.json(results, {
-    headers: { 'Cache-Control': 'public, max-age=3600' }
-  })
+  return NextResponse.json(results)
 }
