@@ -4,8 +4,8 @@ const steps = [
   {
     num: '01',
     title: 'Velg lokasjon og mottakere',
-    desc: 'Søk opp din havn, hytte eller fiskeplass. Legg til hvem som skal få rapporten — deg selv, familien eller svigerforeldre.',
-    details: ['Hele norskekysten støttes', 'Opptil 5 mottakere per lokasjon', 'Aktivitetsprofil per mottaker', 'SMS og e-post'],
+    desc: 'Søk opp kyststeder langs hele norskekysten. Legg til mottakere og velg aktivitetsprofil — så tilpasses rapporten akkurat det du skal gjøre.',
+    details: ['Hele norskekysten støttes', 'Opptil 5 mottakere per lokasjon', '9 aktivitetsprofiler — surfer, seiler, fisker...', 'Eget leveringstidspunkt per mottaker'],
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
         <path d="M14 3C10.13 3 7 6.13 7 10c0 5.25 7 15 7 15s7-9.75 7-15c0-3.87-3.13-7-7-7z" stroke="#1a6080" strokeWidth="1.6" fill="none" strokeLinejoin="round"/>
@@ -18,8 +18,8 @@ const steps = [
   {
     num: '02',
     title: 'Vi analyserer bølger, vind og vær',
-    desc: 'Vi henter ferske data fra met.no og Open-Meteo, beregner forholdene for akkurat din lokasjon og setter det sammen til en klar rapport.',
-    details: ['Bølgehøyde og periode', 'Vindstyrke og retning', 'Lufttemperatur og sjøtemperatur', 'Data fra met.no og Open-Meteo'],
+    desc: 'Ferske data fra met.no og Open-Meteo Marine — bølgehøyde, periode, vindstyrke og sjøtemperatur beregnet for nøyaktig din lokasjon.',
+    details: ['Bølgehøyde og periode', 'Vindstyrke og retning', 'Sjøtemperatur', 'Oppdatert flere ganger daglig'],
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
         <circle cx="14" cy="9" r="3" stroke="#cc7700" strokeWidth="1.4" fill="none"/>
@@ -33,7 +33,7 @@ const steps = [
   {
     num: '03',
     title: 'Du mottar din daglige sjørapport',
-    desc: 'SMS for rask oversikt, e-post for full detalj — og rapport-fanen på Min side lar deg sjekke forholdene når som helst.',
+    desc: 'Kortfattet SMS med det viktigste, detaljert e-postrapport med timesvarsel og profilspesifikke tips — pluss on-demand rapport på Min side.',
     details: [],
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -60,8 +60,8 @@ export default function HowItWorks() {
   return (
     <section id="hvordan" className={styles.section}>
       <span className={styles.label}>Slik fungerer det</span>
-      <h2 className={styles.title}>Daglig sjørapport<br/>levert når du vil</h2>
-      <p className={styles.sub}>Du velger lokasjon, mottakere og tidspunkt — vi gjør resten. Hver dag får du en komplett sjørapport tilpasset din aktivitet og kystlokasjon.</p>
+      <h2 className={styles.title}>Sett opp én gang —<br/>vi gjør resten</h2>
+      <p className={styles.sub}>Velg lokasjon, mottakere og aktivitetsprofil. Deretter kommer rapporten automatisk — tilpasset deg, kl. du bestemmer.</p>
 
       <div className={styles.steps}>
         {steps.map((step) => (
