@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   // Finn abonnenten
   const { data: sub } = await supabase.from('bv_subscribers').select('id, email, status').eq('email', email).maybeSingle()
   if (!sub) return NextResponse.json({ error: 'Ingen konto funnet for denne e-postadressen' }, { status: 404 })
-  if (sub.status === 'inactive' || sub.status === 'cancelled') return NextResponse.json({ error: 'Kontoen er deaktivert' }, { status: 403 })
+  if (sub.status === 'inactive' || sub.status === 'cancelled') return NextResponse.json({ error: 'Kontoen er deaktivert eller kansellert. Kontakt hei@bolgevarsel.no for hjelp.' }, { status: 403 })
 
   // Slett gamle tokens og generer nytt
   await supabase.from('bv_magic_tokens').delete().eq('subscriber_id', sub.id)

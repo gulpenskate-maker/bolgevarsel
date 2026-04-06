@@ -32,7 +32,7 @@ async function sendWelcomeEmail(email: string, plan: string, loginLink: string) 
 
 <tr><td style="background:#fff;padding:36px 40px">
   <p style="margin:0 0 20px;font-size:16px;color:#334155;line-height:1.6">
-    Hei! Du er nå registrert med <strong>${navn}-abonnementet</strong> og vil motta daglig bølge- og værvarsel kl. 07:30 fra i morgen.
+    Hei! Du er nå registrert med <strong>${navn}-abonnementet</strong> og har <strong style="color:#16a34a">7 dager gratis prøveperiode</strong>. Varsler starter fra i morgen — du belastes ikke før prøveperioden er over.
   </p>
 
   <div style="background:#f8fafc;border-radius:12px;padding:20px;margin-bottom:24px;border:1px solid #e2e8f0">
@@ -40,7 +40,8 @@ async function sendWelcomeEmail(email: string, plan: string, loginLink: string) 
     <table width="100%">
       <tr><td style="font-size:15px;color:#334155;padding:4px 0">Plan</td><td style="font-size:15px;font-weight:600;color:#0a2a3d;text-align:right">${navn}</td></tr>
       <tr><td style="font-size:15px;color:#334155;padding:4px 0;border-top:1px solid #f1f5f9">Pris</td><td style="font-size:15px;font-weight:600;color:#0a2a3d;text-align:right;border-top:1px solid #f1f5f9">${pris} kr/mnd</td></tr>
-      <tr><td style="font-size:15px;color:#334155;padding:4px 0;border-top:1px solid #f1f5f9">Fakturering</td><td style="font-size:15px;font-weight:600;color:#0a2a3d;text-align:right;border-top:1px solid #f1f5f9">Månedlig</td></tr>
+      <tr><td style="font-size:15px;color:#334155;padding:4px 0;border-top:1px solid #f1f5f9">Prøveperiode</td><td style="font-size:15px;font-weight:600;color:#16a34a;text-align:right;border-top:1px solid #f1f5f9">7 dager gratis</td></tr>
+      <tr><td style="font-size:15px;color:#334155;padding:4px 0;border-top:1px solid #f1f5f9">Fakturering</td><td style="font-size:15px;font-weight:600;color:#0a2a3d;text-align:right;border-top:1px solid #f1f5f9">Månedlig etter trial</td></tr>
     </table>
   </div>
 
@@ -91,15 +92,19 @@ export async function POST(req: NextRequest) {
         const subscriptionId = session.subscription
         if (!email) break
 
+        // Sjekk om trial er aktiv
+        const hasTrial = session.subscription ? true : false
+        const initialStatus = hasTrial ? 'trialing' : 'active'
+
         // Opprett eller oppdater subscriber
         const { data: existing } = await supabase.from('bv_subscribers').select('id').eq('email', email).maybeSingle()
         if (existing) {
           await supabase.from('bv_subscribers').update({
-            status: 'active', plan, stripe_customer_id: customerId, stripe_subscription_id: subscriptionId,
+            status: initialStatus, plan, stripe_customer_id: customerId, stripe_subscription_id: subscriptionId,
           }).eq('email', email)
         } else {
           await supabase.from('bv_subscribers').insert({
-            email, plan, status: 'active', stripe_customer_id: customerId, stripe_subscription_id: subscriptionId,
+            email, plan, status: initialStatus, stripe_customer_id: customerId, stripe_subscription_id: subscriptionId,
           })
         }
 
@@ -122,8 +127,19 @@ export async function POST(req: NextRequest) {
 
       case 'customer.subscription.updated': {
         const sub = event.data.object
-        const status = sub.status === 'active' ? 'active' : sub.status === 'canceled' ? 'cancelled' : 'inactive'
+        let status: string
+        if (sub.status === 'active') status = 'active'
+        else if (sub.status === 'trialing') status = 'trialing'
+        else if (sub.status === 'canceled' || sub.status === 'cancelled') status = 'cancelled'
+        else status = 'inactive'
         await supabase.from('bv_subscribers').update({ status }).eq('stripe_subscription_id', sub.id)
+        break
+      }
+
+      case 'customer.subscription.trial_will_end': {
+        // Stripe sender dette 3 dager før trial utløper — kan brukes til å sende reminder
+        // For nå bare logg det
+        console.log('Trial utløper snart for subscription:', event.data.object.id)
         break
       }
 

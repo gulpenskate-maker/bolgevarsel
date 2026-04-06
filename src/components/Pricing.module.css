@@ -23,3 +23,5 @@
 .planBtn:hover { background: rgba(255,255,255,0.1); }
 .featured .planBtn { background: var(--ocean-deep); color: var(--white); border-color: transparent; }
 .featured .planBtn:hover { background: var(--ocean-light); }
+
+.trial { font-size: 0.9rem; color: #1a7a50; font-weight: 500; margin: 0.5rem 0 0; background: #f0fdf4; display: inline-block; padding: 0.3rem 1rem; border-radius: 100px; border: 1px solid #bbf7d0; }

@@ -7,6 +7,7 @@ export default function Pricing() {
       <div className={styles.inner}>
         <span className={styles.label}>Priser</span>
         <h2 className={styles.title}>Enkle, transparente<br/>abonnementer</h2>
+        <p className={styles.trial}>7 dager gratis — kortet belastes ikke før etter prøveperioden</p>
         <div className={styles.plans}>
           {PLANS.map((plan) => (
             <div key={plan.id} className={`${styles.plan} ${plan.featured ? styles.featured : ''}`}>

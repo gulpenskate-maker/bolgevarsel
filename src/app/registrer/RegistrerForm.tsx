@@ -45,7 +45,7 @@ export default function RegistrerForm() {
       <div className={styles.container}>
         <div className={styles.header}>
           <h1 className={styles.title}>Velg ditt abonnement</h1>
-          <p className={styles.sub}>14 dager gratis. Avslutt når du vil.</p>
+          <p className={styles.sub}>7 dager gratis. Avslutt når du vil.</p>
         </div>
         <div className={styles.plans}>
           {PLANS.map((plan) => (
@@ -67,9 +67,9 @@ export default function RegistrerForm() {
           <input className={styles.input} type="email" placeholder="hei@eksempel.no" value={email} onChange={e => setEmail(e.target.value)} required/>
           {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.submit} disabled={loading}>
-            {loading ? 'Sender...' : 'Start gratis prøveperiode →'}
+            {loading ? 'Sender...' : 'Start 7 dager gratis →'}
           </button>
-          <p className={styles.hint}>Du legger inn lokasjon og mottakere etter betaling</p>
+          <p className={styles.hint}>Kortet belastes ikke før etter 7 dager — avslutt når som helst</p>
         </form>
       </div>
     </div>
