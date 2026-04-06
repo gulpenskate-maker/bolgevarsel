@@ -71,7 +71,8 @@ export default function MinSideClient() {
   const [csvImporting, setCsvImporting] = useState(false)
   const [csvResult, setCsvResult] = useState<{imported:number;total:number;results:any[]}|null>(null)
   const [newEmail, setNewEmail] = useState('')
-  const [newSmsEnabled, setNewSmsEnabled] = useState(true)
+  const [newEmailEnabled, setNewEmailEnabled] = useState(true)
+  const [newSmsEnabled, setNewSmsEnabled] = useState(false)
   const [newSendTime, setNewSendTime] = useState('')
   const [newProfile, setNewProfile] = useState('')
   const [locs, setLocs] = useState<Loc[]>([])
@@ -169,9 +170,9 @@ export default function MinSideClient() {
   async function addRec(e: React.FormEvent) {
     e.preventDefault()
     const r = await fetch('/api/min-side/recipient', { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:true, sms_daily:newSmsEnabled, send_time:newSendTime||null, profile:newProfile||null }) })
+      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:(newEmailEnabled&&newEmail)?newEmail:null, sms_enabled:true, sms_daily:newSmsEnabled, send_time:newSendTime||null, profile:newProfile||null }) })
     const d = await r.json()
-    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setNewSendTime(''); setNewProfile(''); setShowAddRec(false) }
+    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setNewEmailEnabled(true); setNewSmsEnabled(false); setNewSendTime(''); setNewProfile(''); setShowAddRec(false) }
   }
   function parseCsv(text: string) {
     const lines = text.trim().split(/\r?\n/)
@@ -701,14 +702,29 @@ export default function MinSideClient() {
                   {/* ── Seksjon 3: E-postrapport ── */}
                   <div style={{fontSize:11,fontWeight:500,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.06em',display:'flex',alignItems:'center',gap:6}}>
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 3h10l-5 4.5L1.5 3z" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinejoin="round"/><path d="M1.5 3v7.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V3" stroke="currentColor" strokeWidth="1.2" fill="none"/></svg>
-                    E-postrapport (valgfritt)
+                    E-postrapport
                   </div>
                   <div style={{background:'white',borderRadius:10,border:'0.5px solid rgba(10,42,61,0.1)',overflow:'hidden'}}>
+                    {/* E-post toggle */}
+                    <div style={{padding:'10px 12px',borderBottom:'0.5px solid rgba(10,42,61,0.07)'}}>
+                      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
+                        <div style={{display:'flex',alignItems:'center',gap:7}}>
+                          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 3h10l-5 4.5L1.5 3z" stroke="#1a6080" strokeWidth="1.1" fill="none" strokeLinejoin="round"/><path d="M1.5 3v7.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V3" stroke="#1a6080" strokeWidth="1.1" fill="none"/></svg>
+                          <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Detaljert e-postrapport</span>
+                        </div>
+                        <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewEmailEnabled(!newEmailEnabled)}>
+                          <div style={{position:'absolute',inset:0,borderRadius:100,background:newEmailEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
+                          <div style={{position:'absolute',width:14,height:14,top:3,left:newEmailEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
+                        </div>
+                      </div>
+                      <div style={{fontSize:11,color:'#6b8fa3'}}>Full HTML-rapport med timesvarsel og tips. På som standard.</div>
+                    </div>
+                    {/* E-postadresse — vises alltid */}
                     <div style={{padding:'10px 12px',borderBottom:'0.5px solid rgba(10,42,61,0.07)'}}>
                       <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>E-postadresse</div>
-                      <input style={{...S.inp,borderRadius:6}} placeholder="ola@eksempel.no — la stå tom for ingen e-post" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} />
-                      <div style={{fontSize:10,color:'#94a3b8',marginTop:3}}>Detaljert HTML-rapport sendes hit. Valgfritt.</div>
+                      <input style={{...S.inp,borderRadius:6}} placeholder="ola@eksempel.no" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} />
                     </div>
+                    {/* Aktivitetsprofil */}
                     <div style={{padding:'10px 12px'}}>
                       <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil</div>
                       <select style={{...S.inp,borderRadius:6}} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
