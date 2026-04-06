@@ -57,7 +57,9 @@ type LiveData = {
   name: string
   date: string
   vær: string
+  sjøTemp: string | null
   vind: string
+  vindBeskr: string
   bølger: string
   status: string
   fare: boolean
@@ -66,33 +68,41 @@ type LiveData = {
 
 async function fetchLocation(loc: typeof LOCATIONS[0]): Promise<LiveData> {
   try {
-    const res = await fetch(
-      `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${Math.round(loc.lat*10000)/10000}&lon=${Math.round(loc.lon*10000)/10000}`,
-      { headers: { 'User-Agent': 'bolgevarsel.no kontakt@bolgevarsel.no' } }
-    )
-    const data = await res.json()
-    const timeseries = data.properties.timeseries
-    // Maks vind neste 24 timer for fareberegning
+    const lat = Math.round(loc.lat * 10000) / 10000
+    const lon = Math.round(loc.lon * 10000) / 10000
+
+    // Proxy til met.no (TOS-compliant, User-Agent satt server-side)
+    const [metRes, marineRes] = await Promise.all([
+      fetch(`/api/varsel?lat=${lat}&lon=${lon}`),
+      fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&current=wave_height,wave_period,sea_surface_temperature&timezone=Europe/Oslo`),
+    ])
+    const [metData, marineData] = await Promise.all([metRes.json(), marineRes.json()])
+
+    const timeseries = metData.properties?.timeseries ?? []
     const next24 = timeseries.slice(0, 24)
-    const maxVindMs = Math.round(Math.max(...next24.map((t: any) => t.data.instant.details.wind_speed)) * 10) / 10
-    const now = timeseries[0].data.instant.details
-    const vindMs = Math.round(now.wind_speed * 10) / 10
-    const vindDir = Math.round(now.wind_from_direction)
-    const temp = Math.round(now.air_temperature)
+    const maxVindMs = Math.round(Math.max(...next24.map((t: any) => t.data?.instant?.details?.wind_speed ?? 0)) * 10) / 10
+    const now = timeseries[0]?.data?.instant?.details ?? {}
+    const vindMs = Math.round((now.wind_speed ?? 0) * 10) / 10
+    const vindDir = Math.round(now.wind_from_direction ?? 0)
+    const temp = Math.round(now.air_temperature ?? 0)
 
-    // Bølgehøyde estimert fra maks vind
-    let bølgeM = now.significant_wave_height
-    if (!bølgeM) bølgeM = Math.pow(maxVindMs * 0.10, 2)
+    // Bølger fra Open-Meteo Marine
+    const bølgeM = marineData.current?.wave_height ?? Math.pow(maxVindMs * 0.10, 2)
+    const periode = marineData.current?.wave_period
+    const sjøTemp = marineData.current?.sea_surface_temperature
 
-    // Bruk maks vind neste 24t for fareberegning
     const status = sjøStatus(maxVindMs, bølgeM)
-    const bølgeTekst = `${bølgeM.toFixed(1)} m`
+    const bølgeTekst = periode
+      ? `${bølgeM.toFixed(1)} m · ${Math.round(periode)}s`
+      : `${bølgeM.toFixed(1)} m`
 
     return {
       name: loc.name,
       date: getDagensDato(),
       vær: `${temp}°C`,
-      vind: `${vindBeskrivelse(vindMs)} ${vindMs} m/s (maks ${maxVindMs} m/s) fra ${retning(vindDir)}`,
+      sjøTemp: sjøTemp != null ? `${sjøTemp.toFixed(1)}°C` : null,
+      vind: `${vindMs} m/s (maks ${maxVindMs}) fra ${retning(vindDir)}`,
+      vindBeskr: vindBeskrivelse(vindMs),
       bølger: bølgeTekst,
       status: status.tekst,
       fare: status.fare,
@@ -101,8 +111,8 @@ async function fetchLocation(loc: typeof LOCATIONS[0]): Promise<LiveData> {
   } catch {
     return {
       name: loc.name, date: getDagensDato(),
-      vær: '–', vind: '–', bølger: '–',
-      status: 'Kunne ikke hente data', fare: false, loaded: true,
+      vær: '–', sjøTemp: null, vind: '–', vindBeskr: '',
+      bølger: '–', status: 'Kunne ikke hente data', fare: false, loaded: true,
     }
   }
 }
@@ -113,8 +123,8 @@ export default function Hero() {
   const [liveData, setLiveData] = useState<LiveData[]>(
     LOCATIONS.map(l => ({
       name: l.name, date: getDagensDato(),
-      vær: '…', vind: '…', bølger: '…',
-      status: 'Henter data…', fare: false, loaded: false,
+      vær: '…', sjøTemp: null, vind: '…', vindBeskr: '',
+      bølger: '…', status: 'Henter data…', fare: false, loaded: false,
     }))
   )
 
@@ -197,16 +207,16 @@ export default function Hero() {
               <path d="M1 9.5 Q5 8 8 9.5 Q10 10.5 12 9.5" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/>
               <path d="M14 6 Q16 6 16 7.5 Q16 9 14 9 H9" stroke="#1a6080" strokeWidth="1.1" strokeLinecap="round" opacity="0.35"/>
             </svg>
-            <span>Vind: {loc.vind}</span>
+            <span>Vind: {loc.vindBeskr ? `${loc.vindBeskr} · ` : ''}{loc.vind}</span>
           </div>
-          {/* Luft */}
+          {/* Luft + sjøtemp */}
           <div className={styles.smsRow}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
               <path d="M8 2 V9" stroke="#1a6080" strokeWidth="1.3" strokeLinecap="round"/>
               <circle cx="8" cy="12" r="2.5" stroke="#1a6080" strokeWidth="1.3" fill="none"/>
               <path d="M10 4.5 H12 M10 6.5 H11.5" stroke="#1a6080" strokeWidth="1" strokeLinecap="round" opacity="0.4"/>
             </svg>
-            <span>Luft: {loc.vær}</span>
+            <span>Luft: {loc.vær}{loc.sjøTemp ? ` · Sjø: ${loc.sjøTemp}` : ''}</span>
           </div>
           {/* Status */}
           <div className={styles.smsGood} style={{ color: loc.fare ? '#dc2626' : '#1a7a50' }}>
