@@ -52,7 +52,7 @@ function BrandIllustration() {
 
 type Sub = { id:string; email:string; plan:string; status:string; send_time?:string }
 type Loc = { id:string; name:string; lat:number; lon:number }
-type Rec = { id:string; location_id:string; phone:string; name:string; email?:string; active:boolean; sms_enabled:boolean; send_time?:string; profile?:string }
+type Rec = { id:string; location_id:string; phone:string; name:string; email?:string; active:boolean; sms_enabled:boolean; sms_daily:boolean; send_time?:string; profile?:string }
 
 export default function MinSideClient() {
   const [email, setEmail] = useState('')
@@ -169,7 +169,7 @@ export default function MinSideClient() {
   async function addRec(e: React.FormEvent) {
     e.preventDefault()
     const r = await fetch('/api/min-side/recipient', { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:newSmsEnabled, send_time:newSendTime||null, profile:newProfile||null }) })
+      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:true, sms_daily:newSmsEnabled, send_time:newSendTime||null, profile:newProfile||null }) })
     const d = await r.json()
     if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setNewSendTime(''); setNewProfile(''); setShowAddRec(false) }
   }
@@ -222,6 +222,13 @@ export default function MinSideClient() {
   async function toggleSms(rec: Rec) {
     const r = await fetch('/api/min-side/recipient/update', { method:'PATCH', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ id:rec.id, subscriber_id:sub!.id, sms_enabled:!rec.sms_enabled }) })
+    const d = await r.json()
+    if (d.recipient) setRecs(recs.map(r=>r.id===rec.id ? d.recipient : r))
+  }
+
+  async function toggleSmsDaily(rec: Rec) {
+    const r = await fetch('/api/min-side/recipient/update', { method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id:rec.id, subscriber_id:sub!.id, sms_daily:!rec.sms_daily }) })
     const d = await r.json()
     if (d.recipient) setRecs(recs.map(r=>r.id===rec.id ? d.recipient : r))
   }
@@ -582,9 +589,16 @@ export default function MinSideClient() {
                             <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{rec.phone}</td>
                             <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{(rec as any).email||'—'}</td>
                             <td style={{padding:'10px'}}>
-                              <span style={{fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:rec.sms_enabled!==false?'#e8f5ed':'#f1f5f9',color:rec.sms_enabled!==false?'#1a7a50':'#6b8fa3'}}>
-                                {rec.sms_enabled!==false?'På':'Av'}
-                              </span>
+                              <div style={{display:'flex',flexDirection:'column',gap:3}}>
+                                <span style={{fontSize:'10px',fontWeight:500,padding:'2px 7px',borderRadius:100,background:'#fef2f2',color:'#991b1b',whiteSpace:'nowrap'}}>
+                                  Fare: alltid
+                                </span>
+                                <span style={{fontSize:'10px',fontWeight:500,padding:'2px 7px',borderRadius:100,
+                                  background:rec.sms_daily?'#e8f5ed':'#f1f5f9',
+                                  color:rec.sms_daily?'#1a7a50':'#6b8fa3',whiteSpace:'nowrap'}}>
+                                  Daglig: {rec.sms_daily?'på':'av'}
+                                </span>
+                              </div>
                             </td>
                             <td style={{padding:'10px',color:'#6b8fa3',fontSize:'12px'}}>{rec.send_time||'Standard'}</td>
                             <td style={{padding:'10px'}}>
@@ -595,7 +609,7 @@ export default function MinSideClient() {
                               ) : <span style={{fontSize:'12px',color:'#6b8fa3'}}>Standard</span>}
                             </td>
                             <td style={{padding:'10px',textAlign:'right',whiteSpace:'nowrap'}}>
-                              <button style={S.btnGhost} onClick={()=>toggleSms(rec)} title="Skru SMS av/på">
+                              <button style={S.btnGhost} onClick={()=>toggleSmsDaily(rec)} title="Skru daglig SMS av/på">
                                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3 5h7M3 7.5h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/></svg>
                               </button>
                               <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}} title="Rediger">
@@ -628,8 +642,23 @@ export default function MinSideClient() {
                         {locs.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}
                       </select>
                     </div>
+                    {/* Kritisk farevarsel — alltid på */}
+                    <div style={{background:'#fef9f9',borderRadius:8,padding:'10px 12px',border:'0.5px solid rgba(220,38,38,0.15)'}}>
+                      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:4}}>
+                        <div style={{display:'flex',alignItems:'center',gap:7}}>
+                          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2.5v3M6.5 9h.01" stroke="#dc2626" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                          <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Kritisk farevarsel</span>
+                        </div>
+                        <span style={{fontSize:10,fontWeight:600,padding:'2px 8px',borderRadius:100,background:'#fef2f2',color:'#991b1b'}}>Alltid på</span>
+                      </div>
+                      <div style={{fontSize:11,color:'#6b7280'}}>Sendes automatisk ved farlige forhold — kan ikke skrus av.</div>
+                    </div>
+                    {/* Daglig SMS — av som standard */}
                     <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0'}}>
-                      <div><div style={{fontSize:'13px',color:'#0a2a3d'}}>SMS-varsel</div><div style={{fontSize:'11px',color:'#6b8fa3'}}>Mottaker får daglig SMS og farevarsler</div></div>
+                      <div>
+                        <div style={{fontSize:13,color:'#0a2a3d'}}>Daglig SMS-rapport</div>
+                        <div style={{fontSize:11,color:'#6b8fa3'}}>Av som standard — skru på om ønskelig</div>
+                      </div>
                       <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewSmsEnabled(!newSmsEnabled)}>
                         <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
                         <div style={{position:'absolute',width:14,height:14,top:3,left:newSmsEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
