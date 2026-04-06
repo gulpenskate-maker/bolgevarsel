@@ -155,24 +155,36 @@ Bestefar,004747123456,bestefar@mail.no,ja</pre>
     tittel: 'Legg til mottakere',
     kategori: 'Kom i gang',
     html: `
-<p>Mottakere er personene som skal motta SMS-varsler for en gitt lokasjon. Du kan for eksempel legge til deg selv, ektefellen og barna.</p>
+<p>Mottakere er personene som skal motta varsler for en gitt kystlokasjon — deg selv, familien eller venner.</p>
 <h2>Slik legger du til en mottaker</h2>
 <ol>
 <li>Logg inn på <a href="/min-side" style="color:#4da8cc">Min side</a></li>
-<li>Sørg for at du har lagt til minst én lokasjon først</li>
-<li>Finn seksjonen <strong>Mine mottakere</strong></li>
-<li>Velg hvilken lokasjon mottakeren skal få varsler for</li>
-<li>Skriv inn navn (valgfritt) og telefonnummer i format <code>+4799...</code></li>
+<li>Gå til <strong>Mottakere</strong>-fanen</li>
+<li>Klikk <strong>+ Legg til mottaker</strong></li>
+<li>Fyll inn navn, telefonnummer og lokasjon</li>
+<li>Velg SMS- og e-postinnstillinger</li>
 <li>Klikk <strong>Legg til mottaker</strong></li>
 </ol>
+<h2>SMS-innstillinger</h2>
+<p>Når du legger til en mottaker kan du velge:</p>
+<ul>
+<li><strong>Kritisk farevarsel</strong> — sendes alltid ved kuling og farlige forhold. Kan ikke skrus av — din sikkerhet er viktigst.</li>
+<li><strong>Daglig SMS-rapport</strong> — daglig oppsummering av sjøforholdene. Av som standard siden SMS er en kostnad — skru på om ønskelig.</li>
+</ul>
+<h2>E-postrapport</h2>
+<p>Har mottakeren en e-postadresse kan de motta en detaljert HTML-rapport med timesvarsel og profilspesifikke tips. E-post er på som standard — det er gratis og gir ekstra verdi.</p>
+<h2>Leveringstidspunkt</h2>
+<p>Du kan velge eget leveringstidspunkt per mottaker (04:00–12:00). Praktisk for skift- og nattarbeidere som ønsker rapporten etter jobb. Overstyrer abonnementets standard.</p>
+<h2>Aktivitetsprofil</h2>
+<p>Velg en aktivitetsprofil (surfer, seiler, fisker osv.) for å få en skreddersydd vurdering av forholdene — i både SMS og e-post.</p>
 <h2>Antall mottakere per plan</h2>
 <ul>
 <li><strong>Kyst:</strong> Ingen SMS — kun e-post til deg</li>
-<li><strong>Familie:</strong> opptil 3 SMS-mottakere</li>
-<li><strong>Pro:</strong> opptil 5 SMS-mottakere</li>
+<li><strong>Familie:</strong> opptil 5 mottakere</li>
+<li><strong>Pro:</strong> opptil 5 mottakere</li>
 </ul>
-<h2>Kan mottakere pauses?</h2>
-<p>Ja! Du kan enkelt pause en mottaker ved å klikke ⏸-knappen. Da slutter de å motta SMS-varsler inntil du aktiverer dem igjen. Du kan også skru av SMS spesifikt uten å slette mottakeren.</p>
+<h2>Pause eller slett mottaker</h2>
+<p>Du kan pause en mottaker midlertidig (de får ingen varsler) eller slette dem helt. Kritisk farevarsel stoppes ikke av pause.</p>
 `,
   },
 
@@ -180,14 +192,20 @@ Bestefar,004747123456,bestefar@mail.no,ja</pre>
     tittel: 'Når sendes varselet?',
     kategori: 'Varsler og rapporter',
     html: `
-<p>Bølgevarsel sender ut daglige varsler <strong>kl. 07:30 hver morgen</strong> — slik at du vet hva dagen bringer før du legger ut på havet eller planlegger aktiviteter.</p>
-<h2>SMS-varselet</h2>
-<p>SMS sendes kl. 07:30 til alle aktive mottakere. Det tar normalt under 1 minutt fra utsending til du mottar meldingen.</p>
-<h2>E-postrapporten</h2>
-<p>E-postrapporten sendes samtidig som SMS og inneholder en mer detaljert gjennomgang av dagens og kommende dagers forhold.</p>
-<h2>Farevarsler</h2>
-<p>Farevarsler sendes <strong>utenom den faste kl. 07:30</strong> dersom det oppstår ekstreme forhold i løpet av dagen — f.eks. kuling, sterk vind eller høye bølger. Da varsler vi umiddelbart, uansett tidspunkt.</p>
-<p style="margin-top:1.5rem;padding:1rem;background:#fff8e1;border-radius:12px;font-size:0.9rem">⚠️ <strong>Merk:</strong> Varsler sendes ikke i helger og helligdager — tjenesten kjører alle 365 dager i året.</p>
+<p>Standard leveringstidspunkt er <strong>kl. 12:00 hver morgen</strong>, men du kan selv velge tidspunkt mellom 04:00 og 12:00 — enten for hele abonnementet eller per mottaker.</p>
+<h2>Velg ditt eget tidspunkt</h2>
+<p>Du kan endre leveringstidspunktet på to steder:</p>
+<ul>
+<li><strong>Konto-fanen</strong> på Min side — gjelder for hele abonnementet</li>
+<li><strong>Per mottaker</strong> — overstyrer abonnementets standard. Praktisk for skiftarbeidere som ønsker rapporten kl. 06:00 etter nattskift, mens resten av familien får den kl. 09:00.</li>
+</ul>
+<h2>SMS-varsel</h2>
+<p>SMS sendes til mottakere med daglig SMS aktivert. Det tar normalt under 1 minutt fra utsending til du mottar meldingen.</p>
+<h2>E-postrapport</h2>
+<p>Sendes samtidig og inneholder en fullstendig gjennomgang av forholdene med timesvarsel og profilspesifikke tips.</p>
+<h2>Kritisk farevarsel</h2>
+<p>Farevarsler sendes <strong>automatisk</strong> når vi registrerer kuling eller farlige bølgeforhold — uansett tidspunkt og uavhengig av SMS-innstillingene dine. Kritisk farevarsel kan ikke skrus av.</p>
+<p style="margin-top:1.5rem;padding:1rem;background:#fff8e1;border-radius:12px;font-size:0.9rem">⚠️ Tjenesten kjører alle 365 dager i året, inkludert helger og helligdager.</p>
 `,
   },
 
@@ -195,21 +213,36 @@ Bestefar,004747123456,bestefar@mail.no,ja</pre>
     tittel: 'Forstå SMS-varselet',
     kategori: 'Varsler og rapporter',
     html: `
-<p>SMS-varselet er kortfattet og designet for å gi deg det viktigste på sekunder. Her er et eksempel:</p>
+<p>SMS-varselet er kortfattet og designet for å gi deg det viktigste på sekunder.</p>
+<h2>To typer SMS</h2>
+<ul>
+<li><strong>Daglig rapport</strong> — sendes til mottakere som har daglig SMS aktivert. Inneholder bølger, vind, temperatur og en vurdering tilpasset aktivitetsprofilen din.</li>
+<li><strong>Kritisk farevarsel</strong> — sendes alltid til alle aktive mottakere ved kuling eller farlige bølgeforhold, uansett SMS-innstillinger. Kan ikke skrus av.</li>
+</ul>
+<h2>Eksempel på daglig SMS</h2>
 <div style="background:#f8fbfc;border:1px solid #e2e8f0;border-radius:12px;padding:1.2rem;font-family:monospace;font-size:0.9rem;margin:1rem 0;line-height:1.8">
-Bølgevarsel - Tånes, søndag 5. apr<br/>
-Bølger: 0.3m | Vind: 3m/s SV | Temp: 8°C<br/>
-Forhold: Rolig og pent. God dag på sjøen.
+BOLGEVARSEL mandag 6. april<br/>
+Tånes: Rolig hav<br/>
+Vind 2.1/4.3m/s, Bolger 0.3m | Sjo 6.2C<br/>
+Stabile forhold de neste 6 timene<br/>
+bolgevarsel.no
+</div>
+<h2>Eksempel på kritisk farevarsel</h2>
+<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:1.2rem;font-family:monospace;font-size:0.9rem;margin:1rem 0;line-height:1.8">
+FAREVARSEL - kritiske sjoforhold<br/>
+BOLGEVARSEL mandag 6. april<br/>
+Tånes: FAREVARSEL - Bli pa land!<br/>
+Vind 18.4/24.1m/s, Bolger 3.8m<br/>
+bolgevarsel.no
 </div>
 <h2>Hva betyr feltene?</h2>
 <ul>
-<li><strong>Bølger:</strong> Signifikant bølgehøyde i meter</li>
-<li><strong>Vind:</strong> Vindstyrke i meter per sekund og vindretning</li>
-<li><strong>Temp:</strong> Lufttemperatur</li>
-<li><strong>Forhold:</strong> En kort oppsummering av dagen</li>
+<li><strong>Vind X/Y m/s</strong> — nåværende vind / maksimal vind</li>
+<li><strong>Bølger</strong> — signifikant bølgehøyde i meter</li>
+<li><strong>Sjø</strong> — sjøtemperatur i grader</li>
 </ul>
-<h2>Vindretninger forklart</h2>
-<p>N = Nord, S = Sør, Ø = Øst, V = Vest, NV = Nordvest osv. Vindretningen angir <em>hvor vinden kommer fra</em>.</p>
+<h2>Vindretninger</h2>
+<p>N = Nord, S = Sør, O = Øst, V = Vest, NV = Nordvest osv. Vindretningen angir <em>hvor vinden kommer fra</em>.</p>
 `,
   },
 
@@ -416,18 +449,130 @@ Forhold: Rolig og pent. God dag på sjøen.
     tittel: 'Hvilke datakilder bruker dere?',
     kategori: 'Vanlige spørsmål',
     html: `
-<p>Bølgevarsel bruker data fra åpne og anerkjente meteorologiske tjenester:</p>
-<h2>Open-Meteo</h2>
-<p><a href="https://open-meteo.com" style="color:#4da8cc" target="_blank">Open-Meteo</a> er en gratis, åpen API-tjeneste som samler data fra europeiske og globale værtjenester — inkludert ECMWF (European Centre for Medium-Range Weather Forecasts), som regnes som verdens beste værvarselsmodell.</p>
-<h2>Hva henter vi?</h2>
-<ul>
-<li>Signifikant bølgehøyde (fra havmodell)</li>
-<li>Vindstyrke og vindretning (10m høyde)</li>
-<li>Lufttemperatur</li>
-<li>Bølgeperiode</li>
-</ul>
+<p>Bølgevarsel bruker data fra to anerkjente og åpne meteorologiske tjenester:</p>
+<h2>Meteorologisk institutt (met.no)</h2>
+<p><a href="https://met.no" style="color:#4da8cc" target="_blank">Met.no</a> er Norges offisielle meteorologiske institutt. Vi henter vindstyrke, vindretning og lufttemperatur via deres Locationforecast 2.0 API. Data er lisensiert under <a href="https://creativecommons.org/licenses/by/4.0/" style="color:#4da8cc" target="_blank">CC BY 4.0</a>.</p>
+<h2>Open-Meteo Marine API</h2>
+<p><a href="https://open-meteo.com" style="color:#4da8cc" target="_blank">Open-Meteo</a> leverer marine-data (bølger og sjøtemperatur) fra globale havmodeller basert på ECMWF — European Centre for Medium-Range Weather Forecasts.</p>
+<h2>Hva henter vi fra hvem?</h2>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:14px">
+<tr style="background:#f8fbfc"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Datakilde</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Hva</th></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">met.no</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vind, temperatur, nedbør</td></tr>
+<tr><td style="padding:8px 12px">Open-Meteo Marine</td><td style="padding:8px 12px">Bølgehøyde, bølgeperiode, sjøtemperatur</td></tr>
+</table>
 <h2>Oppdateringsfrekvens</h2>
-<p>Dataene oppdateres flere ganger daglig. Varselet vårt kl. 07:30 bruker den siste tilgjengelige modellkjøringen.</p>
+<p>Begge kildene oppdateres flere ganger daglig. Varselet bruker alltid siste tilgjengelige modellkjøring.</p>
 `,
   },
+
+  'varsler/rapport-fanen': {
+    tittel: 'Bruk rapport-fanen på Min side',
+    kategori: 'Varsler og rapporter',
+    html: `
+<p>Rapport-fanen på Min side lar deg generere en sjørapport på forespørsel — uten å vente til neste morgen.</p>
+<h2>Slik bruker du rapport-fanen</h2>
+<ol>
+<li>Logg inn på <a href="/min-side" style="color:#4da8cc">Min side</a></li>
+<li>Klikk på <strong>Rapport</strong>-fanen</li>
+<li>Velg lokasjon, periode (1–7 dager) og aktivitetsprofil</li>
+<li>Klikk <strong>Generer rapport</strong></li>
+</ol>
+<h2>Hva vises i rapporten?</h2>
+<ul>
+<li>Daglig vurdering tilpasset aktivitetsprofilen din</li>
+<li>Bølgesøyler per time med værikoner</li>
+<li>Beste tidspunkt på dagen</li>
+<li>Lufttemperatur og sjøtemperatur</li>
+<li>Profilspesifikke tips (våtdrakt, seil, vindstyrke osv.)</li>
+</ul>
+<h2>Last ned eller send på e-post</h2>
+<p>Du kan laste ned rapporten som PDF eller sende den direkte til en e-postadresse.</p>
+`,
+  },
+
+  'varsler/kritisk-farevarsel': {
+    tittel: 'Kritisk farevarsel — alltid på',
+    kategori: 'Varsler og rapporter',
+    html: `
+<p>Kritisk farevarsel er en automatisk SMS som sendes til alle aktive mottakere når vi registrerer farlige sjøforhold. Dette er en sikkerhetsmekanisme som ikke kan skrus av.</p>
+<h2>Hva utløser et kritisk farevarsel?</h2>
+<ul>
+<li>Maksimal vind over ca. 14 m/s (liten kuling)</li>
+<li>Bølgehøyde over 3 meter</li>
+</ul>
+<h2>Hvem mottar det?</h2>
+<p>Alle aktive mottakere på abonnementet — også de som ikke har daglig SMS aktivert. Sikkerhet går alltid foran kostnadsbesparelser.</p>
+<h2>Hvorfor kan det ikke skrus av?</h2>
+<p>Daglig SMS-rapport er valgfri (og av som standard) fordi det er en kostnad. Men kritisk farevarsel handler om sikkerhet til sjøs. En person som ikke ønsker daglige SMS-rapporter skal likevel bli varslet om farlige forhold.</p>
+<p style="margin-top:1.5rem;padding:1rem;background:#fee2e2;border-left:4px solid #dc2626;border-radius:0 12px 12px 0;font-size:0.9rem"><strong>Viktig:</strong> Kritisk farevarsel er ikke en erstatning for offisielle varsler fra Meteorologisk institutt og Kystverket. Følg alltid myndighetenes råd ved ekstremvær.</p>
+`,
+  },
+
+  'kom-i-gang/aktivitetsprofiler': {
+    tittel: 'Aktivitetsprofiler — tilpass varselet',
+    kategori: 'Kom i gang',
+    html: `
+<p>Med aktivitetsprofiler tilpasses SMS-varselet og e-postrapporten til akkurat det du driver med på sjøen. En surfer og en fisker har helt ulike behov — og det speiler vi i vurderingen.</p>
+<h2>Tilgjengelige profiler</h2>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:14px">
+<tr style="background:#f8fbfc"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Profil</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Optimalt for</th></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Surfer</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Bølgehøyde 0.5–2.5m, periode ≥9s, svak vind</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Kitesurfer</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Stabil vind 7–15 m/s, maks under 18 m/s</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Windsurfer</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vind 8–20 m/s, jevn styrke</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Seiler</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vind 8–15 m/s, bølger under 1.5m</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Fisker</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Lite vind og lave bølger</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Barn/ungdom med båt</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Bølger under 0.8m, svak vind, varm sjø</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Båtfører</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Navigasjonsvurdering basert på Beaufort</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Kajakk/padler</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vind under 7 m/s, bølger under 0.7m</td></tr>
+<tr><td style="padding:8px 12px">Fridykker/snorkling</td><td style="padding:8px 12px">Rolig hav, god sikt, varm sjø</td></tr>
+</table>
+<h2>Uten profil</h2>
+<p>Velger du ingen profil får du en generell sjøvurdering basert på bølgehøyde og vind.</p>
+<h2>Sett aktivitetsprofil</h2>
+<p>Du setter profil per mottaker — gå til <a href="/min-side" style="color:#4da8cc">Min side → Mottakere</a> og rediger mottakeren.</p>
+`,
+  },
+
+  'kom-i-gang/leveringstidspunkt': {
+    tittel: 'Velg leveringstidspunkt',
+    kategori: 'Kom i gang',
+    html: `
+<p>Du bestemmer selv når du vil motta den daglige sjørapporten. Tidspunktet kan settes for hele abonnementet eller individuelt per mottaker.</p>
+<h2>Abonnementets standard</h2>
+<p>Standard leveringstidspunkt er kl. 12:00. Du kan endre dette i <strong>Konto</strong>-fanen på Min side — da gjelder det for alle mottakere som ikke har satt eget tidspunkt.</p>
+<h2>Per mottaker</h2>
+<p>Hvert enkelt familiemedlem eller mottaker kan ha sitt eget tidspunkt. Dette overstyrer abonnementets standard. Eksempel:</p>
+<ul>
+<li>Far jobber nattskift → mottar rapporten kl. 06:00 etter jobb</li>
+<li>Mor vil ha rapporten til frokost → kl. 08:00</li>
+<li>Hytta har fellesrapporten → kl. 07:30</li>
+</ul>
+<h2>Tilgjengelige tidspunkter</h2>
+<p>Du kan velge mellom 04:00 og 12:00 i halvtimes-intervaller.</p>
+<h2>Kritisk farevarsel</h2>
+<p>Farevarsler ved farlige sjøforhold sendes alltid umiddelbart — uavhengig av valgt leveringstidspunkt.</p>
+`,
+  },
+
+  'faq/aktivitetsprofil-sms': {
+    tittel: 'Hva betyr aktivitetsprofil på SMS?',
+    kategori: 'Vanlige spørsmål',
+    html: `
+<p>Aktivitetsprofilen påvirker teksten og vurderingen i SMS-varselet. I stedet for en generell "forholdsbeskrivelse" får du en vurdering tilpasset akkurat det du skal gjøre.</p>
+<h2>Eksempel: Surfer</h2>
+<div style="background:#f8fbfc;border:1px solid #e2e8f0;border-radius:12px;padding:1.2rem;font-family:monospace;font-size:0.9rem;margin:0.5rem 0;line-height:1.7">
+Bra surfetorhold<br/>
+1.4m / 10s periode<br/>
+Vind 5.2/7.1m/s, Bolger 1.4m
+</div>
+<h2>Eksempel: Fisker</h2>
+<div style="background:#f8fbfc;border:1px solid #e2e8f0;border-radius:12px;padding:1.2rem;font-family:monospace;font-size:0.9rem;margin:0.5rem 0;line-height:1.7">
+Gode fiskeforhold<br/>
+0.6m bolger, Lett bris<br/>
+Vind 3.1/5.4m/s, Bolger 0.6m
+</div>
+<p>Du velger profil per mottaker på <a href="/min-side" style="color:#4da8cc">Min side</a>. Profilen påvirker også e-postrapporten med mer detaljerte tips.</p>
+`,
+  },
+
 }

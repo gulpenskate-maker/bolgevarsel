@@ -69,6 +69,8 @@ const KATEGORIER = [
       { slug: 'legg-til-lokasjon', tittel: 'Legg til din kystlokasjon' },
       { slug: 'legg-til-mottakere', tittel: 'Legg til mottakere (barn, ektefelle)' },
       { slug: 'csv-import', tittel: 'Importer mottakere fra CSV' },
+      { slug: 'aktivitetsprofiler', tittel: 'Aktivitetsprofiler — tilpass varselet' },
+      { slug: 'leveringstidspunkt', tittel: 'Velg leveringstidspunkt' },
     ],
   },
   {
@@ -82,6 +84,8 @@ const KATEGORIER = [
       { slug: 'forstå-epost', tittel: 'Forstå e-postrapporten' },
       { slug: 'farevarsel', tittel: 'Hva er et farevarsel?' },
       { slug: 'pause-sms', tittel: 'Pause eller skru av SMS-varsler' },
+      { slug: 'rapport-fanen', tittel: 'Bruk rapport-fanen på Min side' },
+      { slug: 'kritisk-farevarsel', tittel: 'Kritisk farevarsel — alltid på' },
     ],
   },
   {
@@ -108,6 +112,7 @@ const KATEGORIER = [
       { slug: 'sms-ikke-mottatt', tittel: 'Jeg har ikke mottatt SMS — hva gjør jeg?' },
       { slug: 'flere-lokasjoner', tittel: 'Kan jeg ha flere lokasjoner?' },
       { slug: 'datakilder', tittel: 'Hvilke datakilder bruker dere?' },
+      { slug: 'aktivitetsprofil-sms', tittel: 'Hva betyr aktivitetsprofil på SMS?' },
     ],
   },
 ]
@@ -131,8 +136,12 @@ export default function HjelpPage() {
       />
       <nav style={{ padding:'1.2rem 2rem', borderBottom:'1px solid rgba(10,42,61,0.08)', background:'rgba(240,244,248,0.95)', position:'sticky' as const, top:0, zIndex:100 }}>
         <div style={{ maxWidth:900, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-          <Link href="/" style={{ fontFamily:'Georgia, serif', fontSize:'1.3rem', fontWeight:400, color:'#0a2a3d', textDecoration:'none', letterSpacing:'-0.01em' }}>
-            bølge<span style={{color:'#4da8cc'}}>varsel</span>
+          <Link href="/" style={{ textDecoration:'none', display:'inline-flex', alignItems:'center' }}>
+            <svg width="160" height="26" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="#0a2a3d" strokeWidth="3" strokeLinecap="round" fill="none"/>
+              <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="#1a6080" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
+              <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="#0a2a3d" letterSpacing="-0.8">bølgevarsel<tspan fill="#1a6080" fontWeight="400">.no</tspan></text>
+            </svg>
           </Link>
           <Link href="/min-side" style={{ background:'#0a2a3d', color:'white', padding:'0.5rem 1.2rem', borderRadius:100, textDecoration:'none', fontSize:'0.85rem', fontWeight:500 }}>
             Min side →
