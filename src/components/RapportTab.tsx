@@ -25,6 +25,85 @@ const PERIODER = [
 
 const SCORE_COLORS = ['#94a3b8', '#16a34a', '#65a30d', '#ca8a04', '#ea580c', '#dc2626']
 
+function profileTips(profile: string, day: any): { items: {icon: string; label: string; value: string; highlight?: boolean}[] } {
+  const wave = day.avgWave, wind = day.windNow, period = day.avgPeriod
+  const seaTemp = day.seaTemp, waveDir = day.waveDir, windDirLabel = day.windDirLabel
+
+  if (profile === 'surfer') {
+    // Offshore (vind fra land = bra) vs onshore (vind mot land = dårlig)
+    // Vestkysten: offshore er typisk NØ-Ø, onshore er V-SV
+    const offshoreDir = ['NNO','NO','ONO','O','OSO']
+    const isOffshore = offshoreDir.includes(windDirLabel)
+    const windQuality = isOffshore ? 'Offshore — perfekt!' : wind < 4 ? 'Svak — greit' : 'Onshore — messy'
+    const windQColor = isOffshore ? '#16a34a' : wind < 4 ? '#ca8a04' : '#ea580c'
+
+    // Våtdrakt basert på sjøtemp
+    let wetsuit = '5/4mm + hette'
+    if (seaTemp >= 20) wetsuit = 'Shorts/bikini'
+    else if (seaTemp >= 17) wetsuit = '2mm shorty'
+    else if (seaTemp >= 14) wetsuit = '3/2mm'
+    else if (seaTemp >= 11) wetsuit = '4/3mm'
+    else if (seaTemp >= 8) wetsuit = '5/4mm'
+
+    // Brett-anbefaling
+    let board = 'Longboard'
+    if (wave >= 2.0 && period >= 10) board = 'Shortboard / fish'
+    else if (wave >= 1.5 && period >= 8) board = 'Mid-length / fish'
+    else if (wave >= 0.8) board = 'Funboard / mid-length'
+
+    return { items: [
+      { icon: '~', label: 'Vindkvalitet', value: `${windQuality} (${windDirLabel})`, highlight: isOffshore },
+      { icon: '⌛', label: 'Bølgeperiode', value: `${period.toFixed(0)}s — ${period >= 10 ? 'god grunn-swell' : period >= 8 ? 'ok periode' : 'kort — choppy'}` },
+      { icon: '🤿', label: 'Våtdrakt', value: `${wetsuit} (sjø ${seaTemp?.toFixed(1) ?? '?'}°C)` },
+      { icon: '🏄', label: 'Brett-tips', value: board },
+      { icon: '📍', label: 'Bølgeretning', value: `Fra ${waveDir} — sjekk lokale spots` },
+    ]}
+  }
+
+  if (profile === 'seiler') {
+    const beaufort = wind < 2 ? 'Stille (0)' : wind < 4 ? 'Flau vind (1-2)' : wind < 6 ? 'Lett bris (3)' : wind < 8 ? 'Laber bris (4)' : wind < 11 ? 'Frisk bris (5)' : 'Liten kuling (6+)'
+    return { items: [
+      { icon: '🧭', label: 'Vindstyrke', value: `${wind.toFixed(1)} m/s — ${beaufort}` },
+      { icon: '⚓', label: 'Vindretning', value: windDirLabel },
+      { icon: '🌊', label: 'Bølgeforhold', value: `${wave.toFixed(1)}m fra ${waveDir} — ${wave < 0.5 ? 'speil' : wave < 1.5 ? 'lett krusning' : 'krevende'}` },
+      { icon: '⛵', label: 'Seiloppsett', value: wind < 5 ? 'Storseil + spinnaker' : wind < 12 ? 'Fullt seil' : 'Reif seilet' },
+    ]}
+  }
+
+  if (profile === 'fisker') {
+    return { items: [
+      { icon: '🎣', label: 'Fiskeforhold', value: wave < 0.5 ? 'Ideelt — stille hav' : wave < 1.0 ? 'Greit — lette bølger' : 'Krevende — hold kystlinjen' },
+      { icon: '🌊', label: 'Bølgehøyde', value: `${wave.toFixed(1)}m fra ${waveDir}` },
+      { icon: '💨', label: 'Vind', value: `${wind.toFixed(1)} m/s fra ${windDirLabel}` },
+      { icon: '🌡', label: 'Sjøtemperatur', value: seaTemp !== null ? `${seaTemp.toFixed(1)}°C` : '—' },
+    ]}
+  }
+
+  if (profile === 'fridykker') {
+    let siktDesc = wave < 0.2 && wind < 3 ? 'Utmerket sikt forventet' : wave < 0.5 ? 'God sikt' : 'Redusert sikt — bølger'
+    let drysuit = '7mm eller tørdrakt'
+    if (seaTemp >= 20) drysuit = 'Lett 3mm'
+    else if (seaTemp >= 14) drysuit = '5mm'
+    else if (seaTemp >= 10) drysuit = '7mm'
+    return { items: [
+      { icon: '👁', label: 'Forventet sikt', value: siktDesc, highlight: wave < 0.3 },
+      { icon: '🌡', label: 'Sjøtemperatur', value: seaTemp !== null ? `${seaTemp.toFixed(1)}°C` : '—' },
+      { icon: '🤿', label: 'Drakt-anbefaling', value: drysuit },
+      { icon: '🌊', label: 'Bølgehøyde', value: `${wave.toFixed(1)}m — ${wave < 0.3 ? 'perfekt' : wave < 0.5 ? 'ok' : 'for urolig'}` },
+    ]}
+  }
+
+  if (profile === 'kajakk') {
+    return { items: [
+      { icon: '💨', label: 'Vind', value: `${wind.toFixed(1)} m/s fra ${windDirLabel} — ${wind < 4 ? 'ideelt' : wind < 8 ? 'greit' : 'krevende'}` },
+      { icon: '🌊', label: 'Bølger', value: `${wave.toFixed(1)}m — ${wave < 0.3 ? 'padlerparadis' : wave < 0.7 ? 'lett' : 'kun erfarne'}` },
+      { icon: '🧭', label: 'Tips', value: 'Hold alltid kysten i sikte' },
+    ]}
+  }
+
+  return { items: [] }
+}
+
 function WeatherIcon({ symbol, size = 16 }: { symbol: string; size?: number }) {
   const s = symbol.replace('_night', '').replace('_day', '').replace('_polartwilight', '')
   if (s === 'clearsky') return (
@@ -108,7 +187,7 @@ function HourlyBars({ hourly }: { hourly: any[] }) {
   )
 }
 
-function DayCard({ day }: { day: any }) {
+function DayCard({ day, profile }: { day: any; profile: string }) {
   const r = day.rating
   return (
     <div style={{ background: '#f8fbfc', borderRadius: 12, padding: '14px 16px', marginBottom: 10 }}>
@@ -144,6 +223,25 @@ function DayCard({ day }: { day: any }) {
           </div>
         ))}
       </div>
+
+      {/* Profilspesifikke tips */}
+      {profile && (() => {
+        const tips = profileTips(profile, day)
+        if (!tips.items.length) return null
+        return (
+          <div style={{ marginTop: 10, background: 'white', borderRadius: 8, padding: '10px 12px' }}>
+            <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
+              {({'surfer':'Surfer-tips','seiler':'Seiler-tips','fisker':'Fisker-tips','fridykker':'Dykker-tips','kajakk':'Padler-tips'}[profile]||'Tips')}
+            </div>
+            {tips.items.map((item, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderTop: i === 0 ? 'none' : '0.5px solid rgba(10,42,61,0.06)' }}>
+                <span style={{ fontSize: 12, color: '#6b8fa3' }}>{item.label}</span>
+                <span style={{ fontSize: 12, fontWeight: 500, color: item.highlight ? '#16a34a' : '#0a2a3d', textAlign: 'right', maxWidth: '60%' }}>{item.value}</span>
+              </div>
+            ))}
+          </div>
+        )
+      })()}
     </div>
   )
 }
@@ -250,7 +348,7 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
               </button>
             </div>
           </div>
-          {rapport.map((day, i) => <DayCard key={i} day={day} />)}
+          {rapport.map((day, i) => <DayCard key={i} day={day} profile={profile} />)}
           <button style={{ ...S.btnG, width: '100%', justifyContent: 'center', marginTop: 4 }} onClick={() => setRapport(null)}>
             Ny rapport
           </button>
