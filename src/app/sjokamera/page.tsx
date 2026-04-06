@@ -108,9 +108,9 @@ export default function Sjokamera() {
           {cameras.map(cam => <CameraCard key={cam.id} cam={cam} />)}
         </div>
         <div style={{textAlign:'center',marginTop:'4rem',background:'#0a2a3d',borderRadius:24,padding:'3rem 2rem'}}>
-          <h2 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'0.8rem'}}>Vil du ha daglig bølgevarsel?</h2>
-          <p style={{color:'rgba(255,255,255,0.6)',marginBottom:'1.5rem'}}>Motta daglig SMS kl. 07:30 med bølgehøyde, vind og vurdering</p>
-          <a href="/registrer" style={{display:'inline-block',background:'#4da8cc',color:'white',padding:'0.85rem 2rem',borderRadius:'100px',textDecoration:'none',fontWeight:500}}>Start gratis prøveperiode →</a>
+          <h2 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'white',marginBottom:'0.8rem'}}>Bølgevarsel rett i lomma</h2>
+          <p style={{color:'rgba(255,255,255,0.6)',marginBottom:'1.5rem'}}>Bølger, vind og temperatur for din kystlokasjon — levert på SMS og e-post når du vil.</p>
+          <a href="/registrer" style={{display:'inline-block',background:'#4da8cc',color:'white',padding:'0.85rem 2rem',borderRadius:'100px',textDecoration:'none',fontWeight:500}}>Kom i gang — fra 49 kr/mnd →</a>
         </div>
       </div>
     </div>
