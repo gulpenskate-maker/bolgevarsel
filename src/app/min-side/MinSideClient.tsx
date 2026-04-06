@@ -428,8 +428,7 @@ export default function MinSideClient() {
           </div>
 
           {/* Hoveddel: Tab-innhold */}
-          <div>
-        <div style={S.card as React.CSSProperties}>
+          <div style={S.card as React.CSSProperties}>
           {/* Tab-bar */}
           <div style={{display:'flex',borderBottom:'1px solid rgba(10,42,61,0.07)',marginBottom:'1.2rem',gap:0}}>
             {tabs.map(tab => (
@@ -742,9 +741,7 @@ export default function MinSideClient() {
               </div>
             </div>
           )}
-        </div>
-
-          </div>{/* end hoveddel */}
+        </div>{/* end hoveddel + S.card */}
         </div>{/* end bv-dashboard */}
 
         <div style={{textAlign:'center',padding:'1rem 0',opacity:0.4}}>
