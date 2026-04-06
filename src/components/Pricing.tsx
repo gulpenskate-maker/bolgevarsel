@@ -7,7 +7,6 @@ export default function Pricing() {
       <div className={styles.inner}>
         <span className={styles.label}>Priser</span>
         <h2 className={styles.title}>Enkle, transparente<br/>abonnementer</h2>
-        <p className={styles.trial}>7 dager gratis — kortet belastes ikke før etter prøveperioden</p>
         <div className={styles.plans}>
           {PLANS.map((plan) => (
             <div key={plan.id} className={`${styles.plan} ${plan.featured ? styles.featured : ''}`}>
@@ -18,6 +17,12 @@ export default function Pricing() {
               <div className={styles.per}>per måned</div>
               <ul className={styles.features}>{plan.features.map((f) => <li key={f}>{f}</li>)}</ul>
               <a href={`/registrer?plan=${plan.id}`} className={styles.planBtn}>Kom i gang</a>
+              <div className={styles.trialBadge}>
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                  <path d="M5.5 1a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 2.5v2.5M5.5 8h.01" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
+                </svg>
+                7 dager gratis
+              </div>
             </div>
           ))}
         </div>
