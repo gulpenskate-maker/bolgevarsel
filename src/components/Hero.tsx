@@ -185,6 +185,12 @@ export default function Hero() {
           <a href="/registrer" className={styles.btnPrimary}>Kom i gang — fra 49 kr/mnd</a>
           <a href="#hvordan" className={styles.btnGhost}>Se eksempel på varsel →</a>
         </div>
+        <div className={styles.trialBadge}>
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M6.5 1a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm0 3v3M6.5 9.5h.01" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+          </svg>
+          7 dager gratis — kortet belastes ikke før etter prøveperioden
+        </div>
       </div>
       <div className={styles.smsFloat} style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.5s ease' }}>
         <div className={styles.smsHeader}>
