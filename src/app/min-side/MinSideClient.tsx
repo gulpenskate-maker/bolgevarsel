@@ -319,7 +319,13 @@ export default function MinSideClient() {
     <div style={S.page}>
       <div style={{background:'#c8e8f5', overflow:'hidden', position:'relative'}}>
         <div style={{padding:'1.1rem 2rem', display:'flex', alignItems:'center', justifyContent:'space-between', maxWidth:1100, margin:'0 auto', position:'relative', zIndex:2}}>
-          <a href="/" style={{fontFamily:'Georgia,serif', fontSize:'1.25rem', fontWeight:400, color:'#0a2a3d', textDecoration:'none', letterSpacing:'-0.01em'}}>bølge<span style={{color:'#1a6080'}}>varsel</span></a>
+          <a href="/" style={{textDecoration:'none',display:'flex',alignItems:'center'}}>
+            <svg width="200" height="32" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="#0a2a3d" strokeWidth="3" strokeLinecap="round" fill="none"/>
+              <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="#1a6080" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
+              <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="#0a2a3d" letterSpacing="-0.8">bølgevarsel<tspan fill="#1a6080" fontWeight="400">.no</tspan></text>
+            </svg>
+          </a>
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
             <span style={{...S.badge(sub!.plan)}}>{planLabel[sub!.plan]}</span>
             <button onClick={async()=>{await fetch('/api/auth/logout',{method:'POST'});localStorage.removeItem('bv_email');setView('login');setSub(null)}}

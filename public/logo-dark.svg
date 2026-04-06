@@ -1,0 +1,5 @@
+<svg width="280" height="44" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="rgba(125,211,240,0.5)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <text x="52" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="23" font-weight="600" fill="white" letter-spacing="-0.8">bølgevarsel<tspan fill="#7dd3fc" font-weight="400">.no</tspan></text>
+</svg>
