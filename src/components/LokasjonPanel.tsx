@@ -57,12 +57,16 @@ async function fetchWeather(lat: number, lon: number): Promise<WeatherData> {
   // met.no via vår proxy (TOS-compliant)
   // Open-Meteo direkte fra klient (tillatt per deres vilkår)
   const [marineRes, metRes, sstRes] = await Promise.all([
-    fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${tLat}&longitude=${tLon}&hourly=wave_height,wave_direction,wave_period&current=wave_height,wave_period,wave_direction&timezone=Europe/Oslo&forecast_days=1`),
+    fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${tLat}&longitude=${tLon}&hourly=wave_height,wave_direction,wave_period&current=wave_height,wave_period,wave_direction&timezone=Europe/Oslo&forecast_days=1`).catch(() => null),
     fetch(`/api/varsel?lat=${tLat}&lon=${tLon}`),
-    fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${tLat}&longitude=${tLon}&current=sea_surface_temperature&timezone=Europe/Oslo`),
+    fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${tLat}&longitude=${tLon}&current=sea_surface_temperature&timezone=Europe/Oslo`).catch(() => null),
   ])
 
-  const [marine, met, sst] = await Promise.all([marineRes.json(), metRes.json(), sstRes.json()])
+  const [marine, met, sst] = await Promise.all([
+    marineRes?.ok ? marineRes.json() : Promise.resolve({}),
+    metRes.json(),
+    sstRes?.ok ? sstRes.json() : Promise.resolve({}),
+  ])
 
   const hours: string[] = marine.hourly?.time ?? []
   const wH: number[] = marine.hourly?.wave_height ?? []
@@ -147,20 +151,24 @@ export default function LokasjonPanel({ locations }: { locations: Loc[] }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null)
   const [data, setData] = useState<Record<number, WeatherData | 'loading' | 'error'>>({})
 
+  const loaded = React.useRef<Set<number>>(new Set())
+
   const load = useCallback(async (i: number) => {
-    if (data[i]) return
+    if (loaded.current.has(i)) return
+    loaded.current.add(i)
     setData(prev => ({ ...prev, [i]: 'loading' }))
     try {
       const d = await fetchWeather(locations[i].lat, locations[i].lon)
       setData(prev => ({ ...prev, [i]: d }))
-    } catch {
+    } catch(e) {
+      console.error('fetchWeather feil for', locations[i].name, e)
       setData(prev => ({ ...prev, [i]: 'error' }))
     }
-  }, [data, locations])
+  }, [locations])
 
   useEffect(() => {
     locations.forEach((_, i) => load(i))
-  }, [locations])
+  }, [locations, load])
 
   const toggle = (i: number) => {
     setActiveIdx(prev => prev === i ? null : i)
@@ -193,7 +201,7 @@ export default function LokasjonPanel({ locations }: { locations: Loc[] }) {
         const d = data[i]
         const score = d && d !== 'loading' && d !== 'error' ? (d as WeatherData).score : -1
         const color = score >= 0 ? SCORE_COLORS[score] : '#e2e8f0'
-        const label = score >= 0 ? SCORE_LABELS[score] : (d === 'loading' ? 'Laster...' : '—')
+        const label = score >= 0 ? SCORE_LABELS[score] : (d === 'loading' || d === undefined ? 'Laster...' : '—')
         const isActive = activeIdx === i
         const wd = isActive && d && d !== 'loading' && d !== 'error' ? d as WeatherData : null
 
