@@ -412,7 +412,7 @@ export default function MinSideClient() {
                     <div key={i} onMouseDown={()=>pickLoc(s)} style={{padding:'9px 14px',cursor:'pointer',borderBottom:i<locSugg.length-1?'1px solid #f0f4f8':'none',fontSize:'0.88rem'}}
                       onMouseEnter={e=>(e.currentTarget.style.background='#f0f8fc')} onMouseLeave={e=>(e.currentTarget.style.background='white')}>
                       <span style={{fontWeight:500,color:'#0a2a3d'}}>{s.name}</span>
-                      {s.type&&<span style={{color:'#6b8fa3',fontSize:'0.8rem'}}> – {s.type}</span>}
+                      {s.type&&<span style={{color:'#6b8fa3',fontSize:'0.8rem',textTransform:'lowercase'}}> – {s.type}</span>}
                     </div>
                   ))}
                 </div>

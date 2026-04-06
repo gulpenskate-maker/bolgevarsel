@@ -46,12 +46,26 @@ export async function GET(req: NextRequest) {
     return bCoastal - aCoastal || b.importance - a.importance
   })
 
+  const typeMap: Record<string, string> = {
+    bay: 'bukt', beach: 'strand', harbour: 'havn', marina: 'marina',
+    island: 'øy', islet: 'øy', peninsula: 'halvøy', cape: 'nes',
+    fjord: 'fjord', cove: 'vik', inlet: 'vik', strait: 'sund',
+    lake: 'innsjø', river: 'elv', nature_reserve: 'naturreservat',
+    suburb: 'bydel', village: 'tettsted', hamlet: 'tettsted',
+    town: 'by', city: 'by', municipality: 'kommune',
+    county: 'fylke', locality: 'sted', neighbourhood: 'nabolag',
+    water: 'vann', wetland: 'våtmark',
+  }
+  function translateType(type: string, cls: string): string {
+    return typeMap[type] || typeMap[cls] || ''
+  }
+
   const results = sorted.slice(0, 6).map((r: any) => ({
     name: r.display_name.split(',').slice(0, 3).join(',').trim(),
     fullName: r.display_name,
     lat: parseFloat(r.lat),
     lon: parseFloat(r.lon),
-    type: r.type,
+    type: translateType(r.type, r.class),
   }))
 
   return NextResponse.json(results, {
