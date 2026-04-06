@@ -197,7 +197,7 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
         </div>
         <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 100, background: r.farge + '20', color: r.farge }}>{r.tekst}</span>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 6, marginBottom: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 6, marginBottom: 12 }}>
         {[
           { label: 'Bølger snitt', val: `${day.avgWave.toFixed(1)}m`, sub: `maks ${day.maxWave.toFixed(1)}m` },
           { label: 'Vind', val: `${day.windNow.toFixed(1)} m/s`, sub: day.windDesc },
@@ -298,7 +298,7 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="#1a6080" strokeWidth="1.2" fill="none"/><path d="M1 5.5h12" stroke="#1a6080" strokeWidth="1.2"/><path d="M4.5 1v2M9.5 1v2" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round"/></svg>
           <span style={{ fontSize: 13, fontWeight: 500, color: '#0a2a3d' }}>Generer rapport</span>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8, marginBottom: 8 }}>
           <div>
             <div style={{ fontSize: 11, color: '#6b8fa3', marginBottom: 3 }}>Lokasjon</div>
             <select style={S.inp} value={locId} onChange={e => setLocId(e.target.value)}>

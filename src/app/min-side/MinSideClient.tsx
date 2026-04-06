@@ -8,7 +8,7 @@ const S = {
   page: { minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' } as React.CSSProperties,
   nav: { padding:'1.2rem 2rem', borderBottom:'1px solid rgba(10,42,61,0.08)', background:'rgba(232,244,248,0.95)', position:'sticky' as const, top:0, zIndex:100 },
   logo: { fontFamily:'serif', fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' } as React.CSSProperties,
-  wrap: { maxWidth:680, margin:'0 auto', padding:'2.5rem 1.5rem' },
+  wrap: { maxWidth:1100, margin:'0 auto', padding:'2.5rem 1.5rem' },
   card: { background:'white', borderRadius:20, padding:'1.5rem', border:'1px solid rgba(10,42,61,0.07)', marginBottom:'1.2rem', boxShadow:'0 2px 12px rgba(10,42,61,0.06)' } as React.CSSProperties,
   sTitle: { fontFamily:'serif', fontSize:'1.2rem', fontWeight:400, color:'#0a2a3d', marginBottom:'1rem', paddingBottom:'0.6rem', borderBottom:'1px solid rgba(10,42,61,0.07)' } as React.CSSProperties,
   inp: { width:'100%', padding:'0.75rem 1rem', borderRadius:100, border:'1.5px solid rgba(10,42,61,0.12)', background:'#f8fbfc', fontSize:'0.9rem', color:'#0a2a3d', outline:'none', fontFamily:'inherit', boxSizing:'border-box' as const },
@@ -310,7 +310,7 @@ export default function MinSideClient() {
   return (
     <div style={S.page}>
       <div style={{background:'#c8e8f5', overflow:'hidden', position:'relative'}}>
-        <div style={{padding:'1.1rem 2rem', display:'flex', alignItems:'center', justifyContent:'space-between', maxWidth:720, margin:'0 auto', position:'relative', zIndex:2}}>
+        <div style={{padding:'1.1rem 2rem', display:'flex', alignItems:'center', justifyContent:'space-between', maxWidth:1100, margin:'0 auto', position:'relative', zIndex:2}}>
           <a href="/" style={{fontFamily:'Georgia,serif', fontSize:'1.25rem', fontWeight:400, color:'#0a2a3d', textDecoration:'none', letterSpacing:'-0.01em'}}>bølge<span style={{color:'#1a6080'}}>varsel</span></a>
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
             <span style={{...S.badge(sub!.plan)}}>{planLabel[sub!.plan]}</span>
@@ -353,21 +353,82 @@ export default function MinSideClient() {
       </div>
 
       <div style={S.wrap}>
-        {/* Header */}
-        <div style={{marginBottom:'1.2rem'}}>
-          <h1 style={{fontFamily:'Fraunces, Georgia, serif',fontSize:'2rem',fontWeight:300,color:'#0a2a3d',margin:0,letterSpacing:'-0.02em'}}>
-            Hei!{' '}
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style={{display:'inline-block',verticalAlign:'middle',marginBottom:'4px'}}>
-              <path d="M10 6 C10 6 8 4 6.5 5.5 C5 7 7 9 7 9 L11 14" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              <path d="M13 5 C13 5 11 3 9.5 4.5 C8 6 10 8 10 8 L14 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              <path d="M16 5.5 C16 5.5 14.5 3.5 13 5 C11.5 6.5 13 8.5 13 8.5 L17 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              <path d="M7 9 L11 18 C11 18 12 21 14 21 C16 21 18 19 18 17 L20 15 L17 13 L14 13 L11 14 Z" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="rgba(77,168,204,0.12)"/>
-            </svg>
-          </h1>
-          <p style={{color:'#6b8fa3',margin:'4px 0 0',fontSize:'0.9rem'}}>{sub!.email}</p>
-        </div>
+        <style>{`
+          @media (min-width: 800px) {
+            .bv-dashboard { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
+            .bv-sidebar { position: sticky; top: 80px; }
+          }
+          @media (max-width: 799px) {
+            .bv-dashboard { display: block; }
+            .bv-sidebar { margin-bottom: 1rem; }
+          }
+        `}</style>
 
-        {/* Tab-navigasjon */}
+        <div className="bv-dashboard">
+          {/* Sidebar: profil + stat-kort */}
+          <div className="bv-sidebar">
+            <div style={{background:'white',borderRadius:16,border:'1px solid rgba(10,42,61,0.07)',padding:'1.2rem',marginBottom:'1rem',boxShadow:'0 2px 12px rgba(10,42,61,0.06)'}}>
+              <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
+                <div style={{width:44,height:44,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,fontWeight:500,color:'#1a6080',flexShrink:0}}>
+                  {sub!.email.slice(0,2).toUpperCase()}
+                </div>
+                <div>
+                  <div style={{fontFamily:'Georgia,serif',fontSize:'1.15rem',fontWeight:400,color:'#0a2a3d',letterSpacing:'-0.01em'}}>
+                    Hei!{' '}
+                    <svg width="18" height="18" viewBox="0 0 28 28" fill="none" style={{display:'inline-block',verticalAlign:'middle'}}>
+                      <path d="M10 6 C10 6 8 4 6.5 5.5 C5 7 7 9 7 9 L11 14" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      <path d="M13 5 C13 5 11 3 9.5 4.5 C8 6 10 8 10 8 L14 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      <path d="M7 9 L11 18 C11 18 12 21 14 21 C16 21 18 19 18 17 L20 15 L17 13 L14 13 L11 14 Z" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="rgba(77,168,204,0.12)"/>
+                    </svg>
+                  </div>
+                  <div style={{fontSize:'0.82rem',color:'#6b8fa3',marginTop:1,wordBreak:'break-all'}}>{sub!.email}</div>
+                </div>
+              </div>
+              <div style={{display:'flex',flexDirection:'column',gap:6}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
+                  <span style={{fontSize:12,color:'#6b8fa3'}}>Plan</span>
+                  <span style={S.badge(sub!.plan) as React.CSSProperties}>{({'kyst':'Kyst','familie':'Familie','pro':'Pro'}[sub!.plan]||sub!.plan)}</span>
+                </div>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
+                  <span style={{fontSize:12,color:'#6b8fa3'}}>Lokasjoner</span>
+                  <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{locs.length}</span>
+                </div>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
+                  <span style={{fontSize:12,color:'#6b8fa3'}}>Mottakere</span>
+                  <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{recs.length}</span>
+                </div>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
+                  <span style={{fontSize:12,color:'#6b8fa3'}}>Rapporttidspunkt</span>
+                  <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{sendTime}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Hurtiglenker */}
+            <div style={{background:'white',borderRadius:16,border:'1px solid rgba(10,42,61,0.07)',padding:'1rem',boxShadow:'0 2px 12px rgba(10,42,61,0.06)'}}>
+              <div style={{fontSize:11,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:8}}>Hurtigvalg</div>
+              {tabs.map(tab => (
+                <button key={tab.key} onClick={()=>setActiveTab(tab.key as any)}
+                  style={{width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 10px',borderRadius:8,
+                    background:activeTab===tab.key?'#e8f4f8':'transparent',border:'none',cursor:'pointer',
+                    color:activeTab===tab.key?'#1a6080':'#6b8fa3',fontSize:13,fontWeight:activeTab===tab.key?500:400,
+                    fontFamily:'inherit',textAlign:'left',marginBottom:2,transition:'all 0.15s'
+                  }}>
+                  {tab.icon}
+                  {tab.label}
+                  {tab.count !== null && tab.count > 0 && (
+                    <span style={{marginLeft:'auto',background:activeTab===tab.key?'#1a6080':'rgba(10,42,61,0.1)',
+                      color:activeTab===tab.key?'white':'#6b8fa3',fontSize:10,padding:'1px 6px',borderRadius:100}}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Hoveddel: Tab-innhold */}
+          <div>
         <div style={S.card as React.CSSProperties}>
           {/* Tab-bar */}
           <div style={{display:'flex',borderBottom:'1px solid rgba(10,42,61,0.07)',marginBottom:'1.2rem',gap:0}}>
@@ -682,6 +743,9 @@ export default function MinSideClient() {
             </div>
           )}
         </div>
+
+          </div>{/* end hoveddel */}
+        </div>{/* end bv-dashboard */}
 
         <div style={{textAlign:'center',padding:'1rem 0',opacity:0.4}}>
           <svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg" style={{width:120}}>
