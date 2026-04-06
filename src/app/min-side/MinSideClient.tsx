@@ -49,7 +49,7 @@ function BrandIllustration() {
 
 type Sub = { id:string; email:string; plan:string; status:string; send_time?:string }
 type Loc = { id:string; name:string; lat:number; lon:number }
-type Rec = { id:string; location_id:string; phone:string; name:string; active:boolean; sms_enabled:boolean }
+type Rec = { id:string; location_id:string; phone:string; name:string; email?:string; active:boolean; sms_enabled:boolean; send_time?:string }
 
 export default function MinSideClient() {
   const [email, setEmail] = useState('')
@@ -67,6 +67,7 @@ export default function MinSideClient() {
   const [csvResult, setCsvResult] = useState<{imported:number;total:number;results:any[]}|null>(null)
   const [newEmail, setNewEmail] = useState('')
   const [newSmsEnabled, setNewSmsEnabled] = useState(true)
+  const [newSendTime, setNewSendTime] = useState('')
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
@@ -158,9 +159,9 @@ export default function MinSideClient() {
   async function addRec(e: React.FormEvent) {
     e.preventDefault()
     const r = await fetch('/api/min-side/recipient', { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:newSmsEnabled }) })
+      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:newSmsEnabled, send_time:newSendTime||null }) })
     const d = await r.json()
-    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setShowAddRec(false) }
+    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setNewSendTime(''); setShowAddRec(false) }
   }
   function parseCsv(text: string) {
     const lines = text.trim().split(/\r?\n/)
@@ -437,7 +438,7 @@ export default function MinSideClient() {
               <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.85rem'}}>
                 <thead>
                   <tr>
-                    {['Navn','Telefon','E-post','SMS',''].map(h=>(
+                    {['Navn','Telefon','E-post','SMS','Tidspunkt',''].map(h=>(
                       <th key={h} style={{textAlign:'left',color:'#6b8fa3',fontWeight:500,fontSize:'0.72rem',letterSpacing:'0.06em',textTransform:'uppercase',padding:'0 10px 8px'}}>{h}</th>
                     ))}
                   </tr>
@@ -469,6 +470,9 @@ export default function MinSideClient() {
                           <span style={{display:'inline-flex',alignItems:'center',gap:4,fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:rec.sms_enabled!==false?'#e8f5ed':'#f1f5f9',color:rec.sms_enabled!==false?'#1a7a50':'#6b8fa3'}}>
                             {rec.sms_enabled!==false?'På':'Av'}
                           </span>
+                        </td>
+                        <td style={{padding:'10px'}}>
+                          <span style={{fontSize:'12px',color:'#6b8fa3'}}>{rec.send_time||'Standard'}</span>
                         </td>
                         <td style={{padding:'10px',textAlign:'right',whiteSpace:'nowrap'}}>
                           <button style={S.btnGhost} onClick={()=>toggleSms(rec)} title={rec.sms_enabled!==false?'Skru av SMS':'Skru på SMS'}>
@@ -513,6 +517,15 @@ export default function MinSideClient() {
                     <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
                     <div style={{position:'absolute',width:14,height:14,top:3,left:newSmsEnabled?19:3,borderRadius:'50%',background:'white',transition:'0.2s'}}/>
                   </div>
+                </div>
+                <div>
+                  <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt (valgfritt — standard: abonnementets tidspunkt)</div>
+                  <select style={S.inp} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
+                    <option value="">Standard ({sendTime})</option>
+                    {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
                 </div>
                 <div style={{display:'flex',gap:'8px'}}>
                   <button style={{...S.btnPrimary,flex:1}} type="submit">+ Legg til mottaker</button>
