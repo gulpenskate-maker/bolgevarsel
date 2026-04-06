@@ -248,6 +248,7 @@ function HourlyBars({ hourly }: { hourly: HourlyPoint[] }) {
 
 export default function LokasjonPanel({ locations }: { locations: Loc[] }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null)
+  const [hoveredStat, setHoveredStat] = useState<string | null>(null)
   const [data, setData] = useState<Record<number, WeatherData | 'loading' | 'error'>>({})
 
   const loaded = React.useRef<Set<number>>(new Set())
@@ -331,21 +332,26 @@ export default function LokasjonPanel({ locations }: { locations: Loc[] }) {
                 {d === 'error' && <div style={{ textAlign: 'center', color: '#dc2626', fontSize: 13, padding: '1rem 0' }}>Kunne ikke hente data</div>}
                 {wd && (<>
                   <div style={S.statGrid}>
-                    <div style={S.stat}>
-                      <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 3 }}>Bølger snitt</div>
-                      <div style={{ fontSize: 22, fontWeight: 300, color: '#0a2a3d', lineHeight: 1 }}>{wd.avgWave.toFixed(1)}<span style={{ fontSize: 12, color: '#6b8fa3' }}>m</span></div>
-                      <div style={{ fontSize: 11, color: '#6b8fa3', marginTop: 2 }}>maks {wd.maxWave.toFixed(1)}m</div>
-                    </div>
-                    <div style={S.stat}>
-                      <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 3 }}>Vind nå</div>
-                      <div style={{ fontSize: 22, fontWeight: 300, color: '#0a2a3d', lineHeight: 1 }}>{wd.windNow.toFixed(1)}<span style={{ fontSize: 12, color: '#6b8fa3' }}>m/s</span></div>
-                      <div style={{ fontSize: 11, color: '#6b8fa3', marginTop: 2 }}>{windDesc(wd.windNow)}</div>
-                    </div>
-                    <div style={S.stat}>
-                      <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 3 }}>Luft / sjø</div>
-                      <div style={{ fontSize: 22, fontWeight: 300, color: '#0a2a3d', lineHeight: 1 }}>{Math.round(wd.temp)}<span style={{ fontSize: 12, color: '#6b8fa3' }}>°</span></div>
-                      <div style={{ fontSize: 11, color: '#6b8fa3', marginTop: 2 }}>{wd.seaTemp !== null ? `Sjø ${wd.seaTemp.toFixed(1)}°` : '—'}</div>
-                    </div>
+                    {[
+                      { key:'wave', label:'Bølger snitt', main: `${wd.avgWave.toFixed(1)}`, unit:'m', sub:`maks ${wd.maxWave.toFixed(1)}m`, detail:`Periode ${wd.avgPeriod.toFixed(0)}s · fra ${dir(wd.waveDir)}` },
+                      { key:'wind', label:'Vind nå', main: `${wd.windNow.toFixed(1)}`, unit:'m/s', sub:windDesc(wd.windNow), detail:`Maks ${wd.windMax.toFixed(1)} m/s · fra ${dir(wd.windDir)}` },
+                      { key:'temp', label:'Luft / sjø', main: `${Math.round(wd.temp)}`, unit:'°', sub: wd.seaTemp !== null ? `Sjø ${wd.seaTemp.toFixed(1)}°` : '—', detail: wd.seaTemp !== null ? `Lufttemp ${Math.round(wd.temp)}° · sjøtemp ${wd.seaTemp.toFixed(1)}°` : `Lufttemperatur ${Math.round(wd.temp)}°` },
+                    ].map(stat => (
+                      <div key={stat.key}
+                        style={{ ...S.stat, cursor:'default', transition:'background 0.15s, transform 0.15s',
+                          background: hoveredStat===stat.key ? '#e8f4f8' : '#f8fbfc',
+                          transform: hoveredStat===stat.key ? 'translateY(-2px)' : 'none',
+                        }}
+                        onMouseEnter={() => setHoveredStat(stat.key)}
+                        onMouseLeave={() => setHoveredStat(null)}
+                      >
+                        <div style={{ fontSize: 10, color: hoveredStat===stat.key ? '#1a6080' : '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 3, transition:'color 0.15s' }}>{stat.label}</div>
+                        <div style={{ fontSize: 22, fontWeight: 300, color: '#0a2a3d', lineHeight: 1 }}>{stat.main}<span style={{ fontSize: 12, color: '#6b8fa3' }}>{stat.unit}</span></div>
+                        <div style={{ fontSize: 11, color: hoveredStat===stat.key ? '#1a6080' : '#6b8fa3', marginTop: 2, transition:'all 0.15s' }}>
+                          {hoveredStat===stat.key ? stat.detail : stat.sub}
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   <HourlyBars hourly={wd.hourly} />
