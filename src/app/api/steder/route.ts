@@ -30,16 +30,17 @@ export async function GET(req: NextRequest) {
     return true
   })
 
-  // Filtrer vekk irrelevante typer — vi vil ikke ha bussholdeplasser, kirker osv.
+  // Filtrer vekk irrelevante typer — kun stedsnavn og naturtyper er relevante
   const BLOCKED_TYPES = [
-    'bus_stop','bus_station','tram_stop','ferry_terminal','taxi','parking',
-    'fuel','atm','bank','pharmacy','hospital','school','church','chapel',
-    'place_of_worship','supermarket','restaurant','cafe','fast_food','pub',
-    'hotel','motel','shop','mall','post_office','police','fire_station',
+    'bus_stop','bus_station','tram_stop','taxi','parking','fuel','atm','bank',
+    'pharmacy','hospital','school','church','chapel','place_of_worship',
+    'supermarket','restaurant','cafe','fast_food','pub','bar','hotel','motel',
+    'shop','mall','post_office','police','fire_station','library','museum',
     'residential','industrial','commercial','retail','office','construction',
-    'path','footway','cycleway','track','service','road',
+    'path','footway','cycleway','track','service','road','street','avenue',
+    'unclassified','tertiary','secondary','primary','trunk','motorway',
   ]
-  const BLOCKED_CLASSES = ['highway','building','amenity','shop','office','tourism']
+  const BLOCKED_CLASSES = ['highway','building','amenity','shop','office','tourism','man_made']
 
   // Kysttyper prioriteres høyest
   const COASTAL = ['bay','beach','harbour','marina','coastline','cove','inlet','fjord',

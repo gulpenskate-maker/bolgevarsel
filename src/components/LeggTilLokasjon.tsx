@@ -4,6 +4,18 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 type Suggestion = { name: string; lat: number; lon: number; type: string }
 type ValgtLokasjon = { name: string; lat: number; lon: number }
 
+const TYPE_MAP: Record<string,string> = {
+  bay:'bukt', beach:'strand', harbour:'havn', marina:'marina',
+  island:'øy', islet:'øy', peninsula:'halvøy', cape:'nes',
+  fjord:'fjord', cove:'vik', inlet:'vik', strait:'sund',
+  lake:'innsjø', river:'elv', nature_reserve:'naturreservat',
+  suburb:'bydel', village:'tettsted', hamlet:'tettsted',
+  town:'by', city:'by', municipality:'kommune', locality:'sted',
+  neighbourhood:'nabolag', water:'vann', wetland:'våtmark',
+  administrative:'område',
+}
+function typeLabel(t: string): string { return TYPE_MAP[t] || '' }
+
 interface Props {
   onAdd: (loc: ValgtLokasjon) => void
   onCancel: () => void
@@ -136,7 +148,7 @@ export default function LeggTilLokasjon({ onAdd, onCancel }: Props) {
                   <div key={i} style={{ ...S.suggItem, background: i%2===0 ? 'white' : '#fcfefe' }}
                     onMouseDown={() => { setValgt(s); setQuery(s.name); setSugg([]) }}>
                     <span style={{ color:'#0a2a3d' }}>{s.name}</span>
-                    {s.type && <span style={{ fontSize:11, color:'#6b8fa3' }}>{s.type}</span>}
+                    {s.type && typeLabel(s.type) && <span style={{ fontSize:11, color:'#6b8fa3' }}>{typeLabel(s.type)}</span>}
                   </div>
                 ))}
               </div>
