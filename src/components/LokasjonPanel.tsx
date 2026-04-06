@@ -126,19 +126,42 @@ function WaveAnimation() {
 }
 
 function HourlyBars({ hourly }: { hourly: HourlyPoint[] }) {
+  const [hovered, setHovered] = React.useState<number | null>(null)
   const maxWave = Math.max(...hourly.map(h => h.wave), 0.1)
   return (
     <div style={{ marginBottom: '1rem' }}>
-      <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Bølgehøyde per time i dag</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+        <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Bølgehøyde per time i dag</div>
+        {hovered !== null && (
+          <div style={{ fontSize: 11, fontWeight: 500, color: SCORE_COLORS[ratingScore(hourly[hovered].wave, hourly[hovered].wind)] }}>
+            {hourly[hovered].time.slice(0,5)} · {hourly[hovered].wave.toFixed(1)}m · {hourly[hovered].wind.toFixed(1)} m/s
+          </div>
+        )}
+      </div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 70 }}>
         {hourly.map((h, i) => {
           const s = ratingScore(h.wave, h.wind)
           const color = SCORE_COLORS[s]
           const pct = Math.max((h.wave / maxWave) * 100, 4)
+          const isHov = hovered === i
           return (
-            <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, height: '100%', justifyContent: 'flex-end' }}>
-              <div style={{ width: '100%', borderRadius: '3px 3px 0 0', background: color, height: `${pct.toFixed(0)}%`, minHeight: 4 }} />
-              <div style={{ fontSize: 9, color: '#6b8fa3' }}>{h.time.slice(0, 5)}</div>
+            <div key={i}
+              style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, height: '100%', justifyContent: 'flex-end', cursor: 'pointer' }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <div style={{
+                width: '100%', borderRadius: '3px 3px 0 0',
+                background: color,
+                height: `${pct.toFixed(0)}%`, minHeight: 4,
+                opacity: hovered === null || isHov ? 1 : 0.45,
+                transform: isHov ? 'scaleY(1.06)' : 'scaleY(1)',
+                transformOrigin: 'bottom',
+                transition: 'opacity 0.15s, transform 0.15s',
+              }} />
+              <div style={{ fontSize: 9, color: isHov ? '#0a2a3d' : '#6b8fa3', fontWeight: isHov ? 500 : 400, transition: 'color 0.15s' }}>
+                {h.time.slice(0, 5)}
+              </div>
             </div>
           )
         })}
