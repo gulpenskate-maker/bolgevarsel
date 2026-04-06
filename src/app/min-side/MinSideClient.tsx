@@ -368,38 +368,59 @@ export default function MinSideClient() {
           {/* Sidebar: profil + stat-kort */}
           <div className="bv-sidebar">
             <div style={{background:'white',borderRadius:16,border:'1px solid rgba(10,42,61,0.07)',padding:'1.2rem',marginBottom:'1rem',boxShadow:'0 2px 12px rgba(10,42,61,0.06)'}}>
-              <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
-                <div style={{width:44,height:44,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,fontWeight:500,color:'#1a6080',flexShrink:0}}>
+              {/* Profil-header */}
+              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+                <div style={{width:40,height:40,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:500,color:'#1a6080',flexShrink:0}}>
                   {sub!.email.slice(0,2).toUpperCase()}
                 </div>
-                <div>
-                  <div style={{fontFamily:'Georgia,serif',fontSize:'1.15rem',fontWeight:400,color:'#0a2a3d',letterSpacing:'-0.01em'}}>
-                    Hei!{' '}
-                    <svg width="18" height="18" viewBox="0 0 28 28" fill="none" style={{display:'inline-block',verticalAlign:'middle'}}>
-                      <path d="M10 6 C10 6 8 4 6.5 5.5 C5 7 7 9 7 9 L11 14" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                      <path d="M13 5 C13 5 11 3 9.5 4.5 C8 6 10 8 10 8 L14 13" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                      <path d="M7 9 L11 18 C11 18 12 21 14 21 C16 21 18 19 18 17 L20 15 L17 13 L14 13 L11 14 Z" stroke="#1a6080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="rgba(77,168,204,0.12)"/>
-                    </svg>
-                  </div>
-                  <div style={{fontSize:'0.82rem',color:'#6b8fa3',marginTop:1,wordBreak:'break-all'}}>{sub!.email}</div>
+                <div style={{minWidth:0}}>
+                  <div style={{fontSize:14,fontWeight:500,color:'#0a2a3d'}}>Hei!</div>
+                  <div style={{fontSize:11,color:'#6b8fa3',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{sub!.email}</div>
                 </div>
               </div>
-              <div style={{display:'flex',flexDirection:'column',gap:6}}>
-                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
-                  <span style={{fontSize:12,color:'#6b8fa3'}}>Plan</span>
-                  <span style={S.badge(sub!.plan) as React.CSSProperties}>{({'kyst':'Kyst','familie':'Familie','pro':'Pro'}[sub!.plan]||sub!.plan)}</span>
+
+              {/* Plan-kort med progress-bars */}
+              <div style={{background:'#f8fbfc',borderRadius:10,padding:'10px 12px',marginBottom:10}}>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
+                  <div>
+                    <div style={{fontSize:12,fontWeight:500,color:'#0a2a3d'}}>{({'kyst':'Kyst-plan','familie':'Familie-plan','pro':'Pro-plan'}[sub!.plan]||sub!.plan)}</div>
+                    <div style={{fontSize:10,color:'#6b8fa3'}}>{({'kyst':'49','familie':'179','pro':'299'}[sub!.plan]||'—')} kr/mnd</div>
+                  </div>
+                  <span style={{fontSize:11,fontWeight:500,padding:'3px 9px',borderRadius:100,background:'#e8f5ed',color:'#16a34a'}}>{sub!.status==='active'?'Aktivt':'Pauset'}</span>
                 </div>
-                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
-                  <span style={{fontSize:12,color:'#6b8fa3'}}>Lokasjoner</span>
-                  <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{locs.length}</span>
+                {/* Mottakere progress */}
+                <div style={{marginBottom:6}}>
+                  <div style={{display:'flex',justifyContent:'space-between',fontSize:10,color:'#6b8fa3',marginBottom:3}}>
+                    <span>Mottakere brukt</span>
+                    <span style={{fontWeight:500,color:'#0a2a3d'}}>{recs.length} / {sub!.plan==='kyst'?1:sub!.plan==='familie'?5:20}</span>
+                  </div>
+                  <div style={{height:4,borderRadius:2,background:'rgba(10,42,61,0.08)'}}>
+                    <div style={{height:4,borderRadius:2,background:'#1a6080',width:`${Math.min((recs.length/(sub!.plan==='kyst'?1:sub!.plan==='familie'?5:20))*100,100)}%`,transition:'width 0.4s'}}/>
+                  </div>
                 </div>
-                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
-                  <span style={{fontSize:12,color:'#6b8fa3'}}>Mottakere</span>
-                  <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{recs.length}</span>
+                {/* Lokasjoner progress */}
+                <div>
+                  <div style={{display:'flex',justifyContent:'space-between',fontSize:10,color:'#6b8fa3',marginBottom:3}}>
+                    <span>Lokasjoner brukt</span>
+                    <span style={{fontWeight:500,color:'#0a2a3d'}}>{locs.length} / {sub!.plan==='kyst'?1:sub!.plan==='familie'?5:20}</span>
+                  </div>
+                  <div style={{height:4,borderRadius:2,background:'rgba(10,42,61,0.08)'}}>
+                    <div style={{height:4,borderRadius:2,background:'#1a6080',width:`${Math.min((locs.length/(sub!.plan==='kyst'?1:sub!.plan==='familie'?5:20))*100,100)}%`,transition:'width 0.4s'}}/>
+                  </div>
                 </div>
-                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 10px',background:'#f8fbfc',borderRadius:8}}>
-                  <span style={{fontSize:12,color:'#6b8fa3'}}>Rapporttidspunkt</span>
-                  <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{sendTime}</span>
+              </div>
+
+              {/* Stat-grid */}
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6,marginBottom:10}}>
+                <div style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center'}}>
+                  <div style={{fontSize:10,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:2}}>Rapporttidspunkt</div>
+                  <div style={{fontSize:18,fontWeight:300,color:'#0a2a3d'}}>{sendTime}</div>
+                  <div style={{fontSize:10,color:'#6b8fa3',marginTop:1}}>daglig</div>
+                </div>
+                <div style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center'}}>
+                  <div style={{fontSize:10,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:2}}>Mottakere</div>
+                  <div style={{fontSize:18,fontWeight:300,color:'#0a2a3d'}}>{recs.length}</div>
+                  <div style={{fontSize:10,color:'#6b8fa3',marginTop:1}}>{recs.filter(r=>r.active).length} aktive</div>
                 </div>
               </div>
             </div>
