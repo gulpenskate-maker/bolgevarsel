@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 type Loc = { id: string; name: string; lat: number; lon: number }
 
 const PROFILER = [
-  { value: '', label: 'Standard rapport' },
+  { value: '', label: 'Generell sjørapport' },
   { value: 'surfer', label: 'Surfer' },
   { value: 'kitesurfer', label: 'Kitesurfer' },
   { value: 'windsurfer', label: 'Windsurfer' },

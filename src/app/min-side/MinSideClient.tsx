@@ -666,7 +666,7 @@ export default function MinSideClient() {
                     </div>
                     <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt (valgfritt)</div>
                       <select style={S.inp} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
-                        <option value="">Standard ({sendTime})</option>
+                        <option value="">Samme som abonnementet ({sendTime})</option>
                         {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
                           <option key={t} value={t}>{t}</option>
                         ))}
@@ -674,7 +674,7 @@ export default function MinSideClient() {
                     </div>
                     <div><div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil (valgfritt)</div>
                       <select style={S.inp} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
-                        <option value="">Standard rapport</option>
+                        <option value="">Generell sjørapport (ingen spesialprofil)</option>
                         <option value="surfer">🏄 Surfer</option>
                         <option value="kitesurfer">🪁 Kitesurfer</option>
                         <option value="windsurfer">🏄 Windsurfer</option>
