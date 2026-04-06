@@ -119,10 +119,14 @@ export default function MinSideClient() {
     if (locQ.length < 2) { setLocSugg([]); setLocOpen(false); return }
     clearTimeout(locTimer.current)
     locTimer.current = setTimeout(async () => {
-      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locQ)}&count=6&format=json`)
-      const d = await r.json()
-      const hits = (d.results||[]).filter((x:any) => x.country_code==='NO').slice(0,5)
-      setLocSugg(hits); setLocOpen(hits.length>0)
+      const r = await fetch(`/api/steder?q=${encodeURIComponent(locQ)}`)
+      const hits = await r.json()
+      // Mapper til samme format som resten av koden forventer
+      const mapped = hits.map((h: any) => ({
+        name: h.name, latitude: h.lat, longitude: h.lon,
+        country_code: 'NO', type: h.type,
+      }))
+      setLocSugg(mapped); setLocOpen(mapped.length>0)
     }, 300)
   }, [locQ])
 
@@ -139,7 +143,7 @@ export default function MinSideClient() {
   }
 
   function pickLoc(s: any) {
-    const name = s.name + (s.admin1 ? ', '+s.admin1.replace(' Fylke','') : '')
+    const name = s.name
     setLocQ(name); setLocValgt({name, lat:s.latitude, lon:s.longitude}); setLocOpen(false); setLocSugg([])
   }
 
@@ -408,7 +412,7 @@ export default function MinSideClient() {
                     <div key={i} onMouseDown={()=>pickLoc(s)} style={{padding:'9px 14px',cursor:'pointer',borderBottom:i<locSugg.length-1?'1px solid #f0f4f8':'none',fontSize:'0.88rem'}}
                       onMouseEnter={e=>(e.currentTarget.style.background='#f0f8fc')} onMouseLeave={e=>(e.currentTarget.style.background='white')}>
                       <span style={{fontWeight:500,color:'#0a2a3d'}}>{s.name}</span>
-                      {s.admin1&&<span style={{color:'#6b8fa3',fontSize:'0.8rem'}}> – {s.admin1.replace(' Fylke','')}</span>}
+                      {s.type&&<span style={{color:'#6b8fa3',fontSize:'0.8rem'}}> – {s.type}</span>}
                     </div>
                   ))}
                 </div>
