@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import LokasjonPanel from '@/components/LokasjonPanel'
+import LeggTilLokasjon from '@/components/LeggTilLokasjon'
 
 const S = {
   page: { minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' } as React.CSSProperties,
@@ -59,6 +60,7 @@ export default function MinSideClient() {
   const [sendTimeSaving, setSendTimeSaving] = useState(false)
   const [sendTimeSaved, setSendTimeSaved] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showAddLoc, setShowAddLoc] = useState(false)
   const [accountLoading, setAccountLoading] = useState<string|null>(null)
   const [showAddRec, setShowAddRec] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
@@ -399,29 +401,21 @@ export default function MinSideClient() {
               </div>
             ))}
           </div>
-          <form onSubmit={addLoc}>
-            <div style={{position:'relative',marginBottom:'0.6rem'}}>
-              <input style={S.inp} placeholder="Søk etter sted langs kysten..." value={locQ}
-                onChange={e=>{setLocQ(e.target.value);setLocValgt(null)}}
-                onBlur={()=>setTimeout(()=>setLocOpen(false),200)}
-                onFocus={()=>locSugg.length>0&&setLocOpen(true)} autoComplete="off" />
-              {locValgt && <span style={{position:'absolute',right:'12px',top:'50%',transform:'translateY(-50%)',fontSize:'0.72rem',color:'#22c55e',fontWeight:500}}>✓ funnet</span>}
-              {locOpen && locSugg.length>0 && (
-                <div style={{position:'absolute',top:'calc(100% + 4px)',left:0,right:0,background:'white',borderRadius:12,boxShadow:'0 8px 24px rgba(10,42,61,0.12)',border:'1px solid rgba(10,42,61,0.08)',overflow:'hidden',zIndex:999}}>
-                  {locSugg.map((s,i)=>(
-                    <div key={i} onMouseDown={()=>pickLoc(s)} style={{padding:'9px 14px',cursor:'pointer',borderBottom:i<locSugg.length-1?'1px solid #f0f4f8':'none',fontSize:'0.88rem'}}
-                      onMouseEnter={e=>(e.currentTarget.style.background='#f0f8fc')} onMouseLeave={e=>(e.currentTarget.style.background='white')}>
-                      <span style={{fontWeight:500,color:'#0a2a3d'}}>{s.name}</span>
-                      {s.type&&<span style={{color:'#6b8fa3',fontSize:'0.8rem',textTransform:'lowercase'}}> – {s.type}</span>}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <button style={{...S.btnPrimary,opacity:locValgt?1:0.4,width:'100%',padding:'0.85rem'}} type="submit" disabled={!locValgt}>
-              {locValgt ? `+ Legg til ${locValgt.name}` : 'Søk etter sted for å legge til'}
-            </button>
-          </form>
+          <button style={{...S.btnPrimary,width:'100%',padding:'0.85rem'}} onClick={()=>setShowAddLoc(true)}>
+            + Legg til lokasjon
+          </button>
+          {showAddLoc && (
+            <LeggTilLokasjon
+              onAdd={async (loc) => {
+                const r = await fetch('/api/min-side/location', { method:'POST', headers:{'Content-Type':'application/json'},
+                  body: JSON.stringify({ subscriber_id: sub!.id, name: loc.name, lat: loc.lat, lon: loc.lon }) })
+                const d = await r.json()
+                if (d.location) setLocs([...locs, d.location])
+                setShowAddLoc(false)
+              }}
+              onCancel={() => setShowAddLoc(false)}
+            />
+          )}
         </div>
 
         <div style={S.card}>
