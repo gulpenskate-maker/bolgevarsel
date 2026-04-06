@@ -180,9 +180,9 @@ export default function Hero() {
       <div className={styles.content}>
         <div className={styles.eyebrow}><span className={styles.line}/>Sjøvarseltjeneste for norskekysten<span className={styles.line}/></div>
         <h1 className={styles.h1}>Sjøvarsel rett i <em>lomma</em></h1>
-        <p className={styles.sub}>Daglig sjøvarsel på SMS, detaljert rapport på e-post og kritisk farevarsel for din kystlokasjon.</p>
+        <p className={styles.sub}>Bølger, vind og temperatur for din kystlokasjon — levert på SMS og e-post når du vil. Kritisk farevarsel er alltid på.</p>
         <div className={styles.actions}>
-          <a href="/registrer" className={styles.btnPrimary}>Start gratis prøveperiode</a>
+          <a href="/registrer" className={styles.btnPrimary}>Kom i gang — fra 49 kr/mnd</a>
           <a href="#hvordan" className={styles.btnGhost}>Se eksempel på varsel →</a>
         </div>
       </div>
