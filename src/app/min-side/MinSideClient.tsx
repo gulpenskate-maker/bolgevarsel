@@ -687,16 +687,6 @@ export default function MinSideClient() {
                       </div>
                       <div style={{fontSize:11,color:'#6b8fa3'}}>Daglig sjøoppsummering. Av som standard — skru på om ønskelig.</div>
                     </div>
-                    {/* Leveringstidspunkt */}
-                    <div style={{padding:'10px 12px'}}>
-                      <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt for SMS</div>
-                      <select style={{...S.inp,borderRadius:6}} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
-                        <option value="">Samme som abonnementet ({sendTime})</option>
-                        {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
-                          <option key={t} value={t}>{t}</option>
-                        ))}
-                      </select>
-                    </div>
                   </div>
 
                   {/* ── Seksjon 3: E-postrapport ── */}
@@ -723,6 +713,17 @@ export default function MinSideClient() {
                     <div style={{padding:'10px 12px',borderBottom:'0.5px solid rgba(10,42,61,0.07)'}}>
                       <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>E-postadresse</div>
                       <input style={{...S.inp,borderRadius:6}} placeholder="ola@eksempel.no" type="email" value={newEmail} onChange={e=>setNewEmail(e.target.value)} />
+                    </div>
+                    {/* Leveringstidspunkt e-post */}
+                    <div style={{padding:'10px 12px',borderBottom:'0.5px solid rgba(10,42,61,0.07)'}}>
+                      <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Leveringstidspunkt for e-post</div>
+                      <select style={{...S.inp,borderRadius:6}} value={newSendTime} onChange={e=>setNewSendTime(e.target.value)}>
+                        <option value="">Samme som abonnementet ({sendTime})</option>
+                        {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                      <div style={{fontSize:10,color:'#94a3b8',marginTop:3}}>Gjelder både SMS og e-post. Overstyrer abonnementets standard — nyttig for skift- og nattarbeidere.</div>
                     </div>
                     {/* Aktivitetsprofil */}
                     <div style={{padding:'10px 12px'}}>
