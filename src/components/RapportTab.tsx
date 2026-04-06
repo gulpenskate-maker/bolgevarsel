@@ -158,9 +158,9 @@ function HourlyBars({ hourly }: { hourly: any[] }) {
   return (
     <div style={{ marginBottom: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
-        <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Bølgehøyde per time</div>
+        <div style={{ fontSize: 12, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Bølgehøyde per time</div>
         {hov !== null && (
-          <div style={{ fontSize: 11, fontWeight: 500, color: SCORE_COLORS[Math.min(Math.floor(hourly[hov].wave * 2), 5)] }}>
+          <div style={{ fontSize: 13, fontWeight: 500, color: SCORE_COLORS[Math.min(Math.floor(hourly[hov].wave * 2), 5)] }}>
             {hourly[hov].time} · {hourly[hov].wave.toFixed(1)}m · {hourly[hov].wind.toFixed(1)} m/s
           </div>
         )}
@@ -178,7 +178,7 @@ function HourlyBars({ hourly }: { hourly: any[] }) {
               </div>
               <div style={{ width: '100%', borderRadius: '3px 3px 0 0', background: color, height: `${pct.toFixed(0)}%`, minHeight: 3,
                 opacity: hov === null || isHov ? 1 : 0.4, transform: isHov ? 'scaleY(1.06)' : 'scaleY(1)', transformOrigin: 'bottom', transition: '0.15s' }} />
-              <div style={{ fontSize: 9, color: isHov ? '#0a2a3d' : '#6b8fa3', fontWeight: isHov ? 500 : 400 }}>{h.time.slice(0, 5)}</div>
+              <div style={{ fontSize: 11, color: isHov ? '#0a2a3d' : '#6b8fa3', fontWeight: isHov ? 500 : 400 }}>{h.time.slice(0, 5)}</div>
             </div>
           )
         })}
@@ -193,9 +193,9 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
     <div style={{ background: '#f8fbfc', borderRadius: 12, padding: '14px 16px', marginBottom: 10 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 500, color: '#0a2a3d', textTransform: 'capitalize' }}>{day.dateLabel}</div>
+          <div style={{ fontSize: 15, fontWeight: 500, color: '#0a2a3d', textTransform: 'capitalize' }}>{day.dateLabel}</div>
         </div>
-        <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 100, background: r.farge + '20', color: r.farge }}>{r.tekst}</span>
+        <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 11px', borderRadius: 100, background: r.farge + '20', color: r.farge }}>{r.tekst}</span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 6, marginBottom: 12 }}>
         {[
@@ -204,9 +204,9 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
           { label: 'Periode / retning', val: `${day.avgPeriod.toFixed(0)}s`, sub: day.waveDir },
         ].map((s, i) => (
           <div key={i} style={{ background: 'white', borderRadius: 8, padding: '8px 10px', textAlign: 'center' }}>
-            <div style={{ fontSize: 9, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>{s.label}</div>
-            <div style={{ fontSize: 18, fontWeight: 300, color: '#0a2a3d' }}>{s.val}</div>
-            <div style={{ fontSize: 10, color: '#6b8fa3', marginTop: 1 }}>{s.sub}</div>
+            <div style={{ fontSize: 11, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 3 }}>{s.label}</div>
+            <div style={{ fontSize: 22, fontWeight: 300, color: '#0a2a3d' }}>{s.val}</div>
+            <div style={{ fontSize: 12, color: '#6b8fa3', marginTop: 2 }}>{s.sub}</div>
           </div>
         ))}
       </div>
@@ -218,8 +218,8 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
           ...(day.seaTemp !== null ? [{ label: 'Sjøtemperatur', val: `${day.seaTemp.toFixed(1)}°C` }] : []),
         ].map((row, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderTop: i === 0 ? 'none' : '0.5px solid rgba(10,42,61,0.07)' }}>
-            <span style={{ fontSize: 12, color: '#6b8fa3' }}>{row.label}</span>
-            <span style={{ fontSize: 12, fontWeight: 500, color: row.green ? '#16a34a' : '#0a2a3d' }}>{row.val}</span>
+            <span style={{ fontSize: 13, color: '#6b8fa3' }}>{row.label}</span>
+            <span style={{ fontSize: 13, fontWeight: 500, color: row.green ? '#16a34a' : '#0a2a3d' }}>{row.val}</span>
           </div>
         ))}
       </div>
@@ -230,13 +230,13 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
         if (!tips.items.length) return null
         return (
           <div style={{ marginTop: 10, background: 'white', borderRadius: 8, padding: '10px 12px' }}>
-            <div style={{ fontSize: 10, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
+            <div style={{ fontSize: 12, color: '#6b8fa3', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
               {({'surfer':'Surfer-tips','seiler':'Seiler-tips','fisker':'Fisker-tips','fridykker':'Dykker-tips','kajakk':'Padler-tips'}[profile]||'Tips')}
             </div>
             {tips.items.map((item, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderTop: i === 0 ? 'none' : '0.5px solid rgba(10,42,61,0.06)' }}>
-                <span style={{ fontSize: 12, color: '#6b8fa3' }}>{item.label}</span>
-                <span style={{ fontSize: 12, fontWeight: 500, color: item.highlight ? '#16a34a' : '#0a2a3d', textAlign: 'right', maxWidth: '60%' }}>{item.value}</span>
+                <span style={{ fontSize: 13, color: '#6b8fa3' }}>{item.label}</span>
+                <span style={{ fontSize: 13, fontWeight: 500, color: item.highlight ? '#16a34a' : '#0a2a3d', textAlign: 'right', maxWidth: '60%' }}>{item.value}</span>
               </div>
             ))}
           </div>
@@ -285,9 +285,9 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
   }
 
   const S = {
-    inp: { width: '100%', padding: '8px 12px', borderRadius: 8, border: '0.5px solid rgba(10,42,61,0.12)', background: '#f8fbfc', fontSize: 13, color: '#0a2a3d', outline: 'none' } as React.CSSProperties,
-    btnP: { background: '#0a2a3d', color: 'white', border: 'none', borderRadius: 8, padding: '9px 16px', fontSize: 13, fontWeight: 500, cursor: 'pointer' } as React.CSSProperties,
-    btnG: { background: '#f8fbfc', color: '#0a2a3d', border: '0.5px solid rgba(10,42,61,0.12)', borderRadius: 8, padding: '9px 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 } as React.CSSProperties,
+    inp: { width: '100%', padding: '8px 12px', borderRadius: 8, border: '0.5px solid rgba(10,42,61,0.12)', background: '#f8fbfc', fontSize: 14, color: '#0a2a3d', outline: 'none' } as React.CSSProperties,
+    btnP: { background: '#0a2a3d', color: 'white', border: 'none', borderRadius: 8, padding: '9px 16px', fontSize: 14, fontWeight: 500, cursor: 'pointer' } as React.CSSProperties,
+    btnG: { background: '#f8fbfc', color: '#0a2a3d', border: '0.5px solid rgba(10,42,61,0.12)', borderRadius: 8, padding: '9px 12px', fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 } as React.CSSProperties,
   }
 
   return (
@@ -296,24 +296,24 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
       <div style={{ background: '#f8fbfc', borderRadius: 12, padding: '14px 16px', marginBottom: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="#1a6080" strokeWidth="1.2" fill="none"/><path d="M1 5.5h12" stroke="#1a6080" strokeWidth="1.2"/><path d="M4.5 1v2M9.5 1v2" stroke="#1a6080" strokeWidth="1.2" strokeLinecap="round"/></svg>
-          <span style={{ fontSize: 13, fontWeight: 500, color: '#0a2a3d' }}>Generer rapport</span>
+          <span style={{ fontSize: 15, fontWeight: 500, color: '#0a2a3d' }}>Generer rapport</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8, marginBottom: 8 }}>
           <div>
-            <div style={{ fontSize: 11, color: '#6b8fa3', marginBottom: 3 }}>Lokasjon</div>
+            <div style={{ fontSize: 12, color: '#6b8fa3', marginBottom: 4 }}>Lokasjon</div>
             <select style={S.inp} value={locId} onChange={e => setLocId(e.target.value)}>
               {locs.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
           </div>
           <div>
-            <div style={{ fontSize: 11, color: '#6b8fa3', marginBottom: 3 }}>Periode</div>
+            <div style={{ fontSize: 12, color: '#6b8fa3', marginBottom: 4 }}>Periode</div>
             <select style={S.inp} value={days} onChange={e => setDays(e.target.value)}>
               {PERIODER.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
             </select>
           </div>
         </div>
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, color: '#6b8fa3', marginBottom: 3 }}>Aktivitetsprofil</div>
+          <div style={{ fontSize: 12, color: '#6b8fa3', marginBottom: 4 }}>Aktivitetsprofil</div>
           <select style={S.inp} value={profile} onChange={e => setProfile(e.target.value)}>
             {PROFILER.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
           </select>
@@ -327,7 +327,7 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
       {rapport && (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-            <div style={{ fontSize: 12, color: '#6b8fa3' }}>{selectedLoc?.name} · {PROFILER.find(p => p.value === profile)?.label || 'Standard'}</div>
+            <div style={{ fontSize: 13, color: '#6b8fa3' }}>{selectedLoc?.name} · {PROFILER.find(p => p.value === profile)?.label || 'Standard'}</div>
             <div style={{ display: 'flex', gap: 6 }}>
               <button style={S.btnG} onClick={printRapport}>
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 4.5V2h7v2.5M2 4.5h9a1 1 0 0 1 1 1v4H10v2H3v-2H1v-4a1 1 0 0 1 1-1z" stroke="currentColor" strokeWidth="1.1" fill="none"/></svg>
@@ -356,7 +356,7 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
       )}
 
       {locs.length === 0 && (
-        <p style={{ color: '#6b8fa3', fontSize: 13, textAlign: 'center', padding: '1rem 0' }}>
+        <p style={{ color: '#6b8fa3', fontSize: 14, textAlign: 'center', padding: '1rem 0' }}>
           Legg til lokasjoner i «Lokasjoner»-fanen for å generere rapporter.
         </p>
       )}
