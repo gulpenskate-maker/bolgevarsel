@@ -423,6 +423,26 @@ export default function MinSideClient() {
                   <div style={{fontSize:10,color:'#6b8fa3',marginTop:1}}>{recs.filter(r=>r.active).length} aktive</div>
                 </div>
               </div>
+
+              {/* Kontakt for plan-endring */}
+              <div style={{borderTop:'0.5px solid rgba(10,42,61,0.07)',paddingTop:10,marginTop:4}}>
+                <p style={{fontSize:11,color:'#6b8fa3',lineHeight:1.5,marginBottom:8}}>
+                  Ønsker du å endre plan eller legge til flere mottakere?
+                </p>
+                <a href="mailto:hei@bolgevarsel.no?subject=Plan-endring"
+                  style={{display:'flex',alignItems:'center',gap:7,fontSize:12,fontWeight:500,
+                    color:'#1a6080',textDecoration:'none',padding:'8px 10px',borderRadius:8,
+                    background:'#e8f4f8',transition:'background 0.15s'}}
+                  onMouseEnter={e=>(e.currentTarget.style.background='#d4ecf7')}
+                  onMouseLeave={e=>(e.currentTarget.style.background='#e8f4f8')}
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M1.5 3h11l-5.5 5L1.5 3z" stroke="#1a6080" strokeWidth="1.2" fill="none" strokeLinejoin="round"/>
+                    <path d="M1.5 3v8.5a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V3" stroke="#1a6080" strokeWidth="1.2" fill="none"/>
+                  </svg>
+                  hei@bolgevarsel.no
+                </a>
+              </div>
             </div>
 
             {/* Hurtiglenker */}
