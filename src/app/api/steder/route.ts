@@ -20,11 +20,29 @@ export async function GET(req: NextRequest) {
 
   const data = await res.json()
 
-  // Prioriter kysttyper (bay, beach, harbour, marina) men ta med alt
-  const sorted = data.sort((a: any, b: any) => {
-    const coastal = ['bay','beach','harbour','marina','coastline','cove','inlet','fjord']
-    const aCoastal = coastal.includes(a.type) ? 1 : 0
-    const bCoastal = coastal.includes(b.type) ? 1 : 0
+  // Filtrer vekk irrelevante typer — vi vil ikke ha bussholdeplasser, kirker osv.
+  const BLOCKED_TYPES = [
+    'bus_stop','bus_station','tram_stop','ferry_terminal','taxi','parking',
+    'fuel','atm','bank','pharmacy','hospital','school','church','chapel',
+    'place_of_worship','supermarket','restaurant','cafe','fast_food','pub',
+    'hotel','motel','shop','mall','post_office','police','fire_station',
+    'residential','industrial','commercial','retail','office','construction',
+    'path','footway','cycleway','track','service','road',
+  ]
+  const BLOCKED_CLASSES = ['highway','building','amenity','shop','office','tourism']
+
+  // Kysttyper prioriteres høyest
+  const COASTAL = ['bay','beach','harbour','marina','coastline','cove','inlet','fjord',
+    'island','peninsula','cape','strait','water','lake','river','wetland','nature_reserve']
+
+  const filtered = data.filter((r: any) =>
+    !BLOCKED_TYPES.includes(r.type) &&
+    !BLOCKED_CLASSES.includes(r.class)
+  )
+
+  const sorted = (filtered.length > 0 ? filtered : data).sort((a: any, b: any) => {
+    const aCoastal = COASTAL.includes(a.type) ? 1 : 0
+    const bCoastal = COASTAL.includes(b.type) ? 1 : 0
     return bCoastal - aCoastal || b.importance - a.importance
   })
 
