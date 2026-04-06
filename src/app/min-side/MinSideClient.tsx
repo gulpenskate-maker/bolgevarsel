@@ -49,7 +49,7 @@ function BrandIllustration() {
 
 type Sub = { id:string; email:string; plan:string; status:string; send_time?:string }
 type Loc = { id:string; name:string; lat:number; lon:number }
-type Rec = { id:string; location_id:string; phone:string; name:string; email?:string; active:boolean; sms_enabled:boolean; send_time?:string }
+type Rec = { id:string; location_id:string; phone:string; name:string; email?:string; active:boolean; sms_enabled:boolean; send_time?:string; profile?:string }
 
 export default function MinSideClient() {
   const [email, setEmail] = useState('')
@@ -68,6 +68,7 @@ export default function MinSideClient() {
   const [newEmail, setNewEmail] = useState('')
   const [newSmsEnabled, setNewSmsEnabled] = useState(true)
   const [newSendTime, setNewSendTime] = useState('')
+  const [newProfile, setNewProfile] = useState('')
   const [locs, setLocs] = useState<Loc[]>([])
   const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
@@ -159,9 +160,9 @@ export default function MinSideClient() {
   async function addRec(e: React.FormEvent) {
     e.preventDefault()
     const r = await fetch('/api/min-side/recipient', { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:newSmsEnabled, send_time:newSendTime||null }) })
+      body: JSON.stringify({ subscriber_id:sub!.id, location_id:newLocId, phone:newPhone, name:newName, email:newEmail||null, sms_enabled:newSmsEnabled, send_time:newSendTime||null, profile:newProfile||null }) })
     const d = await r.json()
-    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setNewSendTime(''); setShowAddRec(false) }
+    if (d.recipient) { setRecs([...recs, d.recipient]); setNewPhone(''); setNewName(''); setNewLocId(''); setNewEmail(''); setNewSendTime(''); setNewProfile(''); setShowAddRec(false) }
   }
   function parseCsv(text: string) {
     const lines = text.trim().split(/\r?\n/)
@@ -438,7 +439,7 @@ export default function MinSideClient() {
               <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.85rem'}}>
                 <thead>
                   <tr>
-                    {['Navn','Telefon','E-post','SMS','Tidspunkt',''].map(h=>(
+                    {['Navn','Telefon','E-post','SMS','Tidspunkt','Profil',''].map(h=>(
                       <th key={h} style={{textAlign:'left',color:'#6b8fa3',fontWeight:500,fontSize:'0.72rem',letterSpacing:'0.06em',textTransform:'uppercase',padding:'0 10px 8px'}}>{h}</th>
                     ))}
                   </tr>
@@ -473,6 +474,13 @@ export default function MinSideClient() {
                         </td>
                         <td style={{padding:'10px'}}>
                           <span style={{fontSize:'12px',color:'#6b8fa3'}}>{rec.send_time||'Standard'}</span>
+                        </td>
+                        <td style={{padding:'10px'}}>
+                          {rec.profile ? (
+                            <span style={{fontSize:'11px',fontWeight:500,padding:'2px 8px',borderRadius:100,background:'#e8f4f8',color:'#1a6080'}}>
+                              {({'surfer':'Surfer','fisker':'Fisker','familie':'Familie','baatforer':'Båtfører','kajakk':'Padler','kitesurfer':'Kiting','windsurfer':'Windsurfer'}[rec.profile]||rec.profile)}
+                            </span>
+                          ) : <span style={{fontSize:'12px',color:'#6b8fa3'}}>Standard</span>}
                         </td>
                         <td style={{padding:'10px',textAlign:'right',whiteSpace:'nowrap'}}>
                           <button style={S.btnGhost} onClick={()=>toggleSms(rec)} title={rec.sms_enabled!==false?'Skru av SMS':'Skru på SMS'}>
@@ -525,6 +533,19 @@ export default function MinSideClient() {
                     {['04:00','04:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00'].map(t=>(
                       <option key={t} value={t}>{t}</option>
                     ))}
+                  </select>
+                </div>
+                <div>
+                  <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil (valgfritt)</div>
+                  <select style={S.inp} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
+                    <option value="">Standard rapport</option>
+                    <option value="surfer">🏄 Surfer</option>
+                    <option value="kitesurfer">🪁 Kitesurfer</option>
+                    <option value="windsurfer">🏄 Windsurfer</option>
+                    <option value="fisker">🎣 Fisker</option>
+                    <option value="familie">👨‍👩‍👧 Barnefamilie</option>
+                    <option value="baatforer">⛵ Båtfører</option>
+                    <option value="kajakk">🛶 Padler / kajakk</option>
                   </select>
                 </div>
                 <div style={{display:'flex',gap:'8px'}}>
