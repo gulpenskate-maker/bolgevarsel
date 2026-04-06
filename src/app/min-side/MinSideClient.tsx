@@ -8,13 +8,13 @@ const S = {
   page: { minHeight:'100vh', background:'#e8f4f8', fontFamily:'DM Sans, sans-serif' } as React.CSSProperties,
   nav: { padding:'1.2rem 2rem', borderBottom:'1px solid rgba(10,42,61,0.08)', background:'rgba(232,244,248,0.95)', position:'sticky' as const, top:0, zIndex:100 },
   logo: { fontFamily:"'Fraunces', Georgia, serif", fontSize:'1.3rem', fontWeight:600, color:'#0a2a3d', textDecoration:'none' } as React.CSSProperties,
-  wrap: { maxWidth:1100, margin:'0 auto', padding:'2.5rem 1.5rem' },
-  card: { background:'white', borderRadius:20, padding:'1.5rem', border:'1px solid rgba(10,42,61,0.07)', marginBottom:'1.2rem', boxShadow:'0 2px 12px rgba(10,42,61,0.06)' } as React.CSSProperties,
-  sTitle: { fontFamily:"'Fraunces', Georgia, serif", fontSize:'1.2rem', fontWeight:400, color:'#0a2a3d', marginBottom:'1rem', paddingBottom:'0.6rem', borderBottom:'1px solid rgba(10,42,61,0.07)' } as React.CSSProperties,
-  inp: { width:'100%', padding:'0.75rem 1rem', borderRadius:100, border:'1.5px solid rgba(10,42,61,0.12)', background:'#f8fbfc', fontSize:'0.9rem', color:'#0a2a3d', outline:'none', fontFamily:'inherit', boxSizing:'border-box' as const },
-  btnPrimary: { background:'#0a2a3d', color:'white', padding:'0.7rem 1.2rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.88rem', fontWeight:500 } as React.CSSProperties,
-  btnDanger: { background:'#fee2e2', color:'#ef4444', padding:'0.5rem 0.9rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:500 } as React.CSSProperties,
-  btnGhost: { background:'#f0f8fc', color:'#0a2a3d', padding:'0.5rem 0.9rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:500 } as React.CSSProperties,
+  wrap: { maxWidth:1160, margin:'0 auto', padding:'2.5rem 2rem' },
+  card: { background:'white', borderRadius:20, padding:'2rem', border:'1px solid rgba(10,42,61,0.07)', marginBottom:'1.2rem', boxShadow:'0 2px 12px rgba(10,42,61,0.06)' } as React.CSSProperties,
+  sTitle: { fontFamily:"'Fraunces', Georgia, serif", fontSize:'1.3rem', fontWeight:400, color:'#0a2a3d', marginBottom:'1rem', paddingBottom:'0.6rem', borderBottom:'1px solid rgba(10,42,61,0.07)' } as React.CSSProperties,
+  inp: { width:'100%', padding:'0.8rem 1.1rem', borderRadius:100, border:'1.5px solid rgba(10,42,61,0.12)', background:'#f8fbfc', fontSize:'0.95rem', color:'#0a2a3d', outline:'none', fontFamily:'inherit', boxSizing:'border-box' as const },
+  btnPrimary: { background:'#0a2a3d', color:'white', padding:'0.75rem 1.3rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.92rem', fontWeight:500 } as React.CSSProperties,
+  btnDanger: { background:'#fee2e2', color:'#ef4444', padding:'0.55rem 1rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.85rem', fontWeight:500 } as React.CSSProperties,
+  btnGhost: { background:'#f0f8fc', color:'#0a2a3d', padding:'0.55rem 1rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.85rem', fontWeight:500 } as React.CSSProperties,
   badge: (plan: string) => ({ background: plan==='pro'?'#fef3c7':plan==='familie'?'#dbeafe':'#e8f4f8', color: plan==='pro'?'#92400e':plan==='familie'?'#1d4ed8':'#0a2a3d', padding:'7px 18px', borderRadius:100, fontSize:'0.85rem', fontWeight:500 }) as React.CSSProperties,
   tag: (active: boolean) => ({ background: active?'#dcfce7':'#f1f5f9', color: active?'#16a34a':'#64748b', padding:'2px 8px', borderRadius:100, fontSize:'0.75rem', fontWeight:500 }) as React.CSSProperties,
 }
@@ -376,7 +376,7 @@ export default function MinSideClient() {
       <div style={S.wrap}>
         <style>{`
           @media (min-width: 800px) {
-            .bv-dashboard { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
+            .bv-dashboard { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; align-items: start; }
             .bv-sidebar { position: sticky; top: 80px; }
           }
           @media (max-width: 799px) {
@@ -388,15 +388,15 @@ export default function MinSideClient() {
         <div className="bv-dashboard">
           {/* Sidebar: profil + stat-kort */}
           <div className="bv-sidebar">
-            <div style={{background:'white',borderRadius:16,border:'1px solid rgba(10,42,61,0.07)',padding:'1.2rem',marginBottom:'1rem',boxShadow:'0 2px 12px rgba(10,42,61,0.06)'}}>
+            <div style={{background:'white',borderRadius:16,border:'1px solid rgba(10,42,61,0.07)',padding:'1.5rem',marginBottom:'1rem',boxShadow:'0 2px 12px rgba(10,42,61,0.06)'}}>
               {/* Profil-header */}
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-                <div style={{width:40,height:40,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:500,color:'#1a6080',flexShrink:0}}>
+                <div style={{width:44,height:44,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,fontWeight:500,color:'#1a6080',flexShrink:0}}>
                   {sub!.email.slice(0,2).toUpperCase()}
                 </div>
                 <div style={{minWidth:0}}>
-                  <div style={{fontSize:14,fontWeight:500,color:'#0a2a3d'}}>Hei!</div>
-                  <div style={{fontSize:11,color:'#6b8fa3',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{sub!.email}</div>
+                  <div style={{fontSize:15,fontWeight:500,color:'#0a2a3d'}}>Hei!</div>
+                  <div style={{fontSize:12,color:'#6b8fa3',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{sub!.email}</div>
                 </div>
               </div>
 
@@ -404,14 +404,14 @@ export default function MinSideClient() {
               <div style={{background:'#f8fbfc',borderRadius:10,padding:'10px 12px',marginBottom:10}}>
                 <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
                   <div>
-                    <div style={{fontSize:12,fontWeight:500,color:'#0a2a3d'}}>{({'kyst':'Kyst-plan','familie':'Familie-plan','pro':'Pro-plan'}[sub!.plan]||sub!.plan)}</div>
-                    <div style={{fontSize:10,color:'#6b8fa3'}}>{({'kyst':'49','familie':'179','pro':'299'}[sub!.plan]||'—')} kr/mnd</div>
+                    <div style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{({'kyst':'Kyst-plan','familie':'Familie-plan','pro':'Pro-plan'}[sub!.plan]||sub!.plan)}</div>
+                    <div style={{fontSize:11,color:'#6b8fa3'}}>{({'kyst':'49','familie':'179','pro':'299'}[sub!.plan]||'—')} kr/mnd</div>
                   </div>
-                  <span style={{fontSize:11,fontWeight:500,padding:'3px 9px',borderRadius:100,background:'#e8f5ed',color:'#16a34a'}}>{sub!.status==='active'?'Aktivt':'Pauset'}</span>
+                  <span style={{fontSize:12,fontWeight:500,padding:'4px 10px',borderRadius:100,background:'#e8f5ed',color:'#16a34a'}}>{sub!.status==='active'?'Aktivt':'Pauset'}</span>
                 </div>
                 {/* Mottakere progress */}
                 <div style={{marginBottom:6}}>
-                  <div style={{display:'flex',justifyContent:'space-between',fontSize:10,color:'#6b8fa3',marginBottom:3}}>
+                  <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:'#6b8fa3',marginBottom:4}}>
                     <span>Mottakere brukt</span>
                     <span style={{fontWeight:500,color:'#0a2a3d'}}>{recs.length} / {sub!.plan==='kyst'?1:sub!.plan==='familie'?5:20}</span>
                   </div>
@@ -434,14 +434,14 @@ export default function MinSideClient() {
               {/* Stat-grid */}
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6,marginBottom:10}}>
                 <div style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center'}}>
-                  <div style={{fontSize:10,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:2}}>Rapporttidspunkt</div>
-                  <div style={{fontSize:18,fontWeight:300,color:'#0a2a3d'}}>{sendTime}</div>
-                  <div style={{fontSize:10,color:'#6b8fa3',marginTop:1}}>daglig</div>
+                  <div style={{fontSize:11,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:3}}>Rapporttidspunkt</div>
+                  <div style={{fontSize:22,fontWeight:300,color:'#0a2a3d'}}>{sendTime}</div>
+                  <div style={{fontSize:11,color:'#6b8fa3',marginTop:2}}>daglig</div>
                 </div>
                 <div style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center'}}>
-                  <div style={{fontSize:10,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:2}}>Mottakere</div>
-                  <div style={{fontSize:18,fontWeight:300,color:'#0a2a3d'}}>{recs.length}</div>
-                  <div style={{fontSize:10,color:'#6b8fa3',marginTop:1}}>{recs.filter(r=>r.active).length} aktive</div>
+                  <div style={{fontSize:11,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:3}}>Mottakere</div>
+                  <div style={{fontSize:22,fontWeight:300,color:'#0a2a3d'}}>{recs.length}</div>
+                  <div style={{fontSize:11,color:'#6b8fa3',marginTop:2}}>{recs.filter(r=>r.active).length} aktive</div>
                 </div>
               </div>
 
@@ -473,7 +473,7 @@ export default function MinSideClient() {
                 <button key={tab.key} onClick={()=>setActiveTab(tab.key as any)}
                   style={{width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 10px',borderRadius:8,
                     background:activeTab===tab.key?'#e8f4f8':'transparent',border:'none',cursor:'pointer',
-                    color:activeTab===tab.key?'#1a6080':'#6b8fa3',fontSize:13,fontWeight:activeTab===tab.key?500:400,
+                    color:activeTab===tab.key?'#1a6080':'#6b8fa3',fontSize:14,fontWeight:activeTab===tab.key?500:400,
                     fontFamily:'inherit',textAlign:'left',marginBottom:2,transition:'all 0.15s'
                   }}>
                   {tab.icon}
@@ -553,11 +553,11 @@ export default function MinSideClient() {
             <div>
               <div style={{display:'flex',justifyContent:'flex-end',gap:'8px',marginBottom:'1rem'}}>
                 {locs.length > 0 && <>
-                  <button style={{...S.btnGhost,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowCsvImport(!showCsvImport);setShowAddRec(false)}}>
+                  <button style={{...S.btnGhost,fontSize:'0.85rem',padding:'7px 13px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowCsvImport(!showCsvImport);setShowAddRec(false)}}>
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 10h11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/></svg>
                     Importer CSV
                   </button>
-                  <button style={{...S.btnPrimary,fontSize:'0.8rem',padding:'6px 12px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowAddRec(!showAddRec);setShowCsvImport(false)}}>
+                  <button style={{...S.btnPrimary,fontSize:'0.85rem',padding:'7px 13px',display:'flex',alignItems:'center',gap:'5px'}} onClick={()=>{setShowAddRec(!showAddRec);setShowCsvImport(false)}}>
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="white" strokeWidth="1.4" strokeLinecap="round"/></svg>
                     Legg til
                   </button>
@@ -571,7 +571,7 @@ export default function MinSideClient() {
 
               {recs.length > 0 && (
                 <div style={{overflowX:'auto',marginBottom:'1rem'}}>
-                  <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.85rem'}}>
+                  <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.9rem'}}>
                     <thead>
                       <tr>
                         {['Navn','Telefon','E-post','SMS','Tidspunkt','Profil',''].map(h=>(
@@ -600,8 +600,8 @@ export default function MinSideClient() {
                                 <span style={{fontWeight:500,color:'#0a2a3d'}}>{rec.name||'—'}</span>
                               </div>
                             </td>
-                            <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{rec.phone}</td>
-                            <td style={{padding:'10px',color:'#6b8fa3',fontSize:'0.82rem'}}>{(rec as any).email||'—'}</td>
+                            <td style={{padding:'11px',color:'#6b8fa3',fontSize:'0.87rem'}}>{rec.phone}</td>
+                            <td style={{padding:'11px',color:'#6b8fa3',fontSize:'0.87rem'}}>{(rec as any).email||'—'}</td>
                             <td style={{padding:'10px'}}>
                               <div style={{display:'flex',flexDirection:'column',gap:3}}>
                                 <span style={{fontSize:'10px',fontWeight:500,padding:'2px 7px',borderRadius:100,background:'#fef2f2',color:'#991b1b',whiteSpace:'nowrap'}}>
@@ -680,7 +680,7 @@ export default function MinSideClient() {
                       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
                         <div style={{display:'flex',alignItems:'center',gap:7}}>
                           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2.5v3M6.5 9h.01" stroke="#dc2626" strokeWidth="1.2" strokeLinecap="round"/></svg>
-                          <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Kritisk farevarsel</span>
+                          <span style={{fontSize:14,fontWeight:500,color:'#0a2a3d'}}>Kritisk farevarsel</span>
                         </div>
                         <span style={{fontSize:10,fontWeight:600,padding:'2px 8px',borderRadius:100,background:'#fef2f2',color:'#991b1b'}}>Alltid på</span>
                       </div>
@@ -691,7 +691,7 @@ export default function MinSideClient() {
                       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
                         <div style={{display:'flex',alignItems:'center',gap:7}}>
                           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="8" rx="1.5" stroke="#1a6080" strokeWidth="1.1" fill="none"/><path d="M3 5h7M3 7h4" stroke="#1a6080" strokeWidth="1" strokeLinecap="round"/></svg>
-                          <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Daglig rapport på SMS</span>
+                          <span style={{fontSize:14,fontWeight:500,color:'#0a2a3d'}}>Daglig rapport på SMS</span>
                         </div>
                         <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewSmsEnabled(!newSmsEnabled)}>
                           <div style={{position:'absolute',inset:0,borderRadius:100,background:newSmsEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
@@ -713,7 +713,7 @@ export default function MinSideClient() {
                       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
                         <div style={{display:'flex',alignItems:'center',gap:7}}>
                           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 3h10l-5 4.5L1.5 3z" stroke="#1a6080" strokeWidth="1.1" fill="none" strokeLinejoin="round"/><path d="M1.5 3v7.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V3" stroke="#1a6080" strokeWidth="1.1" fill="none"/></svg>
-                          <span style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Detaljert e-postrapport</span>
+                          <span style={{fontSize:14,fontWeight:500,color:'#0a2a3d'}}>Detaljert e-postrapport</span>
                         </div>
                         <div style={{position:'relative',width:36,height:20,cursor:'pointer'}} onClick={()=>setNewEmailEnabled(!newEmailEnabled)}>
                           <div style={{position:'absolute',inset:0,borderRadius:100,background:newEmailEnabled?'#1a6080':'rgba(10,42,61,0.15)',transition:'0.2s'}}/>
@@ -766,7 +766,7 @@ export default function MinSideClient() {
 
               {showCsvImport && locs.length > 0 && (
                 <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',marginBottom:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
-                  <div style={{fontSize:'0.85rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Importer fra CSV</div>
+                  <div style={{fontSize:'0.9rem',fontWeight:500,color:'#0a2a3d',marginBottom:'0.75rem'}}>Importer fra CSV</div>
                   <div style={{marginBottom:'0.75rem'}}>
                     <div style={{fontSize:'11px',color:'#6b8fa3',marginBottom:3}}>Velg lokasjon for alle importerte mottakere</div>
                     <select style={S.inp} value={newLocId} onChange={e=>setNewLocId(e.target.value)}>
