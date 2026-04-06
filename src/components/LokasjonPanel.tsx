@@ -12,7 +12,7 @@ type WeatherData = {
 
 type HourlyPoint = {
   time: string; wave: number; waveDir: number; period: number
-  wind: number; windDir: number; temp: number
+  wind: number; windDir: number; temp: number; symbol: string
 }
 
 const SCORE_COLORS = ['#94a3b8','#16a34a','#65a30d','#ca8a04','#ea580c','#dc2626']
@@ -86,6 +86,7 @@ async function fetchWeather(lat: number, lon: number): Promise<WeatherData> {
       wind: mi >= 0 ? (ts[mi]?.data?.instant?.details?.wind_speed ?? 0) : 0,
       windDir: mi >= 0 ? (ts[mi]?.data?.instant?.details?.wind_from_direction ?? 0) : 0,
       temp: mi >= 0 ? (ts[mi]?.data?.instant?.details?.air_temperature ?? 0) : 0,
+      symbol: mi >= 0 ? (ts[mi]?.data?.next_1_hours?.summary?.symbol_code ?? ts[mi]?.data?.next_6_hours?.summary?.symbol_code ?? '') : '',
     }
   })
 
@@ -125,6 +126,78 @@ function WaveAnimation() {
   )
 }
 
+function WeatherIcon({ symbol, size = 16 }: { symbol: string; size?: number }) {
+  const s = symbol.replace('_night','').replace('_day','').replace('_polartwilight','')
+  if (!s) return null
+  // Solrik
+  if (s === 'clearsky') return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="3" fill="#f59e0b"/>
+      {[0,45,90,135,180,225,270,315].map((deg,i)=>(
+        <line key={i} x1={8+Math.cos(deg*Math.PI/180)*4.2} y1={8+Math.sin(deg*Math.PI/180)*4.2}
+          x2={8+Math.cos(deg*Math.PI/180)*5.5} y2={8+Math.sin(deg*Math.PI/180)*5.5}
+          stroke="#f59e0b" strokeWidth="1.2" strokeLinecap="round"/>
+      ))}
+    </svg>
+  )
+  // Delvis skyet med sol
+  if (s === 'fair' || s === 'partlycloudy') return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <circle cx="6" cy="6" r="2.5" fill="#f59e0b"/>
+      {[0,60,120,180,240,300].map((deg,i)=>(
+        <line key={i} x1={6+Math.cos(deg*Math.PI/180)*3.3} y1={6+Math.sin(deg*Math.PI/180)*3.3}
+          x2={6+Math.cos(deg*Math.PI/180)*4.3} y2={6+Math.sin(deg*Math.PI/180)*4.3}
+          stroke="#f59e0b" strokeWidth="1.1" strokeLinecap="round"/>
+      ))}
+      <ellipse cx="9.5" cy="10" rx="4" ry="2.5" fill="#94a3b8"/>
+      <ellipse cx="7" cy="11" rx="3" ry="2" fill="#94a3b8"/>
+    </svg>
+  )
+  // Skyet
+  if (s === 'cloudy' || s === 'fog') return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <ellipse cx="9" cy="8" rx="5" ry="3.5" fill="#94a3b8"/>
+      <ellipse cx="6" cy="9.5" rx="4" ry="3" fill="#94a3b8"/>
+      <ellipse cx="11" cy="9.5" rx="3" ry="2.5" fill="#94a3b8"/>
+    </svg>
+  )
+  // Lett regn
+  if (s.includes('lightrain') || s === 'drizzle') return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <ellipse cx="8" cy="6.5" rx="5" ry="3.5" fill="#64748b"/>
+      <path d="M5 11 L4.5 13" stroke="#60a5fa" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M8 11 L7.5 13" stroke="#60a5fa" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M11 11 L10.5 13" stroke="#60a5fa" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  )
+  // Regn / kraftig regn
+  if (s.includes('rain') || s.includes('shower')) return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <ellipse cx="8" cy="6" rx="5.5" ry="3.5" fill="#475569"/>
+      <path d="M4 10.5 L3 13.5" stroke="#3b82f6" strokeWidth="1.3" strokeLinecap="round"/>
+      <path d="M7.5 10.5 L6.5 13.5" stroke="#3b82f6" strokeWidth="1.3" strokeLinecap="round"/>
+      <path d="M11 10.5 L10 13.5" stroke="#3b82f6" strokeWidth="1.3" strokeLinecap="round"/>
+    </svg>
+  )
+  // Torden
+  if (s.includes('thunder')) return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <ellipse cx="8" cy="5.5" rx="5.5" ry="3" fill="#475569"/>
+      <path d="M8.5 8.5 L6.5 12 L8 12 L7 15 L10 10.5 L8.5 10.5 Z" fill="#fbbf24"/>
+    </svg>
+  )
+  // Snø / sludd
+  if (s.includes('snow') || s.includes('sleet')) return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <ellipse cx="8" cy="6" rx="5" ry="3.5" fill="#94a3b8"/>
+      <circle cx="5" cy="11.5" r="1" fill="white" stroke="#94a3b8" strokeWidth="0.8"/>
+      <circle cx="8" cy="12.5" r="1" fill="white" stroke="#94a3b8" strokeWidth="0.8"/>
+      <circle cx="11" cy="11.5" r="1" fill="white" stroke="#94a3b8" strokeWidth="0.8"/>
+    </svg>
+  )
+  return null
+}
+
 function HourlyBars({ hourly }: { hourly: HourlyPoint[] }) {
   const [hovered, setHovered] = React.useState<number | null>(null)
   const maxWave = Math.max(...hourly.map(h => h.wave), 0.1)
@@ -138,7 +211,7 @@ function HourlyBars({ hourly }: { hourly: HourlyPoint[] }) {
           </div>
         )}
       </div>
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 70 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 90 }}>
         {hourly.map((h, i) => {
           const s = ratingScore(h.wave, h.wind)
           const color = SCORE_COLORS[s]
@@ -150,6 +223,9 @@ function HourlyBars({ hourly }: { hourly: HourlyPoint[] }) {
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
             >
+              <div style={{ opacity: hovered === null || isHov ? 1 : 0.45, transition: 'opacity 0.15s', marginBottom: 1 }}>
+                <WeatherIcon symbol={h.symbol} size={14} />
+              </div>
               <div style={{
                 width: '100%', borderRadius: '3px 3px 0 0',
                 background: color,
