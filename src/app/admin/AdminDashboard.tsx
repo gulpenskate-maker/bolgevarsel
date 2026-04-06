@@ -50,7 +50,11 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
     <div style={S.page}>
       <nav style={S.nav}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-          <span style={{ fontFamily: 'serif', fontSize: '1.3rem', fontWeight: 600 }}>bølge<span style={{ color: '#4da8cc' }}>varsel</span></span>
+          <span style={{ fontFamily: 'serif', fontSize: '1.3rem', fontWeight: 600 }}><svg width="180" height="30" viewBox="0 0 280 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 22 Q10 14 16 22 Q22 30 28 22 Q34 14 40 22" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none"/>
+              <path d="M6 31 Q11 26 16 31 Q21 36 26 31 Q31 26 36 31" stroke="rgba(125,211,240,0.55)" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.5"/>
+              <text x="52" y="30" fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="23" fontWeight="600" fill="white" letterSpacing="-0.8">bølgevarsel<tspan fill="#7dd3fc" fontWeight="400">.no</tspan></text>
+            </svg></span>
           <span style={{ background: '#ef4444', color: 'white', padding: '2px 8px', borderRadius: 100, fontSize: '0.68rem', fontWeight: 600 }}>ADMIN</span>
         </div>
         <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>

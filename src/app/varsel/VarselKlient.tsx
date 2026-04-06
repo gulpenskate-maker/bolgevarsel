@@ -152,7 +152,13 @@ export default function VarselKlient() {
             <span style={{ width:8, height:8, borderRadius:'50%', background:'#22c55e', display:'inline-block' }}/>
             <span style={{ fontSize:11, fontWeight:600, letterSpacing:'0.1em', color:'#6b8fa3', textTransform:'uppercase' as const }}>Bølgevarsel · {new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})}</span>
           </div>
-          <div style={{ fontWeight:600, color:'#0a2a3d', marginBottom:12 }}>📍 {varsel.navn} – {dato}</div>
+          <div style={{ fontWeight:600, color:'#0a2a3d', marginBottom:12, display:'flex', alignItems:'center', gap:6 }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1.5C5.07 1.5 3.5 3.07 3.5 5c0 2.6 3.5 7.5 3.5 7.5S10.5 7.6 10.5 5C10.5 3.07 8.93 1.5 7 1.5z" stroke="#1a6080" strokeWidth="1.3" fill="none" strokeLinejoin="round"/>
+              <circle cx="7" cy="5" r="1.3" stroke="#1a6080" strokeWidth="1.1" fill="none"/>
+            </svg>
+            {varsel.navn} – {dato}
+          </div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:12 }}>
             <C label="Lufttemperatur" verdi={`${varsel.lufttemp}°C`} />
             <C label="Sjøtemperatur" verdi={varsel.sjoTemp != null ? `${varsel.sjoTemp.toFixed(1)}°C` : '—'} />

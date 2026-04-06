@@ -54,9 +54,9 @@ function profileTips(profile: string, day: any): { items: {icon: string; label: 
     return { items: [
       { icon: '~', label: 'Vindkvalitet', value: `${windQuality} (${windDirLabel})`, highlight: isOffshore },
       { icon: '⌛', label: 'Bølgeperiode', value: `${period.toFixed(0)}s — ${period >= 10 ? 'god grunn-swell' : period >= 8 ? 'ok periode' : 'kort — choppy'}` },
-      { icon: '🤿', label: 'Våtdrakt', value: `${wetsuit} (sjø ${seaTemp?.toFixed(1) ?? '?'}°C)` },
-      { icon: '🏄', label: 'Brett-tips', value: board },
-      { icon: '📍', label: 'Bølgeretning', value: `Fra ${waveDir} — sjekk lokale spots` },
+      { icon: '🤿', label: 'Drakt', value: `${wetsuit} (sjø ${seaTemp?.toFixed(1) ?? '?'}°C)` },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M2 10 Q4 7 7 8 Q10 9 12 6' stroke='#1a6080' strokeWidth='1.3' strokeLinecap='round' fill='none'/><path d='M2 10 Q3 12 5 11' stroke='#1a6080' strokeWidth='1' strokeLinecap='round' fill='none'/></svg>, label: 'Brett-tips', value: board },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M7 1.5C5.3 1.5 4 2.8 4 4.5c0 2.3 3 7 3 7s3-4.7 3-7C10 2.8 8.7 1.5 7 1.5z' stroke='#1a6080' strokeWidth='1.2' fill='none'/><circle cx='7' cy='4.5' r='1.2' stroke='#1a6080' strokeWidth='1' fill='none'/></svg>, label: 'Bølgeretning', value: `Fra ${waveDir} — sjekk lokale spots` },
     ]}
   }
 
@@ -65,15 +65,15 @@ function profileTips(profile: string, day: any): { items: {icon: string; label: 
     return { items: [
       { icon: '🧭', label: 'Vindstyrke', value: `${wind.toFixed(1)} m/s — ${beaufort}` },
       { icon: '⚓', label: 'Vindretning', value: windDirLabel },
-      { icon: '🌊', label: 'Bølgeforhold', value: `${wave.toFixed(1)}m fra ${waveDir} — ${wave < 0.5 ? 'speil' : wave < 1.5 ? 'lett krusning' : 'krevende'}` },
-      { icon: '⛵', label: 'Seiloppsett', value: wind < 5 ? 'Storseil + spinnaker' : wind < 12 ? 'Fullt seil' : 'Reif seilet' },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M1 7 Q3 4 5 7 Q7 10 9 7 Q11 4 13 7' stroke='#1a6080' strokeWidth='1.3' strokeLinecap='round' fill='none'/><path d='M1 10 Q3 8 5 10 Q7 12 9 10 Q11 8 13 10' stroke='#4da8cc' strokeWidth='1' strokeLinecap='round' fill='none' opacity='0.5'/></svg>, label: 'Bølgeforhold', value: `${wave.toFixed(1)}m fra ${waveDir} — ${wave < 0.5 ? 'speil' : wave < 1.5 ? 'lett krusning' : 'krevende'}` },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M7 2 L7 10 L2 10 Z' stroke='#1a6080' strokeWidth='1.2' fill='none' strokeLinejoin='round'/><path d='M7 10 L12 10' stroke='#1a6080' strokeWidth='1.2' strokeLinecap='round'/></svg>, label: 'Seiloppsett', value: wind < 5 ? 'Storseil + spinnaker' : wind < 12 ? 'Fullt seil' : 'Reif seilet' },
     ]}
   }
 
   if (profile === 'fisker') {
     return { items: [
-      { icon: '🎣', label: 'Fiskeforhold', value: wave < 0.5 ? 'Ideelt — stille hav' : wave < 1.0 ? 'Greit — lette bølger' : 'Krevende — hold kystlinjen' },
-      { icon: '🌊', label: 'Bølgehøyde', value: `${wave.toFixed(1)}m fra ${waveDir}` },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M2 4 Q5 2 8 4' stroke='#1a6080' strokeWidth='1.2' strokeLinecap='round' fill='none'/><path d='M8 4 L10 8 L8 10 L4 8 Z' stroke='#1a6080' strokeWidth='1.1' fill='none' strokeLinejoin='round'/><path d='M10 8 L13 10' stroke='#1a6080' strokeWidth='1.1' strokeLinecap='round'/></svg>, label: 'Fiskeforhold', value: wave < 0.5 ? 'Ideelt — stille hav' : wave < 1.0 ? 'Greit — lette bølger' : 'Krevende — hold kystlinjen' },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M1 7 Q3 4 5 7 Q7 10 9 7 Q11 4 13 7' stroke='#1a6080' strokeWidth='1.3' strokeLinecap='round' fill='none'/></svg>, label: 'Bølgehøyde', value: `${wave.toFixed(1)}m fra ${waveDir}` },
       { icon: '💨', label: 'Vind', value: `${wind.toFixed(1)} m/s fra ${windDirLabel}` },
       { icon: '🌡', label: 'Sjøtemperatur', value: seaTemp !== null ? `${seaTemp.toFixed(1)}°C` : '—' },
     ]}
@@ -88,7 +88,7 @@ function profileTips(profile: string, day: any): { items: {icon: string; label: 
     return { items: [
       { icon: '👁', label: 'Forventet sikt', value: siktDesc, highlight: wave < 0.3 },
       { icon: '🌡', label: 'Sjøtemperatur', value: seaTemp !== null ? `${seaTemp.toFixed(1)}°C` : '—' },
-      { icon: '🤿', label: 'Drakt-anbefaling', value: drysuit },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><circle cx='7' cy='7' r='5.5' stroke='#1a6080' strokeWidth='1.2' fill='none'/><path d='M4 7h6M7 4v6' stroke='#1a6080' strokeWidth='1' strokeLinecap='round'/></svg>, label: 'Drakt-anbefaling', value: drysuit },
       { icon: '🌊', label: 'Bølgehøyde', value: `${wave.toFixed(1)}m — ${wave < 0.3 ? 'perfekt' : wave < 0.5 ? 'ok' : 'for urolig'}` },
     ]}
   }
@@ -96,7 +96,7 @@ function profileTips(profile: string, day: any): { items: {icon: string; label: 
   if (profile === 'kajakk') {
     return { items: [
       { icon: '💨', label: 'Vind', value: `${wind.toFixed(1)} m/s fra ${windDirLabel} — ${wind < 4 ? 'ideelt' : wind < 8 ? 'greit' : 'krevende'}` },
-      { icon: '🌊', label: 'Bølger', value: `${wave.toFixed(1)}m — ${wave < 0.3 ? 'padlerparadis' : wave < 0.7 ? 'lett' : 'kun erfarne'}` },
+      { icon: <svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M1 7 Q3 4 5 7 Q7 10 9 7 Q11 4 13 7' stroke='#1a6080' strokeWidth='1.3' strokeLinecap='round' fill='none'/></svg>, label: 'Bølger', value: `${wave.toFixed(1)}m — ${wave < 0.3 ? 'padlerparadis' : wave < 0.7 ? 'lett' : 'kun erfarne'}` },
       { icon: '🧭', label: 'Tips', value: 'Hold alltid kysten i sikte' },
     ]}
   }

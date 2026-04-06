@@ -139,7 +139,14 @@ export default function HowItWorks() {
           <p className={styles.alertDesc}>Dersom sjøforholdene blir farlige sender vi umiddelbart et farevarsel til alle aktive mottakere — uansett tidspunkt og uavhengig av SMS-innstillingene. Sikkerhet går foran alt.</p>
           <div className={styles.alertExample}>
             <div className={styles.alertSms}>
-              ⚠️ <strong>Farevarsel · Tånes</strong><br/>
+              <span style={{display:'inline-flex',alignItems:'center',gap:5}}>
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{flexShrink:0}}>
+                  <path d="M6.5 1.5 L12 11.5 H1 Z" stroke="#cc7700" strokeWidth="1.2" strokeLinejoin="round" fill="none"/>
+                  <path d="M6.5 5V8.5" stroke="#cc7700" strokeWidth="1.2" strokeLinecap="round"/>
+                  <circle cx="6.5" cy="10.5" r="0.7" fill="#cc7700"/>
+                </svg>
+                <strong>Farevarsel · Tånes</strong>
+              </span><br/>
               Kuling varslet fra kl. 14:00 — 20+ m/s fra NV. Unngå sjøen frem til i morgen tidlig.
             </div>
           </div>

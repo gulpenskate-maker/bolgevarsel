@@ -30,7 +30,16 @@ function LoggInnContent() {
   return (
     <div style={page}>
       <div style={box}>
-        <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🌊</div>
+        <div style={{ display:'flex', justifyContent:'center', marginBottom:'1rem' }}>
+          <div style={{ width:56, height:56, borderRadius:14, background:'#0a2a3d', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+              <path d="M5 30 Q12 20 19 30 Q26 40 33 30 Q40 20 47 30" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+              <path d="M4 38 Q11 33 18 38 Q25 43 32 38 Q39 33 46 38" stroke="rgba(125,211,240,0.6)" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+              <circle cx="38" cy="13" r="6" fill="#fcd34d"/>
+              <path d="M38 5L38 4M38 22L38 21M30 13L29 13M47 13L46 13M32.5 7.5L31.5 6.5M44 7.5L45 6.5" stroke="#fcd34d" strokeWidth="1.4" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </div>
         <h1 style={h1}>Logger inn...</h1>
         <p style={sub}>Du blir straks sendt til Min side</p>
       </div>

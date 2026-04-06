@@ -265,7 +265,14 @@ export default function MinSideClient() {
       <div style={{ position:'relative', zIndex:10, maxWidth:420, margin:'0 auto', padding:'1rem 1.5rem 3rem', textAlign:'center' }}>
         {magicSendt ? (
           <div style={{ background:'rgba(255,255,255,0.85)', backdropFilter:'blur(12px)', borderRadius:24, padding:'2.5rem 2rem', boxShadow:'0 8px 40px rgba(10,42,61,0.15)' }}>
-            <div style={{fontSize:'3rem',marginBottom:'1rem'}}>📬</div>
+            <div style={{display:'flex',justifyContent:'center',marginBottom:'1rem'}}>
+              <div style={{width:52,height:52,borderRadius:13,background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M2 6h20l-10 8L2 6z" stroke="#1a6080" strokeWidth="1.4" fill="none" strokeLinejoin="round"/>
+                  <path d="M2 6v14a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V6" stroke="#1a6080" strokeWidth="1.4" fill="none"/>
+                </svg>
+              </div>
+            </div>
             <h1 style={{fontFamily:'serif',fontSize:'1.8rem',fontWeight:300,color:'#0a2a3d',marginBottom:'0.5rem'}}>Sjekk innboksen!</h1>
             <p style={{color:'#6b8fa3',marginBottom:'0.3rem'}}>Vi har sendt en innloggingslenke til</p>
             <p style={{color:'#0a2a3d',fontWeight:600,marginBottom:'1.5rem'}}>{email}</p>
@@ -736,15 +743,15 @@ export default function MinSideClient() {
                       <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil</div>
                       <select style={{...S.inp,borderRadius:6}} value={newProfile} onChange={e=>setNewProfile(e.target.value)}>
                         <option value="">Generell sjørapport (ingen spesialprofil)</option>
-                        <option value="surfer">🏄 Surfer</option>
-                        <option value="kitesurfer">🪁 Kitesurfer</option>
-                        <option value="windsurfer">🏄 Windsurfer</option>
-                        <option value="fisker">🎣 Fisker</option>
-                        <option value="familie">⛵ Barn/ungdom med båt</option>
-                        <option value="baatforer">⛵ Båtfører</option>
-                        <option value="kajakk">🛶 Padler / kajakk</option>
-                        <option value="seiler">⛵ Seiler</option>
-                        <option value="fridykker">🤿 Fridykker / snorkling</option>
+                        <option value="surfer">Surfer</option>
+                        <option value="kitesurfer">Kitesurfer</option>
+                        <option value="windsurfer">Windsurfer</option>
+                        <option value="fisker">Fisker</option>
+                        <option value="familie">Barn/ungdom med båt</option>
+                        <option value="baatforer">Båtfører</option>
+                        <option value="kajakk">Padler / kajakk</option>
+                        <option value="seiler">Seiler</option>
+                        <option value="fridykker">Fridykker / snorkling</option>
                       </select>
                       <div style={{fontSize:10,color:'#94a3b8',marginTop:3}}>Tilpasser både SMS og e-postrapporten til aktiviteten.</div>
                     </div>
