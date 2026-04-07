@@ -62,36 +62,66 @@ async function fetchLiveData(sted: Sted): Promise<LiveData> {
 
 function BolgeGraf({ data }: { data: TimePoint[] }) {
   const [hov, setHov] = useState<number|null>(null)
-  const W=100, H=80, pad=4
+  const W=100, H=72, padL=2, padR=2, padT=6, padB=4
   const maxVal = Math.max(...data.map(d=>d.bolge), 0.5)
-  const x = (i: number) => pad+(i/(data.length-1))*(W-pad*2)
-  const y = (v: number) => H-pad-(v/maxVal)*(H-pad*2)
-  const path = data.map((d,i)=>(i===0?'M':'L')+' '+x(i).toFixed(1)+' '+y(d.bolge).toFixed(1)).join(' ')
-  const area = path+' L '+x(data.length-1).toFixed(1)+' '+H+' L '+x(0).toFixed(1)+' '+H+' Z'
+  const x = (i: number) => padL + (i / (data.length - 1)) * (W - padL - padR)
+  const y = (v: number) => padT + (1 - v / maxVal) * (H - padT - padB)
+  const path = data.map((d,i)=>(i===0?'M':'L')+' '+x(i).toFixed(2)+' '+y(d.bolge).toFixed(2)).join(' ')
+  const area = path+' L '+x(data.length-1).toFixed(2)+' '+H+' L '+x(0).toFixed(2)+' '+H+' Z'
+  const slotW = (W - padL - padR) / (data.length - 1)
+
   return (
-    <div>
-      <svg viewBox={'0 0 '+W+' '+H} style={{width:'100%',height:120,overflow:'visible'}}>
-        <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#1a6080" stopOpacity="0.25"/>
-          <stop offset="100%" stopColor="#1a6080" stopOpacity="0"/>
-        </linearGradient></defs>
-        <path d={area} fill="url(#wg)"/>
-        <path d={path} fill="none" stroke="#1a6080" strokeWidth="0.8"/>
-        {data.map((d,i)=>(
-          <circle key={i} cx={x(i)} cy={y(d.bolge)} r={hov===i?2.2:1.2}
-            fill={FARGER[Math.min(score(d.bolge,d.vind),5)]}
-            style={{cursor:'pointer',transition:'r 0.1s'}}
-            onMouseEnter={()=>setHov(i)} onMouseLeave={()=>setHov(null)}/>
+    <div style={{position:'relative',userSelect:'none'}}>
+      <svg viewBox={'0 0 '+W+' '+H} style={{width:'100%',height:130,overflow:'visible',display:'block'}}>
+        <defs>
+          <linearGradient id="wg2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#1a6080" stopOpacity="0.3"/>
+            <stop offset="100%" stopColor="#1a6080" stopOpacity="0.02"/>
+          </linearGradient>
+        </defs>
+        {/* Y-akse guidelinjer */}
+        {[0.25,0.5,0.75,1].map(f=>(
+          <line key={f} x1={padL} x2={W-padR} y1={y(maxVal*f)} y2={y(maxVal*f)}
+            stroke="rgba(10,42,61,0.05)" strokeWidth="0.4"/>
         ))}
-        {hov!==null&&(
-          <g>
-            <rect x={Math.min(x(hov)-14,W-30)} y={y(data[hov].bolge)-16} width="30" height="12" rx="2" fill="#0a2a3d" opacity="0.92"/>
-            <text x={Math.min(x(hov)+1,W-14)} y={y(data[hov].bolge)-8} fill="white" fontSize="4" textAnchor="middle">{data[hov].bolge.toFixed(1)}m · {data[hov].vind}m/s</text>
-          </g>
-        )}
+        <path d={area} fill="url(#wg2)"/>
+        <path d={path} fill="none" stroke="#1a6080" strokeWidth="0.9" strokeLinejoin="round"/>
+        {/* Datapunkter */}
+        {data.map((d,i)=>(
+          <circle key={i} cx={x(i)} cy={y(d.bolge)} r={hov===i ? 2.5 : 1.4}
+            fill={hov===i ? '#0a2a3d' : FARGER[Math.min(score(d.bolge,d.vind),5)]}
+            stroke={hov===i ? FARGER[Math.min(score(d.bolge,d.vind),5)] : 'none'}
+            strokeWidth="0.8"
+            style={{transition:'r 0.12s, fill 0.12s'}}/>
+        ))}
+        {/* Tooltip */}
+        {hov!==null&&(()=>{
+          const tx = x(hov), ty = y(data[hov].bolge)
+          const boxW = 32, boxH = 14
+          const bx = Math.max(padL, Math.min(tx - boxW/2, W - padR - boxW))
+          const by = ty - boxH - 3 < padT ? ty + 3 : ty - boxH - 3
+          return (
+            <g>
+              <line x1={tx} x2={tx} y1={padT} y2={H} stroke="rgba(10,42,61,0.15)" strokeWidth="0.5" strokeDasharray="1.5,1.5"/>
+              <rect x={bx} y={by} width={boxW} height={boxH} rx="2" fill="#0a2a3d"/>
+              <text x={bx+boxW/2} y={by+5.5} fill="white" fontSize="3.8" textAnchor="middle" fontWeight="600">{data[hov].bolge.toFixed(1)}m</text>
+              <text x={bx+boxW/2} y={by+10} fill="rgba(255,255,255,0.7)" fontSize="3.2" textAnchor="middle">{data[hov].vind} m/s vind</text>
+            </g>
+          )
+        })()}
+        {/* Usynlige hover-soner */}
+        {data.map((d,i)=>(
+          <rect key={'h'+i}
+            x={Math.max(0, x(i) - slotW/2)} y={0}
+            width={slotW} height={H}
+            fill="transparent"
+            style={{cursor:'crosshair'}}
+            onMouseEnter={()=>setHov(i)}
+            onMouseLeave={()=>setHov(null)}/>
+        ))}
       </svg>
-      <div style={{display:'flex',justifyContent:'space-between',marginTop:4}}>
-        {data.filter((_,i)=>i%2===0).map((d,i)=>(
+      <div style={{display:'flex',justifyContent:'space-between',marginTop:2}}>
+        {data.filter((_,i)=>i%3===0||i===data.length-1).map((d,i)=>(
           <span key={i} style={{fontSize:10,color:'#94a3b8'}}>{d.tid}</span>
         ))}
       </div>
