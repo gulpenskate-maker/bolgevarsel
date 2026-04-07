@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 
 type Sted = { name: string; admin1?: string; latitude: number; longitude: number }
-type TimePoint = { tid: string; bolge: number; vind: number; temp: number; periode: number }
+type TimePoint = { tid: string; bolge: number; vind: number; temp: number; periode: number; symbol: string }
 type LiveData = {
   navn: string; lat: number; lon: number
   lufttemp: number; vindMs: number; vindDir: number; vindMaks: number
@@ -107,6 +107,8 @@ async function fetchLiveData(sted: Sted): Promise<LiveData> {
       vind: parseFloat((d.wind_speed??0).toFixed(1)),
       temp: Math.round(d.air_temperature??0),
       periode: mIdx>=0 ? Math.round(marine.hourly.wave_period?.[mIdx]??0) : 0,
+      symbol: slot?.data?.next_1_hours?.summary?.symbol_code ?? slot?.data?.next_6_hours?.summary?.symbol_code ?? 'clearsky_day',
+      symbol: slot?.data?.next_1_hours?.summary?.symbol_code ?? slot?.data?.next_6_hours?.summary?.symbol_code ?? 'clearsky_day',
     }
   })
   return {
@@ -221,6 +223,113 @@ function Stat({ label, value, sub, farge }: { label:string;value:string;sub?:str
       <div style={{fontSize:26,fontWeight:300,color:farge||'#0a2a3d',lineHeight:1}}>{value}</div>
       {sub&&<div style={{fontSize:11,color:'#94a3b8',marginTop:4}}>{sub}</div>}
     </div>
+  )
+}
+
+function VærIkon({ symbol, size=18 }: { symbol: string; size?: number }) {
+  // Normaliser symbol_code — fjern _day/_night/_polartwilight suffix for mapping
+  const base = symbol.replace(/_day|_night|_polartwilight/g,'')
+  const s = size
+
+  // Sol
+  if (base==='clearsky') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="4.5" fill="#fbbf24"/>
+      {[0,45,90,135,180,225,270,315].map(deg=>{
+        const r=Math.PI*deg/180
+        return <line key={deg} x1={12+7.5*Math.cos(r)} y1={12+7.5*Math.sin(r)} x2={12+9.5*Math.cos(r)} y2={12+9.5*Math.sin(r)} stroke="#fbbf24" strokeWidth="1.8" strokeLinecap="round"/>
+      })}
+    </svg>
+  )
+
+  // Delvis skyet
+  if (base==='fair'||base==='partlycloudy') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      <circle cx="9" cy="11" r="3.5" fill="#fbbf24" opacity="0.9"/>
+      {[0,60,120,180,240,300].map(deg=>{
+        const r=Math.PI*deg/180
+        return <line key={deg} x1={9+6*Math.cos(r)} y1={11+6*Math.sin(r)} x2={9+7.5*Math.cos(r)} y2={11+7.5*Math.sin(r)} stroke="#fbbf24" strokeWidth="1.5" strokeLinecap="round"/>
+      })}
+      <rect x="5" y="13" width="13" height="5" rx="2.5" fill="white" stroke="#cbd5e1" strokeWidth="0.8"/>
+      <ellipse cx="10" cy="13" rx="3.5" ry="3" fill="white" stroke="#cbd5e1" strokeWidth="0.8"/>
+      <ellipse cx="14" cy="13" rx="3" ry="2.5" fill="white" stroke="#cbd5e1" strokeWidth="0.8"/>
+    </svg>
+  )
+
+  // Overskyet
+  if (base==='cloudy') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="12" width="18" height="7" rx="3.5" fill="#94a3b8"/>
+      <ellipse cx="9" cy="12" rx="5" ry="4.5" fill="#94a3b8"/>
+      <ellipse cx="15" cy="12" rx="4.5" ry="4" fill="#94a3b8"/>
+    </svg>
+  )
+
+  // Regn
+  if (base.includes('rain')||base==='lightrain'||base==='heavyrain') {
+    const tung = base.includes('heavy')
+    return (
+      <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="6" width="18" height="7" rx="3.5" fill="#64748b"/>
+        <ellipse cx="9" cy="6" rx="5" ry="4" fill="#64748b"/>
+        <ellipse cx="15" cy="6" rx="4" ry="3.5" fill="#64748b"/>
+        {(tung?[6,10,14,18]:[8,12,16]).map(x=>(
+          <line key={x} x1={x} y1="16" x2={x-1.5} y2="20" stroke="#38bdf8" strokeWidth="1.4" strokeLinecap="round"/>
+        ))}
+      </svg>
+    )
+  }
+
+  // Sludd
+  if (base.includes('sleet')) return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="6" width="18" height="7" rx="3.5" fill="#64748b"/>
+      <ellipse cx="9" cy="6" rx="5" ry="4" fill="#64748b"/>
+      <line x1="8" y1="16" x2="6.5" y2="20" stroke="#38bdf8" strokeWidth="1.4" strokeLinecap="round"/>
+      <circle cx="13" cy="18" r="1.5" fill="#e2e8f0"/>
+      <line x1="16" y1="16" x2="14.5" y2="20" stroke="#38bdf8" strokeWidth="1.4" strokeLinecap="round"/>
+    </svg>
+  )
+
+  // Snø
+  if (base.includes('snow')) return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="6" width="18" height="7" rx="3.5" fill="#94a3b8"/>
+      <ellipse cx="9" cy="6" rx="5" ry="4" fill="#94a3b8"/>
+      {[8,12,16].map(x=>(
+        <g key={x}>
+          <line x1={x} y1="15.5" x2={x} y2="20" stroke="#bfdbfe" strokeWidth="1.3" strokeLinecap="round"/>
+          <line x1={x-1.5} y1="17" x2={x+1.5} y2="17" stroke="#bfdbfe" strokeWidth="1.3" strokeLinecap="round"/>
+        </g>
+      ))}
+    </svg>
+  )
+
+  // Torden
+  if (base.includes('thunder')) return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="5" width="18" height="7" rx="3.5" fill="#475569"/>
+      <ellipse cx="9" cy="5" rx="5" ry="4" fill="#475569"/>
+      <path d="M13 13L10 18H13L10 23" stroke="#fbbf24" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  )
+
+  // Tåke
+  if (base==='fog') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      {[8,12,16].map(y=>(
+        <line key={y} x1="3" y1={y} x2="21" y2={y} stroke="#94a3b8" strokeWidth="1.8" strokeLinecap="round" opacity={y===12?1:0.5}/>
+      ))}
+    </svg>
+  )
+
+  // Fallback — sky
+  return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="10" width="18" height="8" rx="3.5" fill="#94a3b8"/>
+      <ellipse cx="10" cy="10" rx="5" ry="4.5" fill="#94a3b8"/>
+      <ellipse cx="16" cy="10" rx="4" ry="3.5" fill="#94a3b8"/>
+    </svg>
   )
 }
 
@@ -426,7 +535,7 @@ export default function DashboardKlient() {
               <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
                 <thead>
                   <tr style={{background:'#f8fbfc'}}>
-                    {['Tid','Bolger','Periode','Vind','Temp','Vurdering'].map(h=>(
+                    {['Tid','','Bolger','Periode','Vind','Temp','Vurdering'].map(h=>(
                       <th key={h} style={{padding:'8px 14px',textAlign:'left',fontWeight:600,color:'#6b8fa3',fontSize:11,textTransform:'uppercase' as const,letterSpacing:'0.05em',borderBottom:'1px solid #f1f5f9',whiteSpace:'nowrap'}}>{h}</th>
                     ))}
                   </tr>
@@ -439,6 +548,7 @@ export default function DashboardKlient() {
                         onMouseEnter={e=>(e.currentTarget.style.background='#f8fbfc')}
                         onMouseLeave={e=>(e.currentTarget.style.background='white')}>
                         <td style={{padding:'10px 14px',fontWeight:500,color:'#0a2a3d',whiteSpace:'nowrap'}}>{t.tid}</td>
+                        <td style={{padding:'6px 8px'}}><VærIkon symbol={t.symbol} size={20}/></td>
                         <td style={{padding:'10px 14px'}}>
                           <span style={{display:'inline-flex',alignItems:'center',gap:6}}>
                             <span style={{width:7,height:7,borderRadius:'50%',background:f,flexShrink:0,display:'inline-block'}}/>
