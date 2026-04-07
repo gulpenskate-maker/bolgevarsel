@@ -23,6 +23,71 @@ const score = (bolge: number, vind: number) => {
 const FARGER = ['#22c55e','#65a30d','#f59e0b','#ea580c','#dc2626','#9f1239']
 const TEKST  = ['Flott dag på sjøen','Gode forhold','Moderat','Krevende','Farlige forhold','FAREVARSEL']
 
+const SKALA_INFO = [
+  { nivå: 0, farge: '#22c55e', tekst: 'Flott dag på sjøen', bolge: '< 1.0m', vind: '< 8 m/s', eks: 'Ideelt for alle aktiviteter' },
+  { nivå: 1, farge: '#65a30d', tekst: 'Gode forhold', bolge: '1.0–1.5m', vind: '8–11 m/s', eks: 'Passer for erfarne brukere' },
+  { nivå: 2, farge: '#f59e0b', tekst: 'Moderat', bolge: '1.5–2.0m', vind: '11–14 m/s', eks: 'Vær forsiktig, ikke for nybegynnere' },
+  { nivå: 3, farge: '#ea580c', tekst: 'Krevende', bolge: '2.0–3.0m', vind: '14–21 m/s', eks: 'Kun erfarne — vurder å bli på land' },
+  { nivå: 4, farge: '#dc2626', tekst: 'Farlige forhold', bolge: '3.0–4.0m', vind: '21–25 m/s', eks: 'Frarådes — sterk kuling' },
+  { nivå: 5, farge: '#9f1239', tekst: 'FAREVARSEL', bolge: '> 4.0m', vind: '> 25 m/s', eks: 'Livsfarlig — gå i havn umiddelbart' },
+]
+
+function FarevarselSkala({ aktivt }: { aktivt: number }) {
+  const [hov, setHov] = useState<number|null>(null)
+  const vis = hov !== null ? hov : aktivt
+  const info = SKALA_INFO[Math.min(vis, 5)]
+  return (
+    <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8}}>
+      {/* Stolpene */}
+      <div style={{display:'flex',gap:4,alignItems:'flex-end',position:'relative'}}>
+        {SKALA_INFO.map((s,i)=>(
+          <div key={i}
+            style={{
+              width:10,
+              height:10+i*7,
+              borderRadius:4,
+              background: i<=aktivt ? s.farge : 'rgba(10,42,61,0.08)',
+              border: hov===i ? '2px solid '+s.farge : '2px solid transparent',
+              cursor:'pointer',
+              transition:'all 0.15s',
+              transform: hov===i ? 'scaleY(1.08)' : 'scaleY(1)',
+              transformOrigin:'bottom',
+            }}
+            onMouseEnter={()=>setHov(i)}
+            onMouseLeave={()=>setHov(null)}
+          />
+        ))}
+      </div>
+      {/* Tooltip/forklaring */}
+      {hov!==null && (
+        <div style={{
+          position:'absolute',
+          right:0,
+          top:'100%',
+          marginTop:8,
+          background:'white',
+          borderRadius:12,
+          padding:'12px 14px',
+          boxShadow:'0 4px 20px rgba(10,42,61,0.15)',
+          border:'1px solid rgba(10,42,61,0.08)',
+          minWidth:200,
+          zIndex:50,
+        }}>
+          <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
+            <div style={{width:10,height:10,borderRadius:3,background:info.farge}}/>
+            <span style={{fontSize:13,fontWeight:600,color:info.farge}}>Nivå {vis} — {info.tekst}</span>
+          </div>
+          <div style={{fontSize:12,color:'#6b8fa3',lineHeight:1.6}}>
+            <div>Bølgehøyde: <strong style={{color:'#0a2a3d'}}>{info.bolge}</strong></div>
+            <div>Vind: <strong style={{color:'#0a2a3d'}}>{info.vind}</strong></div>
+            <div style={{marginTop:4,color:'#94a3b8',fontStyle:'italic'}}>{info.eks}</div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 async function fetchLiveData(sted: Sted): Promise<LiveData> {
   const lat = trunc(sted.latitude), lon = trunc(sted.longitude)
   const [metRes, marineRes] = await Promise.all([
@@ -322,10 +387,8 @@ export default function DashboardKlient() {
                 <div style={{fontSize:12,color:'#6b8fa3'}}>Bolger {data.bolgeHoyde.toFixed(1)}m · maks vind {data.vindMaks} m/s (neste 24t)</div>
               </div>
             </div>
-            <div style={{display:'flex',gap:5,alignItems:'flex-end'}}>
-              {[0,1,2,3,4,5].map(i=>(
-                <div key={i} style={{width:9,height:12+i*6,borderRadius:4,background:i<=s?FARGER[i]:'rgba(10,42,61,0.08)',transition:'background 0.3s'}}/>
-              ))}
+            <div style={{position:'relative'}}>
+              <FarevarselSkala aktivt={s}/>
             </div>
           </div>
 
