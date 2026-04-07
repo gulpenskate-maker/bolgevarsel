@@ -152,7 +152,8 @@ export default function DashboardKlient() {
     timer.current=setTimeout(async()=>{
       const r=await fetch('/api/steder?q='+encodeURIComponent(sok))
       const d=await r.json()
-      setSugg((d.steder||[]).slice(0,6)); setApent((d.steder||[]).length>0)
+      const steder=Array.isArray(d)?d:(d.steder||[])
+      setSugg(steder.slice(0,6)); setApent(steder.length>0)
     },300)
   },[sok])
 
@@ -229,7 +230,8 @@ export default function DashboardKlient() {
                 const nm=names[idx]; setSok(nm);setApent(false)
                 const r=await fetch('/api/steder?q='+encodeURIComponent(nm))
                 const d=await r.json()
-                if((d.steder||[]).length>0)hent(d.steder[0])
+                const st=Array.isArray(d)?d:(d.steder||[])
+                if(st.length>0)hent(st[0])
               }} style={{background:'rgba(255,255,255,0.1)',border:'0.5px solid rgba(255,255,255,0.2)',color:'rgba(255,255,255,0.75)',padding:'5px 14px',borderRadius:100,fontSize:12,cursor:'pointer'}}
                 onMouseEnter={e=>(e.currentTarget.style.background='rgba(255,255,255,0.2)')}
                 onMouseLeave={e=>(e.currentTarget.style.background='rgba(255,255,255,0.1)')}>{names[idx]}</button>
