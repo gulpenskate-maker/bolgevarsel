@@ -16,6 +16,7 @@ export default function Nav() {
         <li><a href="#pris">Priser</a></li>
         <li><a href="/varsel">Sjekk bølger</a></li>
         <li><a href="/sjokamera">Sjøkamera</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/hjelp">Hjelp</a></li>
         <li><a href="/min-side">Min side</a></li>
       </ul>
