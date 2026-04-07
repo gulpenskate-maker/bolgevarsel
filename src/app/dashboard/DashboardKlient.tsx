@@ -157,12 +157,19 @@ export default function DashboardKlient() {
     },300)
   },[sok])
 
-  const hent=useCallback(async(sted:Sted)=>{
+  const hent=useCallback(async(raw:any)=>{
+    // API returnerer {lat, lon} — mapper til {latitude, longitude} for fetchLiveData
+    const sted:Sted = {
+      name: raw.name,
+      admin1: raw.admin1,
+      latitude: raw.latitude ?? raw.lat,
+      longitude: raw.longitude ?? raw.lon,
+    }
     stedRef.current=sted
     setSok(sted.name+(sted.admin1?' — '+sted.admin1.replace(' Fylke',''):''))
     setSugg([]);setApent(false);setLoading(true);setFeil('');setData(null)
     try { const d=await fetchLiveData(sted); setData(d) }
-    catch { setFeil('Kunne ikke hente data. Prøv igjen.') }
+    catch(e) { console.error(e); setFeil('Kunne ikke hente data. Prøv igjen.') }
     setLoading(false)
   },[])
 
