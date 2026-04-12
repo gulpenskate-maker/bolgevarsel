@@ -189,14 +189,42 @@ function HourlyBars({ hourly }: { hourly: any[] }) {
 
 function DayCard({ day, profile }: { day: any; profile: string }) {
   const r = day.rating
+  const [oppsummering, setOppsummering] = React.useState<string | null>(null)
+  const [oppLoading, setOppLoading] = React.useState(false)
+
+  React.useEffect(() => {
+    setOppsummering(null)
+    setOppLoading(true)
+    fetch('/api/min-side/oppsummering', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lokasjon: day.dateLabel, profile: profile || null, day }),
+    })
+      .then(res => res.json())
+      .then(d => { if (d.tekst) setOppsummering(d.tekst) })
+      .catch(() => {})
+      .finally(() => setOppLoading(false))
+  }, [day, profile])
+
   return (
     <div style={{ background: '#f8fbfc', borderRadius: 12, padding: '14px 16px', marginBottom: 10 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <div>
-          <div style={{ fontSize: 15, fontWeight: 500, color: '#0a2a3d', textTransform: 'capitalize' }}>{day.dateLabel}</div>
-        </div>
+        <div style={{ fontSize: 15, fontWeight: 500, color: '#0a2a3d', textTransform: 'capitalize' }}>{day.dateLabel}</div>
         <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 11px', borderRadius: 100, background: r.farge + '20', color: r.farge }}>{r.tekst}</span>
       </div>
+
+      {/* AI-oppsummering */}
+      {oppLoading && (
+        <div style={{ fontSize: 13, color: '#94a3b8', fontStyle: 'italic', marginBottom: 12, padding: '10px 12px', background: 'white', borderRadius: 8 }}>
+          Henter oppsummering...
+        </div>
+      )}
+      {oppsummering && (
+        <p style={{ margin: '0 0 12px', fontSize: 13, color: '#334155', lineHeight: 1.65, background: 'white', borderRadius: 8, padding: '10px 12px', borderLeft: `3px solid ${r.farge}` }}>
+          {oppsummering}
+        </p>
+      )}
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 6, marginBottom: 12 }}>
         {[
           { label: 'Bølger snitt', val: `${day.avgWave.toFixed(1)}m`, sub: `maks ${day.maxWave.toFixed(1)}m` },
