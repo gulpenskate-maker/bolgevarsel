@@ -63,6 +63,7 @@ function fareIndikator(score: number): { farge: string; ikon: string } {
 
 function profileRating(profile: string | null, w: any) {
   const wind = w.windNow, windMax = w.windMax, wave = w.avgWave, period = w.avgPeriod
+  const precip = w.totalPrecip ?? 0
   let score: number
   let tekst: string
 
@@ -129,7 +130,14 @@ function profileRating(profile: string | null, w: any) {
   }
 
   const { farge } = fareIndikator(score)
-  return { score, tekst, farge }
+
+  // Nedbør overstyrer aldri farefargen oppover, men kan trekke ned scoren
+  if (precip >= 10 && score < 3) { score = 3; tekst = 'Mye nedbør — ta regntøy' }
+  else if (precip >= 20 && score < 4) { score = 4; tekst = 'Kraftig nedbør — ikke ideelt' }
+  else if (precip >= 5 && score < 2) { score = 2; tekst = tekst + ' — noe nedbør' }
+
+  const { farge: fargeFinal } = fareIndikator(score)
+  return { score, tekst, farge: fargeFinal }
 }
 
 export async function GET(req: NextRequest) {
@@ -244,7 +252,7 @@ export async function GET(req: NextRequest) {
     const waveDirDeg = hasBw
       ? (bwDayWave[Math.floor(bwDayWave.length / 2)]?.totalMeanWaveDirection ?? wD[midI] ?? 0)
       : (wD[midI] ?? 0)
-    const w = { avgWave, maxWave, avgPeriod, waveDir: waveDirDeg, windNow, windDir, windMax, temp, seaTemp: sst.current?.sea_surface_temperature ?? null }
+    const w = { avgWave, maxWave, avgPeriod, waveDir: waveDirDeg, windNow, windDir, windMax, temp, seaTemp: sst.current?.sea_surface_temperature ?? null, totalPrecip }
     const rating = profileRating(profile, w)
 
     const bestH = hourly.reduce((b, h) => {
