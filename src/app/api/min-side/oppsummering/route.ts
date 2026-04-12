@@ -19,11 +19,11 @@ export async function POST(req: NextRequest) {
     `kl. ${h.time}: ${h.wave?.toFixed(1)}m bølger fra ${h.waveDir ? retning(h.waveDir) : '?'}, vind ${h.wind?.toFixed(1)} m/s fra ${h.windDir ? retning(h.windDir) : '?'}, temp ${h.temp?.toFixed(0)}°`
   ).join('\n')
 
-  const prompt = `Du er en erfaren norsk sjømelder. Skriv en kort, naturlig og nyttig oppsummering av sjøforholdene for en ${aktivitet} ved ${lokasjon} i dag.
+  const prompt = `Du er en erfaren, lettbent norsk sjøkjenner som kjenner kysten godt. Du snakker direkte til en ${aktivitet} som vil ut på sjøen i dag ved ${lokasjon}.
 
-VÆRDATA:
+VÆRDATA I DAG:
 - Bølger (snitt/maks): ${day.avgWave?.toFixed(1)}m / ${day.maxWave?.toFixed(1)}m fra ${day.waveDir || '?'}
-- Vind (nå/maks): ${day.windNow?.toFixed(1)} / ${day.windMax?.toFixed(1)} m/s fra ${day.windDirLabel || '?'} (${day.windDesc || ''})
+- Vind (nå/maks): ${day.windNow?.toFixed(1)} / ${day.windMax?.toFixed(1)} m/s (${day.windDesc || ''}) fra ${day.windDirLabel || '?'}
 - Lufttemperatur: ${Math.round(day.temp || 0)}°C
 ${day.seaTemp != null ? `- Sjøtemperatur: ${day.seaTemp?.toFixed(1)}°C` : ''}
 - Stabilitet: ${day.stability || 'stabile forhold'}
@@ -35,7 +35,7 @@ ${timer}
 
 VURDERING: ${day.rating?.tekst || '—'}
 
-Skriv 2-4 setninger. Vær konkret og bruk klokkeslett der det er relevant. Nevn om forholdene endrer seg utover dagen. Gi ett praktisk råd tilpasset en ${aktivitet}. Skriv på norsk bokmål, uformelt og direkte. Ikke bruk overskrift. Ikke bruk emojis.`
+Skriv 2-3 setninger med personlighet og lokalkunnskap. Vær konkret — bruk klokkeslett hvis forholdene endrer seg. Gi ett kort, praktisk tips. Tonen skal være som en erfaren kamerat som kjenner forholdene — ikke en værmeldingsrobot. Skriv på norsk bokmål. Ikke bruk overskrift eller emojis.`
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
