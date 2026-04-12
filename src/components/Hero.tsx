@@ -178,7 +178,7 @@ export default function Hero() {
         <g><line x1="900" y1="550" x2="900" y2="520" stroke="#8a7a6a" strokeWidth="1.5"/><path d="M900 550 L878 545 L900 525 Z" fill="rgba(255,255,255,0.85)"/><path d="M900 550 L920 545 L900 535 Z" fill="rgba(255,255,255,0.6)"/><path d="M882 550 Q900 554 918 550" fill="#5a4a3a"/></g>
       </svg>
       <div className={styles.content}>
-        <div className={styles.eyebrow}><span className={styles.line}/>Sjøvarseltjeneste for norskekysten<span className={styles.line}/></div>
+        <div className={styles.eyebrow}><span className={styles.line}/>Norsk sjøvarseltjeneste — fra Lindesnes til Nordkapp<span className={styles.line}/></div>
         <h1 className={styles.h1}>Sjøvarsel rett i <em>lomma</em></h1>
         <p className={styles.sub}>Bølger, vind og temperatur for din kystlokasjon — levert på SMS og e-post når du vil. Kritisk farevarsel er alltid på.</p>
         <div className={styles.actions}>
