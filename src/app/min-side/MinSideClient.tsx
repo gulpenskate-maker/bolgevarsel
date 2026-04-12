@@ -116,6 +116,8 @@ export default function MinSideClient() {
   const [editRec, setEditRec] = useState<Rec|null>(null)
   const [editPhone, setEditPhone] = useState('')
   const [editName, setEditName] = useState('')
+  const [editEmail, setEditEmail] = useState('')
+  const [editProfile, setEditProfile] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newName, setNewName] = useState('')
   const [newLocId, setNewLocId] = useState('')
@@ -237,7 +239,7 @@ export default function MinSideClient() {
   async function saveEditRec(e: React.FormEvent) {
     e.preventDefault(); if (!editRec) return
     const r = await fetch('/api/min-side/recipient/update', { method:'PATCH', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ id:editRec.id, subscriber_id:sub!.id, phone:editPhone, name:editName }) })
+      body: JSON.stringify({ id:editRec.id, subscriber_id:sub!.id, phone:editPhone, name:editName, email:editEmail||null, profile:editProfile||null }) })
     const d = await r.json()
     if (d.recipient) { setRecs(recs.map(r=>r.id===editRec.id ? d.recipient : r)); setEditRec(null) }
   }
@@ -609,12 +611,41 @@ export default function MinSideClient() {
                       {recs.map(rec=>(
                         <tr key={rec.id} style={{borderTop:'1px solid rgba(10,42,61,0.06)'}}>
                           {editRec?.id===rec.id ? (
-                            <td colSpan={7} style={{padding:'8px 0'}}>
-                              <form onSubmit={saveEditRec} style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
-                                <input style={{...S.inp,flex:1,minWidth:120}} placeholder="Navn" value={editName} onChange={e=>setEditName(e.target.value)} />
-                                <input style={{...S.inp,flex:1,minWidth:140}} placeholder="Telefon" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
-                                <button style={{...S.btnPrimary,padding:'6px 12px'}} type="submit">Lagre</button>
-                                <button style={{...S.btnGhost,padding:'6px 12px'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
+                            <td colSpan={7} style={{padding:'10px 0'}}>
+                              <form onSubmit={saveEditRec} style={{display:'flex',flexDirection:'column',gap:'8px'}}>
+                                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}}>
+                                  <div>
+                                    <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Navn</div>
+                                    <input style={{...S.inp}} placeholder="Navn" value={editName} onChange={e=>setEditName(e.target.value)} />
+                                  </div>
+                                  <div>
+                                    <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Telefon</div>
+                                    <input style={{...S.inp}} placeholder="Telefon" value={editPhone} onChange={e=>setEditPhone(e.target.value)} required />
+                                  </div>
+                                  <div>
+                                    <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>E-postadresse</div>
+                                    <input style={{...S.inp}} placeholder="epost@eksempel.no" type="email" value={editEmail} onChange={e=>setEditEmail(e.target.value)} />
+                                  </div>
+                                  <div>
+                                    <div style={{fontSize:11,color:'#6b8fa3',marginBottom:3}}>Aktivitetsprofil</div>
+                                    <select style={{...S.inp}} value={editProfile} onChange={e=>setEditProfile(e.target.value)}>
+                                      <option value="">Generell sjørapport</option>
+                                      <option value="surfer">Surfer</option>
+                                      <option value="kitesurfer">Kitesurfer</option>
+                                      <option value="windsurfer">Windsurfer</option>
+                                      <option value="fisker">Fisker</option>
+                                      <option value="familie">Barn/ungdom med båt</option>
+                                      <option value="baatforer">Båtfører</option>
+                                      <option value="kajakk">Padler / kajakk</option>
+                                      <option value="seiler">Seiler</option>
+                                      <option value="fridykker">Fridykker / snorkling</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div style={{display:'flex',gap:'8px'}}>
+                                  <button style={{...S.btnPrimary,padding:'7px 16px'}} type="submit">Lagre</button>
+                                  <button style={{...S.btnGhost,padding:'7px 16px'}} type="button" onClick={()=>setEditRec(null)}>Avbryt</button>
+                                </div>
                               </form>
                             </td>
                           ) : (<>
@@ -652,7 +683,7 @@ export default function MinSideClient() {
                               <button style={S.btnGhost} onClick={()=>toggleSmsDaily(rec)} title="Skru daglig SMS av/på">
                                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M3 5h7M3 7.5h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/></svg>
                               </button>
-                              <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'')}} title="Rediger">
+                              <button style={S.btnGhost} onClick={()=>{setEditRec(rec);setEditPhone(rec.phone);setEditName(rec.name||'');setEditEmail((rec as any).email||'');setEditProfile(rec.profile||'')}} title="Rediger">
                                 <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L5 11H3v-2l6.5-6.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                               </button>
                               <button style={S.btnDanger} onClick={()=>deleteRec(rec.id)} title="Slett">
