@@ -251,7 +251,6 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
       <HourlyBars hourly={day.hourly} />
       <div>
         {[
-          { label: 'Best tidspunkt', val: `${day.bestTime} — roligst`, green: true },
           { label: 'Soloppgang', val: day.sunrise ?? '—', sun: true },
           { label: 'Solnedgang', val: day.sunset ?? '—', sun: true },
           { label: 'Lufttemperatur', val: `${Math.round(day.temp)}°C` },
