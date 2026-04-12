@@ -196,6 +196,10 @@ export default function Hero() {
         <div className={styles.smsHeader}>
           <div className={styles.smsDot}/>
           <span className={styles.smsLabel}>Bølgevarsel · {loc.name} · {loc.date}</span>
+          <span className={styles.liveBadge}>
+            <span className={styles.liveDot}/>
+            Live
+          </span>
         </div>
         <div className={styles.smsBody}>
           {/* Bølger */}
