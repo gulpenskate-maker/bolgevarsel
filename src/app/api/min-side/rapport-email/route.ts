@@ -25,7 +25,10 @@ export async function POST(req: NextRequest) {
   <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.55)">${day.dateLabel}</p>
 </td></tr>
 <tr><td style="background:#fff;padding:28px 40px">
-  <div style="background:${day.rating?.farge || '#1a6080'}18;border-left:4px solid ${day.rating?.farge || '#1a6080'};padding:12px 14px;border-radius:0 8px 8px 0;margin-bottom:20px">
+  <div style="background:${day.rating?.farge || '#1a6080'}18;border-left:4px solid ${day.rating?.farge || '#1a6080'};padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;display:flex;align-items:center;gap:12px">
+    <div style="display:inline-flex;align-items:center;gap:6px">
+      ${[1,2,3,4,5].map(i => `<svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="7" fill="${(day.rating?.score ?? 0) >= i ? (day.rating?.farge || '#94a3b8') : '#e2e8f0'}"/></svg>`).join('')}
+    </div>
     <p style="margin:0;font-size:16px;font-weight:700;color:${day.rating?.farge || '#1a6080'}">${day.rating?.tekst || '—'}</p>
   </div>
   <table width="100%" cellpadding="0" cellspacing="4" style="margin-bottom:20px">
@@ -58,7 +61,7 @@ export async function POST(req: NextRequest) {
     method: 'POST',
     headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'Bølgevarsel <noreply@getlara.app>',
+      from: 'Bølgevarsel <noreply@bolgevarsel.no>',
       to: [email],
       subject: `${day.rating?.tekst || 'Sjørapport'} — ${locName} ${day.dateLabel}`,
       html,

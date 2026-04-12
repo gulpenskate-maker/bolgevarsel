@@ -20,57 +20,83 @@ function windDesc(s: number) {
   if (s < 21) return 'Stiv kuling'; return 'Kuling'
 }
 
+// Fareindikator 0–5:
+// 0 = Ikke aktuelt (for lite vind for seiler etc.)  → grå
+// 1 = Perfekte forhold                              → grønn #16a34a
+// 2 = Gode forhold                                  → lysgrønn #65a30d
+// 3 = Akseptable forhold — vær oppmerksom          → gul #ca8a04
+// 4 = Krevende forhold                              → oransje #ea580c
+// 5 = Farlige forhold — frarådes                    → rød #dc2626
+function fareIndikator(score: number): { farge: string; ikon: string } {
+  if (score === 0) return { farge: '#94a3b8', ikon: '—' }
+  if (score === 1) return { farge: '#16a34a', ikon: '●' }
+  if (score === 2) return { farge: '#65a30d', ikon: '●' }
+  if (score === 3) return { farge: '#ca8a04', ikon: '●' }
+  if (score === 4) return { farge: '#ea580c', ikon: '●' }
+  return { farge: '#dc2626', ikon: '●' }
+}
+
 function profileRating(profile: string | null, w: any) {
   const wind = w.windNow, windMax = w.windMax, wave = w.avgWave, period = w.avgPeriod
+  let score: number
+  let tekst: string
+
   if (profile === 'surfer') {
-    if (wave < 0.3) return { score: 0, tekst: 'For små bølger', farge: '#94a3b8' }
-    if (wave >= 0.5 && wave <= 2.5 && period >= 9 && wind < 8) return { score: 5, tekst: 'Perfekte surfeforhold!', farge: '#16a34a' }
-    if (wave >= 0.5 && wave <= 3.0 && period >= 7 && wind < 12) return { score: 4, tekst: 'Bra surfeforhold', farge: '#65a30d' }
-    if (wave >= 0.3 && wind < 15) return { score: 3, tekst: 'Greit for erfarne', farge: '#ca8a04' }
-    return { score: 2, tekst: 'Middels forhold', farge: '#ca8a04' }
-  }
-  if (profile === 'seiler') {
-    if (wind < 3) return { score: 0, tekst: 'For lite vind', farge: '#94a3b8' }
-    if (windMax >= 20.8 || wave >= 3.0) return { score: 1, tekst: 'Bli i havn', farge: '#dc2626' }
-    if (wind >= 8 && wind <= 15 && windMax < 18 && wave < 1.5) return { score: 5, tekst: 'Perfekte seilingsforhold!', farge: '#16a34a' }
-    if (wind >= 5 && wind <= 18 && windMax < 20) return { score: 4, tekst: 'Gode seilingsforhold', farge: '#65a30d' }
-    return { score: 3, tekst: 'Akseptable forhold', farge: '#ca8a04' }
-  }
-  if (profile === 'fisker') {
-    if (windMax >= 13.9 || wave >= 2.0) return { score: 1, tekst: 'Ikke anbefalt', farge: '#dc2626' }
-    if (windMax < 8 && wave < 0.8) return { score: 5, tekst: 'Perfekte fiskeforhold', farge: '#16a34a' }
-    if (windMax < 10.8 && wave < 1.5) return { score: 4, tekst: 'Gode fiskeforhold', farge: '#65a30d' }
-    return { score: 3, tekst: 'Akseptable fiskeforhold', farge: '#ca8a04' }
-  }
-  if (profile === 'kajakk') {
-    if (windMax >= 10.8 || wave >= 1.0) return { score: 1, tekst: 'Ikke anbefalt', farge: '#dc2626' }
-    if (wind < 4 && wave < 0.4) return { score: 5, tekst: 'Perfekte padleforhold!', farge: '#16a34a' }
-    if (wind < 7 && wave < 0.7) return { score: 4, tekst: 'Gode padleforhold', farge: '#65a30d' }
-    return { score: 3, tekst: 'Kun erfarne padlere', farge: '#ca8a04' }
-  }
-  if (profile === 'fridykker') {
+    if (wave < 0.3) { score = 0; tekst = 'For små bølger' }
+    else if (wave >= 0.5 && wave <= 2.5 && period >= 9 && wind < 8) { score = 1; tekst = 'Perfekte surfeforhold!' }
+    else if (wave >= 0.5 && wave <= 3.0 && period >= 7 && wind < 12) { score = 2; tekst = 'Gode surfeforhold' }
+    else if (wave >= 0.3 && wind < 15) { score = 3; tekst = 'Akseptabelt — kun erfarne' }
+    else if (wave >= 3.0 || wind >= 15) { score = 4; tekst = 'Krevende — stor sjø' }
+    else { score = 5; tekst = 'Farlige forhold — frarådes' }
+  } else if (profile === 'seiler') {
+    if (wind < 3) { score = 0; tekst = 'For lite vind' }
+    else if (windMax >= 24.5 || wave >= 4.0) { score = 5; tekst = 'Farlige forhold — bli i havn' }
+    else if (windMax >= 20.8 || wave >= 3.0) { score = 4; tekst = 'Krevende — erfarne seglere' }
+    else if (wind >= 8 && wind <= 15 && windMax < 18 && wave < 1.5) { score = 1; tekst = 'Perfekte seilingsforhold!' }
+    else if (wind >= 5 && wind <= 18 && windMax < 20) { score = 2; tekst = 'Gode seilingsforhold' }
+    else { score = 3; tekst = 'Akseptable forhold — vær oppmerksom' }
+  } else if (profile === 'fisker') {
+    if (windMax >= 24.5 || wave >= 3.0) { score = 5; tekst = 'Farlige forhold — frarådes' }
+    else if (windMax >= 13.9 || wave >= 2.0) { score = 4; tekst = 'Krevende fiskeforhold' }
+    else if (windMax < 8 && wave < 0.8) { score = 1; tekst = 'Perfekte fiskeforhold!' }
+    else if (windMax < 10.8 && wave < 1.5) { score = 2; tekst = 'Gode fiskeforhold' }
+    else { score = 3; tekst = 'Akseptable fiskeforhold' }
+  } else if (profile === 'kajakk') {
+    if (windMax >= 13.9 || wave >= 1.5) { score = 5; tekst = 'Farlige forhold — frarådes' }
+    else if (windMax >= 10.8 || wave >= 1.0) { score = 4; tekst = 'Krevende — kun erfarne' }
+    else if (wind < 4 && wave < 0.4) { score = 1; tekst = 'Perfekte padleforhold!' }
+    else if (wind < 7 && wave < 0.7) { score = 2; tekst = 'Gode padleforhold' }
+    else { score = 3; tekst = 'Akseptabelt — vær oppmerksom' }
+  } else if (profile === 'fridykker') {
     const st = w.seaTemp
-    if (windMax >= 8.0 || wave >= 0.8) return { score: 1, tekst: 'For urolig', farge: '#dc2626' }
-    if (wave < 0.3 && wind < 4 && st !== null && st >= 14) return { score: 5, tekst: 'Perfekte dykkforhold!', farge: '#16a34a' }
-    if (wave < 0.5 && wind < 6) return { score: 4, tekst: 'Gode dykkforhold', farge: '#65a30d' }
-    return { score: 3, tekst: 'Akseptabelt', farge: '#ca8a04' }
+    if (windMax >= 13.9 || wave >= 1.5) { score = 5; tekst = 'Farlige forhold — frarådes' }
+    else if (windMax >= 8.0 || wave >= 0.8) { score = 4; tekst = 'Krevende — for urolig' }
+    else if (wave < 0.3 && wind < 4 && st !== null && st >= 14) { score = 1; tekst: 'Perfekte dykkforhold!' }
+    else if (wave < 0.5 && wind < 6) { score = 2; tekst = 'Gode dykkforhold' }
+    else { score = 3; tekst = 'Akseptabelt — vær oppmerksom' }
+  } else if (profile === 'familie') {
+    if (windMax >= 13.9 || wave >= 2.0) { score = 5; tekst = 'Farlige forhold — frarådes' }
+    else if (windMax >= 10.8 || wave >= 1.2) { score = 4; tekst = 'Krevende — ikke trygt for barn' }
+    else if (wave < 0.5 && wind < 6) { score = 1; tekst = 'Perfekt for familien!' }
+    else if (wave < 0.8 && wind < 8) { score = 2; tekst = 'Rolig og trygt' }
+    else { score = 3; tekst = 'Akseptabelt — hold ungene nær land' }
+  } else if (profile === 'baatforer') {
+    if (windMax >= 24.5 || wave >= 4.0) { score = 5; tekst = 'Farlige forhold — bli i havn' }
+    else if (windMax >= 20.8 || wave >= 3.0) { score = 4; tekst = 'Krevende navigasjonsforhold' }
+    else if (windMax < 8 && wave < 0.8) { score = 1; tekst = 'Perfekte navigasjonsforhold!' }
+    else if (windMax < 14 && wave < 1.5) { score = 2; tekst = 'Gode navigasjonsforhold' }
+    else { score = 3; tekst = 'Akseptable forhold — vær oppmerksom' }
+  } else {
+    // Standard / ingen profil
+    if (windMax >= 24.5 || wave >= 4.0) { score = 5; tekst = 'Farlige forhold — frarådes' }
+    else if (windMax >= 13.9 || wave >= 2.0) { score = 4; tekst = 'Krevende forhold' }
+    else if (wave < 0.5 && windMax < 8) { score = 1; tekst = 'Perfekte forhold' }
+    else if (wave < 1.5 && windMax < 13) { score = 2; tekst = 'Gode forhold' }
+    else { score = 3; tekst = 'Akseptable forhold — vær oppmerksom' }
   }
-  if (profile === 'familie') {
-    if (windMax >= 10.8 || wave >= 1.2) return { score: 1, tekst: 'Ikke trygt for barn', farge: '#dc2626' }
-    if (wave < 0.5 && wind < 6) return { score: 5, tekst: 'Perfekt for familien!', farge: '#16a34a' }
-    if (wave < 0.8 && wind < 8) return { score: 4, tekst: 'Rolig og trygt', farge: '#65a30d' }
-    return { score: 3, tekst: 'Hold ungene nær land', farge: '#ca8a04' }
-  }
-  if (profile === 'baatforer') {
-    if (windMax >= 20.8 || wave >= 3.0) return { score: 1, tekst: 'Bli i havn', farge: '#dc2626' }
-    if (windMax < 8 && wave < 0.8) return { score: 5, tekst: 'Utmerkede forhold', farge: '#16a34a' }
-    return { score: 4, tekst: 'Gode seilingsforhold', farge: '#65a30d' }
-  }
-  // Standard
-  if (windMax >= 24.5 || wave >= 4.0) return { score: 5, tekst: 'FAREVARSEL', farge: '#dc2626' }
-  if (windMax >= 13.9 || wave >= 2.0) return { score: 3, tekst: 'Kuling ventes', farge: '#ea580c' }
-  if (wave < 0.5 && windMax < 8) return { score: 1, tekst: 'Stille hav', farge: '#16a34a' }
-  return { score: 2, tekst: 'Moderat sjø', farge: '#ca8a04' }
+
+  const { farge } = fareIndikator(score)
+  return { score, tekst, farge }
 }
 
 export async function GET(req: NextRequest) {
