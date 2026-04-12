@@ -306,16 +306,34 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
   const [rapport, setRapport] = useState<any[] | null>(null)
   const [sendingEmail, setSendingEmail] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const [flerdagOppsummering, setFlerdagOppsummering] = useState<string | null>(null)
+  const [flerdagLoading, setFlerdagLoading] = useState(false)
 
   const selectedLoc = locs.find(l => l.id === locId)
 
   async function generer() {
     if (!selectedLoc) return
     setLoading(true); setRapport(null); setEmailSent(false)
+    setFlerdagOppsummering(null)
     try {
       const r = await fetch(`/api/min-side/rapport?lat=${selectedLoc.lat}&lon=${selectedLoc.lon}&days=${days}&profile=${profile}`)
       const d = await r.json()
-      if (d.ok) setRapport(d.days)
+      if (d.ok) {
+        setRapport(d.days)
+        // Hent flerdag-oppsummering hvis mer enn 1 dag
+        if (parseInt(days) > 1) {
+          setFlerdagLoading(true)
+          fetch('/api/min-side/oppsummering-flerdag', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ lokasjon: selectedLoc.name, profile: profile || null, days: d.days }),
+          })
+            .then(res => res.json())
+            .then(od => { if (od.tekst) setFlerdagOppsummering(od.tekst) })
+            .catch(() => {})
+            .finally(() => setFlerdagLoading(false))
+        }
+      }
     } finally { setLoading(false) }
   }
 
@@ -400,6 +418,29 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
               </button>
             </div>
           </div>
+          {/* Flerdag-oppsummering */}
+          {parseInt(days) > 1 && (flerdagLoading || flerdagOppsummering) && (
+            <div style={{ background: '#0a2a3d', borderRadius: 12, padding: '14px 16px', marginBottom: 12 }}>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+                Oversikt — {PERIODER.find(p => p.value === days)?.label}
+              </div>
+              {flerdagLoading ? (
+                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontStyle: 'italic' }}>Analyserer perioden...</div>
+              ) : (
+                <>
+                  <p style={{ margin: '0 0 8px', fontSize: 14, color: 'rgba(255,255,255,0.9)', lineHeight: 1.65 }}>{flerdagOppsummering}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                      <circle cx="5.5" cy="5.5" r="4.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="none"/>
+                      <path d="M3.5 5.5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeLinecap="round" fill="none"/>
+                      <circle cx="5.5" cy="3.5" r=".5" fill="rgba(255,255,255,0.3)"/>
+                    </svg>
+                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)' }}>Generert av AI — kan inneholde feil. Sjekk alltid offisielle farevarsler.</span>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
           {rapport.map((day, i) => <DayCard key={i} day={day} profile={profile} />)}
           <button style={{ ...S.btnG, width: '100%', justifyContent: 'center', marginTop: 4 }} onClick={() => setRapport(null)}>
             Ny rapport
