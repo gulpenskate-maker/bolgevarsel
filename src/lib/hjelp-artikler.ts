@@ -41,9 +41,9 @@ export const ARTIKLER: Record<string, Artikkel> = {
 <th style="padding:10px;text-align:left;border-bottom:2px solid #e2e8f0">SMS</th>
 </tr></thead>
 <tbody>
-<tr><td style="padding:10px;border-bottom:1px solid #f1f5f9"><strong>Kyst</strong></td><td style="padding:10px;border-bottom:1px solid #f1f5f9">49 kr/mnd</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">3</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">Kun e-post</td></tr>
-<tr><td style="padding:10px;border-bottom:1px solid #f1f5f9"><strong>Familie</strong></td><td style="padding:10px;border-bottom:1px solid #f1f5f9">179 kr/mnd</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">1</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">Opptil 3 mottakere</td></tr>
-<tr><td style="padding:10px"><strong>Pro</strong></td><td style="padding:10px">299 kr/mnd</td><td style="padding:10px">3</td><td style="padding:10px">Opptil 5 mottakere</td></tr>
+<tr><td style="padding:10px;border-bottom:1px solid #f1f5f9"><strong>Kyst</strong></td><td style="padding:10px;border-bottom:1px solid #f1f5f9">49 kr/mnd</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">1</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">Kun e-post</td></tr>
+<tr><td style="padding:10px;border-bottom:1px solid #f1f5f9"><strong>Familie</strong></td><td style="padding:10px;border-bottom:1px solid #f1f5f9">179 kr/mnd</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">3</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">Opptil 5 mottakere</td></tr>
+<tr><td style="padding:10px"><strong>Pro</strong></td><td style="padding:10px">299 kr/mnd</td><td style="padding:10px">5</td><td style="padding:10px">Opptil 5 mottakere</td></tr>
 </tbody>
 </table>
 <h2>Velg Kyst hvis du...</h2>
@@ -91,9 +91,9 @@ export const ARTIKLER: Record<string, Artikkel> = {
 <p>Vi bruker koordinatene fra stedsnavnet du velger. Jo mer spesifikt sted du søker, desto mer nøyaktige blir værdataene. For en hytte i en vik kan det lønne seg å søke på det nærmeste tettstedet.</p>
 <h2>Antall lokasjoner per plan</h2>
 <ul>
-<li><strong>Kyst:</strong> opptil 3 lokasjoner</li>
-<li><strong>Familie:</strong> 1 lokasjon</li>
-<li><strong>Pro:</strong> opptil 3 lokasjoner</li>
+<li><strong>Kyst:</strong> 1 lokasjon</li>
+<li><strong>Familie:</strong> opptil 3 lokasjoner</li>
+<li><strong>Pro:</strong> opptil 5 lokasjoner</li>
 </ul>
 <p style="margin-top:1.5rem;padding:1rem;background:#f0f8fc;border-radius:12px;font-size:0.9rem">💡 <strong>Tips:</strong> Du må legge til minst én lokasjon før du kan legge til mottakere.</p>
 `,
