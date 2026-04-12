@@ -18,6 +18,7 @@ function byggPrompt(aktivitet: string, profile: string | null, lokasjon: string,
 - Stabilitet: ${day.stability || 'stabile forhold'}${day.tomorrowForecast ? `\n- I morgen: ${day.tomorrowForecast.wind?.toFixed(1)} m/s vind, ${day.tomorrowForecast.wave?.toFixed(1)}m bølger` : ''}
 
 VIKTIG: Ikke referer til høytider, helligdager eller spesielle anledninger. Hold deg til værdata og aktivitetsråd.
+${day.totalPrecip > 5 ? `VIKTIG: Det er varslet ${day.precipDesc} denne dagen. Dette MÅ nevnes i oppsummeringen — kraftig nedbør påvirker komfort, sikt og sikkerheten på sjøen.` : day.totalPrecip > 1 ? `Merk: Det er varslet ${day.precipDesc}. Nevn dette kort.` : ''}
 
 TIMESVARSEL:
 ${timer}
