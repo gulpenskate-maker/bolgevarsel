@@ -435,12 +435,16 @@ export default function MinSideClient() {
 
               {/* Stat-grid */}
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6,marginBottom:10}}>
-                <div style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center'}}>
+                <div onClick={()=>setActiveTab('konto')} style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center',cursor:'pointer',transition:'background 0.15s'}}
+                  onMouseEnter={e=>(e.currentTarget.style.background='#e8f4f8')}
+                  onMouseLeave={e=>(e.currentTarget.style.background='#f8fbfc')}>
                   <div style={{fontSize:11,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:3}}>Rapporttidspunkt</div>
                   <div style={{fontSize:22,fontWeight:300,color:'#0a2a3d'}}>{sendTime}</div>
                   <div style={{fontSize:11,color:'#6b8fa3',marginTop:2}}>daglig</div>
                 </div>
-                <div style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center'}}>
+                <div onClick={()=>setActiveTab('mottakere')} style={{background:'#f8fbfc',borderRadius:8,padding:'8px 10px',textAlign:'center',cursor:'pointer',transition:'background 0.15s'}}
+                  onMouseEnter={e=>(e.currentTarget.style.background='#e8f4f8')}
+                  onMouseLeave={e=>(e.currentTarget.style.background='#f8fbfc')}>
                   <div style={{fontSize:11,color:'#6b8fa3',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:3}}>Mottakere</div>
                   <div style={{fontSize:22,fontWeight:300,color:'#0a2a3d'}}>{recs.length}</div>
                   <div style={{fontSize:11,color:'#6b8fa3',marginTop:2}}>{recs.filter(r=>r.active).length} aktive</div>
