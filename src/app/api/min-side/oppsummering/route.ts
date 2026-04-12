@@ -9,13 +9,14 @@ function retning(deg: number): string {
 }
 
 function byggPrompt(aktivitet: string, profile: string | null, lokasjon: string, day: any, timer: string): string {
-  const base = `VÆRDATA FOR ${lokasjon.toUpperCase()} I DAG:
+  const base = `VÆRDATA FOR ${lokasjon.toUpperCase()} — ${day.dateLabel?.toUpperCase() || new Date().toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase()}:
 - Bølger (snitt/maks): ${day.avgWave?.toFixed(1)}m / ${day.maxWave?.toFixed(1)}m fra ${day.waveDir || '?'}
 - Bølgeperiode: ${day.avgPeriod?.toFixed(0) ?? '?'}s
 - Vind (nå/maks): ${day.windNow?.toFixed(1)} / ${day.windMax?.toFixed(1)} m/s fra ${day.windDirLabel || '?'} (${day.windDesc || ''})
 - Lufttemperatur: ${Math.round(day.temp || 0)}°C${day.seaTemp != null ? `\n- Sjøtemperatur: ${day.seaTemp?.toFixed(1)}°C` : ''}
-- Stabilitet: ${day.stability || 'stabile forhold'}
-- Beste tidspunkt: ${day.bestTime || '—'}${day.tomorrowForecast ? `\n- I morgen: ${day.tomorrowForecast.wind?.toFixed(1)} m/s vind, ${day.tomorrowForecast.wave?.toFixed(1)}m bølger` : ''}
+- Stabilitet: ${day.stability || 'stabile forhold'}${day.tomorrowForecast ? `\n- I morgen: ${day.tomorrowForecast.wind?.toFixed(1)} m/s vind, ${day.tomorrowForecast.wave?.toFixed(1)}m bølger` : ''}
+
+VIKTIG: Ikke referer til høytider, helligdager eller spesielle anledninger. Hold deg til værdata og aktivitetsråd.
 
 TIMESVARSEL:
 ${timer}
