@@ -220,9 +220,19 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
         </div>
       )}
       {oppsummering && (
-        <p style={{ margin: '0 0 12px', fontSize: 13, color: '#334155', lineHeight: 1.65, background: 'white', borderRadius: 8, padding: '10px 12px', borderLeft: `3px solid ${r.farge}` }}>
-          {oppsummering}
-        </p>
+        <div style={{ marginBottom: 12 }}>
+          <p style={{ margin: '0 0 4px', fontSize: 13, color: '#334155', lineHeight: 1.65, background: 'white', borderRadius: 8, padding: '10px 12px', borderLeft: `3px solid ${r.farge}` }}>
+            {oppsummering}
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, paddingLeft: 4 }}>
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+              <circle cx="5.5" cy="5.5" r="4.5" stroke="#94a3b8" strokeWidth="1" fill="none"/>
+              <path d="M3.5 5.5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2" stroke="#94a3b8" strokeWidth="1" strokeLinecap="round" fill="none"/>
+              <circle cx="5.5" cy="3.5" r=".5" fill="#94a3b8"/>
+            </svg>
+            <span style={{ fontSize: 10, color: '#94a3b8' }}>Generert av AI — kan inneholde feil. Sjekk alltid offisielle farevarsler.</span>
+          </div>
+        </div>
       )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 6, marginBottom: 12 }}>
