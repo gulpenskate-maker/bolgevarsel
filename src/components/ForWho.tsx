@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import styles from './ForWho.module.css'
 
 const personas = [
@@ -105,28 +105,9 @@ const personas = [
   },
 ]
 
-const CARD_WIDTH = 340 + 20 // kortbredde + gap
-
 export default function ForWho() {
-  const sliderRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
-
-  function scrollTo(index: number) {
-    const el = sliderRef.current
-    if (!el) return
-    el.scrollTo({ left: index * CARD_WIDTH, behavior: 'smooth' })
-    setActive(index)
-  }
-
-  function prev() { scrollTo(Math.max(0, active - 1)) }
-  function next() { scrollTo(Math.min(personas.length - 1, active + 1)) }
-
-  function onScroll() {
-    const el = sliderRef.current
-    if (!el) return
-    const idx = Math.round(el.scrollLeft / CARD_WIDTH)
-    setActive(idx)
-  }
+  const p = personas[active]
 
   return (
     <section className={styles.wrap}>
@@ -137,47 +118,50 @@ export default function ForWho() {
           <p className={styles.subtitle}>Samme tjeneste — tilpasset din aktivitet. Bølgevarsel forstår hva som faktisk betyr noe for deg på sjøen.</p>
         </div>
 
-        <div className={styles.sliderWrap}>
-          <div className={styles.slider} ref={sliderRef} onScroll={onScroll}>
-            {personas.map((p) => (
-              <div key={p.tittel} className={styles.card}>
-                <div className={styles.imgWrap}>
-                  <Image src={p.img} alt={p.imgAlt} fill className={styles.img} style={{ objectFit: 'cover' }} />
-                  <div className={styles.imgOverlay} />
-                  <span className={styles.tagOverlay}>{p.tag}</span>
+        {/* Tabs */}
+        <div className={styles.tabs}>
+          {personas.map((per, i) => (
+            <button key={i} className={`${styles.tab} ${i === active ? styles.tabActive : ''}`} onClick={() => setActive(i)}>
+              {per.tag.replace('For ', '')}
+            </button>
+          ))}
+        </div>
+
+        {/* Kort */}
+        <div className={styles.card}>
+          <div className={styles.imgWrap}>
+            <Image src={p.img} alt={p.imgAlt} fill className={styles.img} style={{ objectFit: 'cover' }} priority />
+            <div className={styles.imgOverlay} />
+          </div>
+          <div className={styles.cardContent}>
+            <span className={styles.tagOverlay}>{p.tag}</span>
+            <h3 className={styles.cardTitle}>{p.tittel}</h3>
+            <p className={styles.cardText}>{p.beskrivelse}</p>
+            <div className={styles.datapunkter}>
+              {p.datapunkter.map((d, i) => (
+                <div key={i} className={styles.datapunkt}>
+                  <span className={styles.datapunktIkon}>{d.ikon}</span>
+                  <span className={styles.datapunktTekst}>{d.tekst}</span>
                 </div>
-                <div className={styles.cardContent}>
-                  <h3 className={styles.cardTitle}>{p.tittel}</h3>
-                  <p className={styles.cardText}>{p.beskrivelse}</p>
-                  <div className={styles.datapunkter}>
-                    {p.datapunkter.map((d, i) => (
-                      <div key={i} className={styles.datapunkt}>
-                        <span className={styles.datapunktIkon}>{d.ikon}</span>
-                        <span className={styles.datapunktTekst}>{d.tekst}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <blockquote className={styles.sitat}>{p.sitat}</blockquote>
-                  <Link href="/registrer" className={styles.cta}>
-                    Prøv gratis i 7 dager →
-                  </Link>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <blockquote className={styles.sitat}>{p.sitat}</blockquote>
+            <Link href="/registrer" className={styles.cta}>Prøv gratis i 7 dager →</Link>
           </div>
         </div>
 
+        {/* Pil-navigasjon */}
         <div className={styles.navRow}>
           <div className={styles.dots}>
             {personas.map((_, i) => (
-              <button key={i} className={`${styles.dot} ${i === active ? styles.dotActive : ''}`} onClick={() => scrollTo(i)} aria-label={`Gå til kort ${i + 1}`} />
+              <button key={i} className={`${styles.dot} ${i === active ? styles.dotActive : ''}`} onClick={() => setActive(i)} />
             ))}
           </div>
           <div className={styles.arrows}>
-            <button className={styles.arrow} onClick={prev} disabled={active === 0} aria-label="Forrige">
+            <button className={styles.arrow} onClick={() => setActive(Math.max(0, active - 1))} disabled={active === 0}>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
-            <button className={styles.arrow} onClick={next} disabled={active === personas.length - 1} aria-label="Neste">
+            <button className={styles.arrow} onClick={() => setActive(Math.min(personas.length - 1, active + 1))} disabled={active === personas.length - 1}>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
           </div>
