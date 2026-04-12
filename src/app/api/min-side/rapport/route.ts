@@ -131,10 +131,18 @@ function profileRating(profile: string | null, w: any) {
 
   const { farge } = fareIndikator(score)
 
-  // Nedbør overstyrer aldri farefargen oppover, men kan trekke ned scoren
-  if (precip >= 10 && score < 3) { score = 3; tekst = 'Mye nedbør — ta regntøy' }
-  else if (precip >= 20 && score < 4) { score = 4; tekst = 'Kraftig nedbør — ikke ideelt' }
-  else if (precip >= 5 && score < 2) { score = 2; tekst = tekst + ' — noe nedbør' }
+  // Nedbør påvirker scoren ulikt per profil
+  const precipSensitive = ['familie', 'fridykker', 'kajakk', null] // disse bryr seg om regn
+  const precipNeutral = ['fisker', 'surfer', 'kitesurfer', 'windsurfer', 'seiler', 'baatforer'] // regn er greit
+
+  if (precipSensitive.includes(profile)) {
+    if (precip >= 20 && score < 4) { score = 4; tekst = 'Kraftig nedbør — ikke ideelt' }
+    else if (precip >= 10 && score < 3) { score = 3; tekst = 'Mye nedbør — ta regntøy' }
+    else if (precip >= 5 && score < 2) { score = 2; tekst = tekst + ' — noe nedbør' }
+  } else if (precipNeutral.includes(profile)) {
+    // Kun ekstremregn (over 30mm) trekker ned for disse
+    if (precip >= 30 && score < 3) { score = 3; tekst = tekst + ' — kraftig nedbør' }
+  }
 
   const { farge: fargeFinal } = fareIndikator(score)
   return { score, tekst, farge: fargeFinal }
