@@ -486,6 +486,21 @@ export default function MinSideClient() {
                   )}
                 </button>
               ))}
+              <div style={{borderTop:'0.5px solid rgba(10,42,61,0.07)',marginTop:6,paddingTop:8}}>
+                <a href="/hjelp"
+                  style={{width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 10px',borderRadius:8,
+                    color:'#6b8fa3',fontSize:14,textDecoration:'none',transition:'all 0.15s'}}
+                  onMouseEnter={e=>{e.currentTarget.style.background='#f8fbfc';e.currentTarget.style.color='#1a6080'}}
+                  onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color='#6b8fa3'}}
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+                    <path d="M5.5 5.5a1.5 1.5 0 0 1 3 0c0 1-1.5 1.5-1.5 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                    <circle cx="7" cy="10" r="0.6" fill="currentColor"/>
+                  </svg>
+                  Hjelpesenter
+                </a>
+              </div>
             </div>
           </div>
 
