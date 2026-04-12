@@ -209,7 +209,7 @@ Bestefar,004747123456,bestefar@mail.no,ja</pre>
 `,
   },
 
-  'varsler/forstå-sms': {
+  'varsler/forsta-sms': {
     tittel: 'Forstå SMS-varselet',
     kategori: 'Varsler og rapporter',
     html: `
@@ -246,7 +246,7 @@ bolgevarsel.no
 `,
   },
 
-  'varsler/forstå-epost': {
+  'varsler/forsta-epost': {
     tittel: 'Forstå e-postrapporten',
     kategori: 'Varsler og rapporter',
     html: `
