@@ -42,12 +42,20 @@ function profileRating(profile: string | null, w: any) {
   let tekst: string
 
   if (profile === 'surfer') {
+    // Offshore-retninger på norsk vestkyst (vind fra land = rene bølger)
+    const offshoreDir = ['N','NNO','NO','ONO','O','OSO']
+    const windDirLabel = w.windDirLabel ?? dir(w.windDir ?? 0)
+    const isOffshore = offshoreDir.includes(windDirLabel)
+    const isOnshore = ['SV','VSV','V','VNV','S','SSV'].includes(windDirLabel)
+
     if (wave < 0.3) { score = 0; tekst = 'For små bølger' }
-    else if (wave >= 0.5 && wave <= 2.5 && period >= 9 && wind < 8) { score = 1; tekst = 'Perfekte surfeforhold!' }
-    else if (wave >= 0.5 && wave <= 3.0 && period >= 7 && wind < 12) { score = 2; tekst = 'Gode surfeforhold' }
-    else if (wave >= 0.3 && wind < 15) { score = 3; tekst = 'Akseptabelt — kun erfarne' }
-    else if (wave >= 3.0 || wind >= 15) { score = 4; tekst = 'Krevende — stor sjø' }
-    else { score = 5; tekst = 'Farlige forhold — frarådes' }
+    else if (period < 6) { score = 4; tekst = 'For kort periode — rotete swell' }
+    else if (isOnshore && wind > 6) { score = 4; tekst = 'Onshore vind — ødelegger bølgene' }
+    else if (wave >= 0.5 && wave <= 2.5 && period >= 9 && wind < 8 && isOffshore) { score = 1; tekst = 'Perfekte surfeforhold!' }
+    else if (wave >= 0.5 && wave <= 3.0 && period >= 7 && wind < 10) { score = 2; tekst = 'Gode surfeforhold' }
+    else if (wave >= 3.5 || windMax >= 15) { score = 5; tekst = 'Farlig — stor sjø og sterk vind' }
+    else if (wave >= 2.5 || isOnshore) { score = 3; tekst = 'Krevende — kun erfarne' }
+    else { score = 3; tekst = 'Akseptabelt — kun erfarne' }
   } else if (profile === 'seiler') {
     if (wind < 3) { score = 0; tekst = 'For lite vind' }
     else if (windMax >= 24.5 || wave >= 4.0) { score = 5; tekst = 'Farlige forhold — bli i havn' }
