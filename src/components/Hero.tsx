@@ -180,7 +180,7 @@ export default function Hero() {
       <div className={styles.content}>
         <div className={styles.eyebrow}><span className={styles.line}/>Norsk sjøvarseltjeneste — fra Lindesnes til Nordkapp<span className={styles.line}/></div>
         <h1 className={styles.h1}>Sjøvarsel rett i <em>lomma</em></h1>
-        <p className={styles.sub}>Bølger, vind og temperatur for din kystlokasjon — levert på SMS og e-post når du vil. Kritisk farevarsel er alltid på.</p>
+        <p className={styles.sub}>Vi henter ferske sjødata for akkurat dine kyststeder, analyserer dem med AI og leverer dem ferdig tilpasset din aktivitet. Farevarsel på SMS — alltid på, uansett.</p>
         <div className={styles.actions}>
           <a href="/registrer" className={styles.btnPrimary}>Kom i gang — fra 49 kr/mnd</a>
           <a href="#hvordan" className={styles.btnGhost}>Se eksempel på varsel →</a>
