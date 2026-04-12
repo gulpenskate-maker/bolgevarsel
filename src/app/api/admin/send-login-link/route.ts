@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     method: 'POST',
     headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'Bølgevarsel <noreply@getlara.app>',
+      from: 'Bølgevarsel <noreply@bolgevarsel.no>',
       to: [email],
       subject: 'Din innloggingslenke til Bølgevarsel',
       html: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f0f4f8;font-family:'Helvetica Neue',Arial,sans-serif">
