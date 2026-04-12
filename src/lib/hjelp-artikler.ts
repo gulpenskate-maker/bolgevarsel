@@ -648,6 +648,7 @@ bolgevarsel.no
   },
 
 
+  'faq/aktivitetsprofil-sms': {
     tittel: 'Hva betyr aktivitetsprofil på SMS?',
     kategori: 'Vanlige spørsmål',
     html: `
