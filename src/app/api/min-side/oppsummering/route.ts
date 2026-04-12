@@ -34,7 +34,7 @@ VIKTIGE SURFEFAKTORER du MÅ ta stilling til:
 
 ${base}
 
-Skriv 3-4 setninger som en lokal surfer ville sagt til en kamerat. Vær ærlig — hvis forholdene er dårlige, si det klart. Nevn periode, vindkvalitet (offshore/onshore), drakt og eventuelt beste tidspunkt. Norsk bokmål, uformelt, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger som en lokal surfer ville sagt til en kamerat. Vær ærlig — hvis forholdene er dårlige, si det klart. Nevn periode, vindkvalitet (offshore/onshore), drakt og eventuelt beste tidspunkt. Norsk bokmål, uformelt men saklig, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
 
     kitesurfer: `Du er en erfaren kitesurfer i Norge. Vurder forholdene presist for kiting.
 
@@ -46,7 +46,7 @@ VIKTIGE KITEFAKTORER:
 
 ${base}
 
-Skriv 3-4 setninger som en erfaren kitesurfer. Vær tydelig på vindstyrke, stabilitet og retning. Norsk bokmål, uformelt, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger som en erfaren kitesurfer. Vær tydelig på vindstyrke, stabilitet og retning. Norsk bokmål, uformelt, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
 
     seiler: `Du er en erfaren norsk seiler/kystlos. Vurder forholdene for seilas.
 
@@ -58,7 +58,7 @@ VIKTIGE SEILERFAKTORER:
 
 ${base}
 
-Skriv 3-4 setninger som en erfaren skipper. Gi konkret råd om seiloppsett og trygghet. Norsk bokmål, uformelt, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger som en erfaren skipper. Gi konkret råd om seiloppsett og trygghet. Norsk bokmål, uformelt, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
 
     fisker: `Du er en erfaren kystfisker i Norge. Vurder forholdene for fiske fra båt.
 
@@ -70,7 +70,7 @@ VIKTIGE FISKERFAKTORER:
 
 ${base}
 
-Skriv 3-4 setninger som en erfaren fisker. Vær konkret og praktisk. Norsk bokmål, uformelt, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger som en erfaren fisker. Vær konkret og praktisk. Norsk bokmål, uformelt, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
 
     kajakk: `Du er en erfaren havkajakk-padler i Norge. Vurder forholdene for kajakk.
 
@@ -82,7 +82,7 @@ VIKTIGE KAJAKK-FAKTORER:
 
 ${base}
 
-Skriv 3-4 setninger som en erfaren padler. Prioriter sikkerhet. Norsk bokmål, uformelt, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger som en erfaren padler. Prioriter sikkerhet. Norsk bokmål, uformelt, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
 
     familie: `Du er en trygg og erfaren båtfører som vurderer forhold for familieturer med barn.
 
@@ -94,7 +94,7 @@ VIKTIGE FAKTORER FOR FAMILIETUR:
 
 ${base}
 
-Skriv 3-4 setninger med fokus på trygghet for familien. Norsk bokmål, vennlig, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger med fokus på trygghet for familien. Norsk bokmål, vennlig, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
 
     baatforer: `Du er en erfaren norsk båtfører og navigatør. Gi en navigasjonsmessig vurdering.
 
@@ -106,7 +106,7 @@ VIKTIGE NAVIGASJONSFAKTORER:
 
 ${base}
 
-Skriv 3-4 setninger som en erfaren skipper. Norsk bokmål, presist, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger som en erfaren skipper. Norsk bokmål, presist, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
 
     fridykker: `Du er en erfaren fridykker og snorklist i Norge. Vurder forholdene for fridykking.
 
@@ -118,7 +118,7 @@ VIKTIGE FAKTORER FOR FRIDYKKING:
 
 ${base}
 
-Skriv 3-4 setninger som en erfaren fridykker. Vær tydelig om sikt og drakt. Norsk bokmål, uformelt, ingen emojis, ingen overskrift.`,
+Skriv 3-4 setninger som en erfaren fridykker. Vær tydelig om sikt og drakt. Norsk bokmål, uformelt, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`,
   }
 
   const spesifikk = profile && regler[profile]
@@ -129,7 +129,7 @@ Skriv 3-4 setninger som en erfaren fridykker. Vær tydelig om sikt og drakt. Nor
 
 ${base}
 
-Skriv 2-4 setninger. Vær konkret og bruk klokkeslett der relevant. Norsk bokmål, uformelt, ingen emojis, ingen overskrift.`
+Skriv 2-4 setninger. Vær konkret og bruk klokkeslett der relevant. Norsk bokmål, uformelt, ingen kallenavn eller tiltaleord som "bror", "kompis", "mann" e.l., ingen emojis, ingen overskrift.`
 }
 
 export async function POST(req: NextRequest) {
