@@ -17,8 +17,8 @@ const personas = [
     beskrivelse: 'Båten ligger klar. Helgen er her. Men er sjøen det? I stedet for å tolke symboler og prognoser fra fem ulike tjenester, får du ett enkelt varsel — skreddersydd for din havn, din kyst, din tur.',
   },
   {
-    img: '/images/fisker.png',
-    imgAlt: 'Fisker tidlig morgen',
+    img: '/images/fisker.jpg',
+    imgAlt: 'Fisker ute på sjøen langs norskekysten med fiskestang og utsikt over fjell og hav',
     tag: 'For fiskeentusiaster',
     tittel: 'Opp klokken fem — men bare når det er verdt det',
     beskrivelse: 'God fisk henger ikke i kalenderen — den henger i forholdene. Riktig bølgehøyde, riktig vind, riktig tidspunkt. Bølgevarsel forteller deg når det stemmer.',

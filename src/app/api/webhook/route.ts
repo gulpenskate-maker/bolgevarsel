@@ -16,7 +16,7 @@ async function sendWelcomeEmail(email: string, plan: string, loginLink: string) 
     method: 'POST',
     headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'Bølgevarsel <noreply@getlara.app>',
+      from: 'Bølgevarsel <noreply@bolgevarsel.no>',
       to: [email],
       subject: '🌊 Velkommen til Bølgevarsel – logg inn her',
       html: `<!DOCTYPE html><html lang="nb"><head><meta charset="UTF-8"></head>

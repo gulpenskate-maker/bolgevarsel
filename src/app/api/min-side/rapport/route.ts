@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
+import { fetchBarentsWatchForecast, type BwWavePoint, type BwWindPoint } from '@/lib/barentswatch'
 const MET_HEADERS = {
   'User-Agent': 'Bolgevarsel/1.0 bolgevarsel.no kontakt@bolgevarsel.no',
   'Accept-Encoding': 'gzip, deflate',
@@ -83,10 +84,11 @@ export async function GET(req: NextRequest) {
 
   const tLat = truncCoord(lat), tLon = truncCoord(lon)
 
-  const [marineRes, metRes, sstRes] = await Promise.all([
+  const [marineRes, metRes, sstRes, bw] = await Promise.all([
     fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${tLat}&longitude=${tLon}&hourly=wave_height,wave_direction,wave_period&timezone=Europe/Oslo&forecast_days=${days}`).catch(() => null),
     fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${tLat}&lon=${tLon}`, { headers: MET_HEADERS }),
     fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${tLat}&longitude=${tLon}&current=sea_surface_temperature&timezone=Europe/Oslo`).catch(() => null),
+    fetchBarentsWatchForecast(tLat, tLon).catch(() => ({ wave: [] as BwWavePoint[], wind: [] as BwWindPoint[] })),
   ])
 
   const [marine, met, sst] = await Promise.all([
@@ -94,6 +96,16 @@ export async function GET(req: NextRequest) {
     metRes.json(),
     sstRes?.ok ? sstRes.json() : Promise.resolve({}),
   ])
+
+  // Index BarentsWatch data by hour for easy lookup
+  const bwWaveByHour: Record<string, BwWavePoint> = {}
+  for (const p of bw.wave) {
+    if (p.forecastTime) bwWaveByHour[p.forecastTime.slice(0, 13)] = p
+  }
+  const bwWindByHour: Record<string, BwWindPoint> = {}
+  for (const p of bw.wind) {
+    if (p.forecastTime) bwWindByHour[p.forecastTime.slice(0, 13)] = p
+  }
 
   const hours: string[] = marine.hourly?.time ?? []
   const wH: number[] = marine.hourly?.wave_height ?? []
@@ -111,13 +123,31 @@ export async function GET(req: NextRequest) {
       const h = new Date(t).getHours(); return t.startsWith(dateStr) && h >= 6 && h <= 20
     })
 
-    const avgWave = dayIdx.reduce((s, { i }) => s + (wH[i] ?? 0), 0) / (dayIdx.length || 1)
-    const maxWave = Math.max(0, ...dayIdx.map(({ i }) => wH[i] ?? 0))
-    const avgPeriod = dayIdx.reduce((s, { i }) => s + (wP[i] ?? 0), 0) / (dayIdx.length || 1)
+    // BarentsWatch wave data for this day (prefer over Open-Meteo for Norwegian coast)
+    const bwDayWave = bw.wave.filter(p => p.forecastTime?.startsWith(dateStr) &&
+      new Date(p.forecastTime!).getHours() >= 6 && new Date(p.forecastTime!).getHours() <= 20)
+    const hasBw = bwDayWave.length > 0
+
+    const avgWave = hasBw
+      ? bwDayWave.reduce((s, p) => s + (p.totalSignificantWaveHeight ?? 0), 0) / bwDayWave.length
+      : dayIdx.reduce((s, { i }) => s + (wH[i] ?? 0), 0) / (dayIdx.length || 1)
+    const maxWave = hasBw
+      ? Math.max(0, ...bwDayWave.map(p => p.expectedMaximumWaveHeight ?? p.totalSignificantWaveHeight ?? 0))
+      : Math.max(0, ...dayIdx.map(({ i }) => wH[i] ?? 0))
+    const avgPeriod = hasBw
+      ? bwDayWave.reduce((s, p) => s + (p.totalPeakPeriod ?? 0), 0) / bwDayWave.length
+      : dayIdx.reduce((s, { i }) => s + (wP[i] ?? 0), 0) / (dayIdx.length || 1)
     const midI = dayIdx[Math.floor(dayIdx.length / 2)]?.i ?? 0
 
+    // BarentsWatch wind gust data for windMax (supplements met.no)
+    const bwDayWind = bw.wind.filter(p => p.forecastTime?.startsWith(dateStr))
+    const bwGustMax = bwDayWind.length > 0
+      ? Math.max(0, ...bwDayWind.map(p => p.windSpeedOfGust ?? p.windSpeed ?? 0))
+      : 0
+
     const dayTs = ts.filter(t => t.time?.startsWith(dateStr))
-    const windMax = Math.max(0, ...dayTs.map(t => t.data?.instant?.details?.wind_speed ?? 0))
+    const metWindMax = Math.max(0, ...dayTs.map(t => t.data?.instant?.details?.wind_speed ?? 0))
+    const windMax = Math.max(metWindMax, bwGustMax)
     const noon = dayTs.find(t => t.time?.includes('T09:')) ?? dayTs[0]
     const windNow = noon?.data?.instant?.details?.wind_speed ?? 0
     const windDir = noon?.data?.instant?.details?.wind_from_direction ?? 0
@@ -125,21 +155,30 @@ export async function GET(req: NextRequest) {
 
     const keyHours = [6, 9, 12, 15, 18, 21]
     const hourly = keyHours.map(hr => {
-      const idx = hours.findIndex(t => t.startsWith(`${dateStr}T${String(hr).padStart(2, '0')}:00`))
-      const mi = ts.findIndex(t => t.time?.startsWith(`${dateStr}T${String(hr).padStart(2, '0')}:`))
+      const hrStr = String(hr).padStart(2, '0')
+      const bwKey = `${dateStr}T${hrStr}`
+      const bwW = bwWaveByHour[bwKey]
+      const bwWi = bwWindByHour[bwKey]
+      const idx = hours.findIndex(t => t.startsWith(`${dateStr}T${hrStr}:00`))
+      const mi = ts.findIndex(t => t.time?.startsWith(`${dateStr}T${hrStr}:`))
       return {
-        time: `${String(hr).padStart(2, '0')}:00`,
-        wave: idx >= 0 ? (wH[idx] ?? 0) : 0,
-        waveDir: idx >= 0 ? (wD[idx] ?? 0) : 0,
-        period: idx >= 0 ? (wP[idx] ?? 0) : 0,
+        time: `${hrStr}:00`,
+        wave: bwW?.totalSignificantWaveHeight ?? (idx >= 0 ? (wH[idx] ?? 0) : 0),
+        waveDir: bwW?.totalMeanWaveDirection ?? (idx >= 0 ? (wD[idx] ?? 0) : 0),
+        period: bwW?.totalPeakPeriod ?? (idx >= 0 ? (wP[idx] ?? 0) : 0),
         wind: mi >= 0 ? (ts[mi]?.data?.instant?.details?.wind_speed ?? 0) : 0,
+        gust: bwWi?.windSpeedOfGust ?? null,
         windDir: mi >= 0 ? (ts[mi]?.data?.instant?.details?.wind_from_direction ?? 0) : 0,
         temp: mi >= 0 ? (ts[mi]?.data?.instant?.details?.air_temperature ?? 0) : 0,
         symbol: mi >= 0 ? (ts[mi]?.data?.next_1_hours?.summary?.symbol_code ?? ts[mi]?.data?.next_6_hours?.summary?.symbol_code ?? '') : '',
+        source: bwW ? 'barentswatch' : 'open-meteo',
       }
     })
 
-    const w = { avgWave, maxWave, avgPeriod, waveDir: wD[midI] ?? 0, windNow, windDir, windMax, temp, seaTemp: sst.current?.sea_surface_temperature ?? null }
+    const waveDirDeg = hasBw
+      ? (bwDayWave[Math.floor(bwDayWave.length / 2)]?.totalMeanWaveDirection ?? wD[midI] ?? 0)
+      : (wD[midI] ?? 0)
+    const w = { avgWave, maxWave, avgPeriod, waveDir: waveDirDeg, windNow, windDir, windMax, temp, seaTemp: sst.current?.sea_surface_temperature ?? null }
     const rating = profileRating(profile, w)
 
     // Best tidspunkt
@@ -154,11 +193,12 @@ export async function GET(req: NextRequest) {
       dateLabel: d.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' }),
       ...w,
       windDesc: windDesc(windNow),
-      waveDir: dir(wD[midI] ?? 0),
+      waveDir: dir(waveDirDeg),
       windDirLabel: dir(windDir),
       rating,
       hourly,
       bestTime: bestH?.time ?? '—',
+      waveSource: hasBw ? 'barentswatch' : 'open-meteo',
     })
   }
 
