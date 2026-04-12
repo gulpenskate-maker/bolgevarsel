@@ -1,4 +1,13 @@
 import type { Metadata } from 'next'
+import Nav from '@/components/Nav'
+import Hero from '@/components/Hero'
+import HowItWorks from '@/components/HowItWorks'
+import ForWho from '@/components/ForWho'
+import Pricing from '@/components/Pricing'
+import Footer from '@/components/Footer'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: 'Bølgevarsel – Daglig sjøvarsel på SMS',
@@ -10,13 +19,6 @@ export const metadata: Metadata = {
     url: 'https://bolgevarsel.no',
   },
 }
-
-import Nav from '@/components/Nav'
-import Hero from '@/components/Hero'
-import HowItWorks from '@/components/HowItWorks'
-import ForWho from '@/components/ForWho'
-import Pricing from '@/components/Pricing'
-import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -50,20 +52,16 @@ export default function Home() {
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style={{opacity:0.18}}>
           <circle cx="32" cy="32" r="30" stroke="#0a2a3d" strokeWidth="2"/>
           <circle cx="32" cy="32" r="22" stroke="#0a2a3d" strokeWidth="1"/>
-          {/* N S Ø V markeringer */}
           <line x1="32" y1="2" x2="32" y2="10" stroke="#0a2a3d" strokeWidth="2" strokeLinecap="round"/>
           <line x1="32" y1="54" x2="32" y2="62" stroke="#0a2a3d" strokeWidth="2" strokeLinecap="round"/>
           <line x1="2" y1="32" x2="10" y2="32" stroke="#0a2a3d" strokeWidth="2" strokeLinecap="round"/>
           <line x1="54" y1="32" x2="62" y2="32" stroke="#0a2a3d" strokeWidth="2" strokeLinecap="round"/>
-          {/* Diagonaler */}
           <line x1="9.5" y1="9.5" x2="14.5" y2="14.5" stroke="#0a2a3d" strokeWidth="1" strokeLinecap="round"/>
           <line x1="49.5" y1="49.5" x2="54.5" y2="54.5" stroke="#0a2a3d" strokeWidth="1" strokeLinecap="round"/>
           <line x1="54.5" y1="9.5" x2="49.5" y2="14.5" stroke="#0a2a3d" strokeWidth="1" strokeLinecap="round"/>
           <line x1="9.5" y1="54.5" x2="14.5" y2="49.5" stroke="#0a2a3d" strokeWidth="1" strokeLinecap="round"/>
-          {/* Nål — nord rød, sør mørk */}
           <polygon points="32,10 35,32 32,28 29,32" fill="#1a6080"/>
           <polygon points="32,54 35,32 32,36 29,32" fill="#0a2a3d" opacity="0.4"/>
-          {/* Senterpunkt */}
           <circle cx="32" cy="32" r="2.5" fill="#0a2a3d"/>
         </svg>
       </div>
