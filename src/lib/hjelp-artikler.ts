@@ -554,7 +554,100 @@ bolgevarsel.no
 `,
   },
 
-  'faq/aktivitetsprofil-sms': {
+  'varsler/tegnforklaring': {
+    tittel: 'Tegnforklaring — forkortelser og symboler',
+    kategori: 'Varsler og rapporter',
+    html: `
+<p>Her finner du forklaring på alle forkortelser, symboler og betegnelser du møter i Bølgevarsel — fra vindretninger til bølgebeskrivelser og fareindikator.</p>
+
+<h2>Vindretninger</h2>
+<p>Vindretningen angir <strong>hvor vinden kommer fra</strong> — ikke hvor den blåser. En nordavind blåser fra nord mot sør.</p>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:14px">
+<tr style="background:#f8fbfc"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Forkortelse</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Betyr</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Grader</th></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>N</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Nord</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">0° / 360°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>NNO</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Nord-nordøst</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">22,5°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>NO</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Nordøst</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">45°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>ONO</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Øst-nordøst</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">67,5°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>O</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Øst</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">90°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>OSO</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Øst-sørøst</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">112,5°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>SO</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Sørøst</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">135°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>SSO</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Sør-sørøst</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">157,5°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>S</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Sør</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">180°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>SSV</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Sør-sørvest</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">202,5°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>SV</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Sørvest</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">225°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>VSV</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vest-sørvest</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">247,5°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>V</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vest</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">270°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>VNV</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vest-nordvest</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">292,5°</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>NV</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Nordvest</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">315°</td></tr>
+<tr><td style="padding:8px 12px"><strong>NNV</strong></td><td style="padding:8px 12px">Nord-nordvest</td><td style="padding:8px 12px">337,5°</td></tr>
+</table>
+
+<h2>Vindstyrke — Beaufortskalaen</h2>
+<p>Vindstyrken beskrives med Beaufortskalaen, som går fra 0 (stille) til 12 (orkan). I Bølgevarsel bruker vi disse betegnelsene:</p>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:14px">
+<tr style="background:#f8fbfc"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Betegnelse</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">m/s</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Beskrivelse</th></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Stille</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">0–2</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Røyk stiger rett opp, speilblankt hav</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Svak vind</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">2–4</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vinden kjennes i ansiktet, lett krusning</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Lett bris</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">4–8</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Blader rører seg, krusning på sjøen</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Laber bris</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">8–11</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Kvister beveger seg, lette bølger</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Frisk bris</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">11–14</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Større greiner beveger seg, moderat sjø</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Liten kuling</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">14–17</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Trær svinger, roff sjø — vær forsiktig</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Stiv kuling</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">17–21</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Vanskelig å gå mot vinden, høye bølger</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Sterk kuling</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">21–25</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Kvister brekker, svært roff sjø</td></tr>
+<tr><td style="padding:8px 12px"><strong>Storm</strong></td><td style="padding:8px 12px">25+</td><td style="padding:8px 12px">Alvorlige skader mulig — bli på land</td></tr>
+</table>
+
+<h2>Bølgebeskrivelser</h2>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:14px">
+<tr style="background:#f8fbfc"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Betegnelse</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Bølgehøyde</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Merknader</th></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Stille hav</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Under 0,3m</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Speilblankt eller svak dønning</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Lett krusning</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">0,3–0,7m</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Fin dag for de fleste</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Lette bølger</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">0,7–1,2m</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Greit for erfarne — vær oppmerksom</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Moderat sjø</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">1,2–2,0m</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Krevende for åpne båter og kajakker</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Roff sjø</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">2,0–3,0m</td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Kun erfarne i egnet fartøy</td></tr>
+<tr><td style="padding:8px 12px"><strong>Veldig roff sjø</strong></td><td style="padding:8px 12px">Over 3,0m</td><td style="padding:8px 12px">Farlig — bli på land</td></tr>
+</table>
+<p style="font-size:13px;color:#6b8fa3">Bølgehøyden som oppgis er <strong>signifikant bølgehøyde</strong> — gjennomsnittet av den høyeste tredjedelen av bølgene. Enkeltbølger kan være høyere.</p>
+
+<h2>Fareindikator 0–5</h2>
+<p>Fareindikatoren viser en samlet vurdering av forholdene tilpasset aktivitetsprofilen din:</p>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:14px">
+<tr style="background:#f8fbfc"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Score</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Farge</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Betyr</th></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>0</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><span style="color:#94a3b8">■ Grå</span></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Ikke aktuelt — f.eks. for lite vind for seiler</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>1</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><span style="color:#16a34a">■ Grønn</span></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Perfekte forhold</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>2</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><span style="color:#65a30d">■ Lysgrønn</span></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Gode forhold</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>3</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><span style="color:#ca8a04">■ Gul</span></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Akseptable forhold — vær oppmerksom</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>4</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><span style="color:#ea580c">■ Oransje</span></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Krevende forhold — kun erfarne</td></tr>
+<tr><td style="padding:8px 12px"><strong>5</strong></td><td style="padding:8px 12px"><span style="color:#dc2626">■ Rød</span></td><td style="padding:8px 12px">Farlige forhold — frarådes</td></tr>
+</table>
+
+<h2>Bølgeperiode</h2>
+<p>Bølgeperioden (oppgitt i sekunder, f.eks. <strong>9s</strong>) er tid mellom to bølgetopper. Lang periode betyr kraftigere og mer organiserte bølger fra langt unna (dønning). Kort periode betyr lokale vindsbølger:</p>
+<ul>
+<li><strong>Under 6s</strong> — korte, kaotiske vindsbølger. Ukomfortabelt, selv ved lav høyde.</li>
+<li><strong>6–9s</strong> — moderat periode, typisk for kystnære forhold</li>
+<li><strong>Over 9s</strong> — lang dønning fra åpent hav. Kan gi store bølger selv med lite vind.</li>
+</ul>
+
+<h2>Andre forkortelser</h2>
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:14px">
+<tr style="background:#f8fbfc"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Forkortelse</th><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0">Betyr</th></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>m/s</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Meter per sekund — mål for vindstyrke</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>m</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Meter — bølgehøyde</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>s</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Sekunder — bølgeperiode</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>°C</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Grader Celsius — temperatur</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Sjøtemp</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Sjøtemperatur i overflaten</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Lufttemp</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Lufttemperatur i 2 meters høyde</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Vind nå / maks</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Øyeblikkelig vindstyrke / høyeste registrert i dag</td></tr>
+<tr><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9"><strong>Bølger snitt / maks</strong></td><td style="padding:8px 12px;border-bottom:1px solid #f1f5f9">Gjennomsnittlig / høyeste bølgehøyde i dag</td></tr>
+<tr><td style="padding:8px 12px"><strong>MET / met.no</strong></td><td style="padding:8px 12px">Meteorologisk institutt — norsk datakilde for vind og temperatur</td></tr>
+</table>
+
+<p style="margin-top:1.5rem;padding:1rem;background:#f0f8fc;border-radius:12px;font-size:0.9rem">💡 <strong>Tips:</strong> Vindretning og bølgeretning kan ofte avvike. Vinden kan komme fra nordvest mens bølgene (dønning) kommer fra sørvest etter en storm lenger ute på havet.</p>
+`,
+  },
+
+
     tittel: 'Hva betyr aktivitetsprofil på SMS?',
     kategori: 'Vanlige spørsmål',
     html: `
