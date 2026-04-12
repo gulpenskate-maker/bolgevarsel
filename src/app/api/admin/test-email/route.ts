@@ -32,11 +32,25 @@ export async function POST(req: NextRequest) {
   const profile = recipients[0]?.profile || null
   const recipientName = recipients[0]?.name || ''
 
-  // Hent værmeldingen for alle lokasjoner
+  // Hent værmeldingen + AI-oppsummering for alle lokasjoner
   const lokasjoner = await Promise.all(locations.map(async (loc: any) => {
     const res = await fetch(`${siteUrl}/api/min-side/rapport?lat=${loc.lat}&lon=${loc.lon}&profile=${profile || ''}&days=1`)
     const data = await res.json()
-    return { navn: loc.name, day: data.days?.[0] }
+    const day = data.days?.[0]
+
+    // Hent AI-oppsummering
+    let oppsummering: string | undefined
+    try {
+      const oppRes = await fetch(`${siteUrl}/api/min-side/oppsummering`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lokasjon: loc.name, profile, day }),
+      })
+      const oppData = await oppRes.json()
+      if (oppData.tekst) oppsummering = oppData.tekst
+    } catch (e) { console.warn('Oppsummering feilet', e) }
+
+    return { navn: loc.name, day, oppsummering }
   }))
 
   // Generer magic token (24t)
@@ -65,7 +79,7 @@ export async function POST(req: NextRequest) {
     ? `<a href="${loginUrl}" style="display:inline-block;background:#4da8cc;color:white;font-size:12px;font-weight:600;padding:7px 18px;border-radius:100px;text-decoration:none">Se full rapport &#8594;</a>`
     : `<a href="${siteUrl}/min-side" style="font-size:12px;color:rgba(255,255,255,0.5)">Administrer varsler &#8594;</a>`
 
-  const seksjonHtml = lokasjoner.map(({ navn, day: d }: any) => {
+  const seksjonHtml = lokasjoner.map(({ navn, day: d, oppsummering }: any) => {
     if (!d) return ''
     const farge = d.rating?.farge || '#1a6080'
     return `
@@ -75,6 +89,7 @@ export async function POST(req: NextRequest) {
         <p style="margin:0 0 3px;font-size:15px;font-weight:700;color:${farge}">${d.rating?.tekst || '—'}</p>
         <p style="margin:0;font-size:12px;color:${farge};opacity:0.8">${d.avgWave?.toFixed(1)}m bølger · ${d.windNow?.toFixed(1)} m/s vind</p>
       </div>
+      ${oppsummering ? `<p style="margin:0 0 16px;font-size:14px;color:#334155;line-height:1.65;background:#f8fafc;border-radius:8px;padding:14px 16px">${oppsummering}</p>` : ''}
       <table width="100%" cellpadding="0" cellspacing="4" style="margin-bottom:14px">
         <tr>
           <td style="padding:10px;background:#f8fafc;border-radius:8px;text-align:center;width:30%">
