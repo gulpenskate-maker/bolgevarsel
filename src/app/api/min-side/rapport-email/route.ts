@@ -25,10 +25,7 @@ export async function POST(req: NextRequest) {
   <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.55)">${day.dateLabel}</p>
 </td></tr>
 <tr><td style="background:#fff;padding:28px 40px">
-  <div style="background:${day.rating?.farge || '#1a6080'}18;border-left:4px solid ${day.rating?.farge || '#1a6080'};padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:20px">
-    <table cellpadding="0" cellspacing="0" style="margin-bottom:6px"><tr>
-      ${[1,2,3,4,5].map(i => `<td style="padding:0 2px 0 0"><div style="width:12px;height:12px;border-radius:50%;background:${(day.rating?.score ?? 0) >= i ? (day.rating?.farge || '#94a3b8') : '#e2e8f0'}"></div></td>`).join('')}
-    </tr></table>
+  <div style="background:${day.rating?.farge || '#1a6080'}18;border-left:4px solid ${day.rating?.farge || '#1a6080'};padding:12px 14px;border-radius:0 8px 8px 0;margin-bottom:20px">
     <p style="margin:0;font-size:16px;font-weight:700;color:${day.rating?.farge || '#1a6080'}">${day.rating?.tekst || '—'}</p>
   </div>
   <table width="100%" cellpadding="0" cellspacing="4" style="margin-bottom:20px">
