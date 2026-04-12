@@ -255,6 +255,7 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
           { label: 'Solnedgang', val: day.sunset ?? '—', sun: true },
           { label: 'Lufttemperatur', val: `${Math.round(day.temp)}°C` },
           ...(day.seaTemp !== null ? [{ label: 'Sjøtemperatur', val: `${day.seaTemp.toFixed(1)}°C` }] : []),
+          ...(day.totalPrecip > 0 ? [{ label: 'Nedbør', val: `${day.totalPrecip} mm`, rain: true }] : []),
         ].map((row: any, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderTop: i === 0 ? 'none' : '0.5px solid rgba(10,42,61,0.07)' }}>
             <span style={{ fontSize: 13, color: '#6b8fa3', display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -271,7 +272,7 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
               )}
               {row.label}
             </span>
-            <span style={{ fontSize: 13, fontWeight: 500, color: row.green ? '#16a34a' : row.sun ? '#d97706' : '#0a2a3d' }}>{row.val}</span>
+            <span style={{ fontSize: 13, fontWeight: 500, color: row.green ? '#16a34a' : row.sun ? '#d97706' : row.rain ? '#3b82f6' : '#0a2a3d' }}>{row.val}</span>
           </div>
         ))}
       </div>

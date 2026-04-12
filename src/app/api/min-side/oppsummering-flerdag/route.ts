@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
 
   // Bygg dagsoversikt
   const dagsoversikt = days.map((d: any) => {
-    return `${d.dateLabel}: Bølger ${d.avgWave?.toFixed(1)}m (maks ${d.maxWave?.toFixed(1)}m), periode ${d.avgPeriod?.toFixed(0)}s, vind ${d.windNow?.toFixed(1)}/${d.windMax?.toFixed(1)} m/s fra ${d.windDirLabel || '?'}, vurdering: "${d.rating?.tekst || '—'}"`
+    const nedbor = d.precipDesc ? `, ${d.precipDesc}` : ''
+    return `${d.dateLabel}: Bølger ${d.avgWave?.toFixed(1)}m (maks ${d.maxWave?.toFixed(1)}m), periode ${d.avgPeriod?.toFixed(0)}s, vind ${d.windNow?.toFixed(1)}/${d.windMax?.toFixed(1)} m/s fra ${d.windDirLabel || '?'}${nedbor}, vurdering: "${d.rating?.tekst || '—'}"`
   }).join('\n')
 
   const bestDag = [...days].sort((a: any, b: any) => {

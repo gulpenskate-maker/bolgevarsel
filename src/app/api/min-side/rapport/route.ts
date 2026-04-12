@@ -212,6 +212,13 @@ export async function GET(req: NextRequest) {
     const windDir = noon?.data?.instant?.details?.wind_from_direction ?? 0
     const temp = noon?.data?.instant?.details?.air_temperature ?? 0
 
+    // Nedbør: summer next_1_hours precipitation for hele dagen
+    const totalPrecip = dayTs.reduce((sum, t) => {
+      return sum + (t.data?.next_1_hours?.details?.precipitation_amount ?? 0)
+    }, 0)
+    // Sjekk om det er signifikant nedbør (over 1mm totalt)
+    const precipDesc = totalPrecip < 1 ? null : totalPrecip < 5 ? `${totalPrecip.toFixed(1)}mm lett nedbør` : totalPrecip < 15 ? `${totalPrecip.toFixed(1)}mm moderat nedbør` : `${totalPrecip.toFixed(1)}mm kraftig nedbør`
+
     const keyHours = [6, 9, 12, 15, 18, 21]
     const hourly = keyHours.map(hr => {
       const hrStr = String(hr).padStart(2, '0')
@@ -240,7 +247,6 @@ export async function GET(req: NextRequest) {
     const w = { avgWave, maxWave, avgPeriod, waveDir: waveDirDeg, windNow, windDir, windMax, temp, seaTemp: sst.current?.sea_surface_temperature ?? null }
     const rating = profileRating(profile, w)
 
-    // Best tidspunkt
     const bestH = hourly.reduce((b, h) => {
       const hs = h.wave + h.wind * 0.1
       const bs = b.wave + b.wind * 0.1
@@ -262,6 +268,8 @@ export async function GET(req: NextRequest) {
       waveSource: hasBw ? 'barentswatch' : 'open-meteo',
       sunrise: sunTimes.sunrise,
       sunset: sunTimes.sunset,
+      totalPrecip: Math.round(totalPrecip * 10) / 10,
+      precipDesc,
     })
   }
 

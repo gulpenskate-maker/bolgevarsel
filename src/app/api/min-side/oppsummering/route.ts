@@ -13,6 +13,7 @@ function byggPrompt(aktivitet: string, profile: string | null, lokasjon: string,
 - Bølger (snitt/maks): ${day.avgWave?.toFixed(1)}m / ${day.maxWave?.toFixed(1)}m fra ${day.waveDir || '?'}
 - Bølgeperiode: ${day.avgPeriod?.toFixed(0) ?? '?'}s
 - Vind (nå/maks): ${day.windNow?.toFixed(1)} / ${day.windMax?.toFixed(1)} m/s fra ${day.windDirLabel || '?'} (${day.windDesc || ''})
+- Nedbør: ${day.precipDesc || 'Ingen nedbør'}
 - Lufttemperatur: ${Math.round(day.temp || 0)}°C${day.seaTemp != null ? `\n- Sjøtemperatur: ${day.seaTemp?.toFixed(1)}°C` : ''}
 - Stabilitet: ${day.stability || 'stabile forhold'}${day.tomorrowForecast ? `\n- I morgen: ${day.tomorrowForecast.wind?.toFixed(1)} m/s vind, ${day.tomorrowForecast.wave?.toFixed(1)}m bølger` : ''}
 
