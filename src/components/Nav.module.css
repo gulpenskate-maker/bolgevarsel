@@ -2,16 +2,57 @@
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.2rem 2.5rem;
-  background: rgba(232,244,248,0.85);
+  background: rgba(232,244,248,0.9);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(10,42,61,0.08);
 }
-.logo { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--ocean-deep); letter-spacing: -0.02em; }
-.logo span { color: var(--ocean-foam); }
+
 .logoLink { text-decoration: none; display: flex; align-items: center; flex-shrink: 0; }
-.links { display: flex; gap: 2rem; list-style: none; }
+
+.links { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
 .links a { text-decoration: none; font-size: 0.9rem; color: var(--text-mid); transition: color 0.2s; }
 .links a:hover { color: var(--ocean-deep); }
-.cta { background: var(--ocean-deep); color: var(--white); padding: 0.55rem 1.4rem; border-radius: 100px; font-size: 0.88rem; font-weight: 500; text-decoration: none; transition: background 0.2s; }
+
+.navRight { display: flex; align-items: center; gap: 0.75rem; }
+
+.cta { background: var(--ocean-deep); color: var(--white); padding: 0.55rem 1.4rem; border-radius: 100px; font-size: 0.88rem; font-weight: 500; text-decoration: none; transition: background 0.2s; white-space: nowrap; }
 .cta:hover { background: var(--ocean-light); }
-@media (max-width: 640px) { .links { display: none; } .nav { padding: 1rem 1.5rem; } }
+
+/* Hamburger */
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+.bar { display: block; width: 22px; height: 2px; background: var(--ocean-deep); border-radius: 2px; transition: all 0.25s ease; transform-origin: center; }
+.barTop { transform: translateY(7px) rotate(45deg); }
+.barMid { opacity: 0; transform: scaleX(0); }
+.barBot { transform: translateY(-7px) rotate(-45deg); }
+
+/* Backdrop */
+.backdrop { position: fixed; inset: 0; z-index: 150; background: rgba(10,42,61,0.4); backdrop-filter: blur(2px); animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Drawer */
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 200; width: 300px; max-width: 85vw; background: white; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(10,42,61,0.15); }
+.drawerOpen { transform: translateX(0); }
+
+.drawerHeader { display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 1.5rem; border-bottom: 1px solid rgba(10,42,61,0.07); }
+.drawerLogo { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 400; color: var(--ocean-deep); }
+.drawerClose { background: none; border: none; cursor: pointer; color: var(--text-mid); padding: 4px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: background 0.15s; }
+.drawerClose:hover { background: rgba(10,42,61,0.06); }
+
+.drawerLinks { list-style: none; padding: 1rem 0; margin: 0; flex: 1; overflow-y: auto; }
+.drawerLink { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.5rem; font-size: 0.95rem; color: var(--ocean-deep); text-decoration: none; transition: background 0.15s; border-radius: 0; }
+.drawerLink:hover { background: #f4f8fb; }
+.drawerLink svg { color: #4da8cc; flex-shrink: 0; }
+
+.drawerFooter { padding: 1.25rem 1.5rem; border-top: 1px solid rgba(10,42,61,0.07); display: flex; flex-direction: column; gap: 0.75rem; }
+.drawerLogin { display: block; text-align: center; padding: 0.7rem; border: 1.5px solid rgba(10,42,61,0.15); border-radius: 100px; font-size: 0.9rem; color: var(--ocean-deep); text-decoration: none; transition: all 0.15s; }
+.drawerLogin:hover { border-color: var(--ocean-deep); }
+.drawerCta { display: block; text-align: center; padding: 0.8rem; background: var(--ocean-deep); color: white; border-radius: 100px; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: background 0.15s; }
+.drawerCta:hover { background: var(--ocean-light); }
+
+/* Mobil */
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.25rem; }
+  .links { display: none; }
+  .cta { display: none; }
+  .hamburger { display: flex; }
+}
