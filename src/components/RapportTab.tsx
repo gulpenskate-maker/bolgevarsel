@@ -420,22 +420,22 @@ export default function RapportTab({ locs, subEmail }: { locs: Loc[]; subEmail: 
           </div>
           {/* Flerdag-oppsummering */}
           {parseInt(days) > 1 && (flerdagLoading || flerdagOppsummering) && (
-            <div style={{ background: '#0a2a3d', borderRadius: 12, padding: '14px 16px', marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+            <div style={{ background: '#f0f8fc', border: '1px solid rgba(26,96,128,0.15)', borderRadius: 12, padding: '14px 16px', marginBottom: 12 }}>
+              <div style={{ fontSize: 11, color: '#4da8cc', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, fontWeight: 600 }}>
                 Oversikt — {PERIODER.find(p => p.value === days)?.label}
               </div>
               {flerdagLoading ? (
-                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontStyle: 'italic' }}>Analyserer perioden...</div>
+                <div style={{ fontSize: 13, color: '#94a3b8', fontStyle: 'italic' }}>Analyserer perioden...</div>
               ) : (
                 <>
-                  <p style={{ margin: '0 0 8px', fontSize: 14, color: 'rgba(255,255,255,0.9)', lineHeight: 1.65 }}>{flerdagOppsummering}</p>
+                  <p style={{ margin: '0 0 8px', fontSize: 13, color: '#334155', lineHeight: 1.65 }}>{flerdagOppsummering}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                      <circle cx="5.5" cy="5.5" r="4.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="none"/>
-                      <path d="M3.5 5.5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeLinecap="round" fill="none"/>
-                      <circle cx="5.5" cy="3.5" r=".5" fill="rgba(255,255,255,0.3)"/>
+                      <circle cx="5.5" cy="5.5" r="4.5" stroke="#94a3b8" strokeWidth="1" fill="none"/>
+                      <path d="M3.5 5.5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2" stroke="#94a3b8" strokeWidth="1" strokeLinecap="round" fill="none"/>
+                      <circle cx="5.5" cy="3.5" r=".5" fill="#94a3b8"/>
                     </svg>
-                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)' }}>Generert av AI — kan inneholde feil. Sjekk alltid offisielle farevarsler.</span>
+                    <span style={{ fontSize: 10, color: '#94a3b8' }}>Generert av AI — kan inneholde feil. Sjekk alltid offisielle farevarsler.</span>
                   </div>
                 </>
               )}
