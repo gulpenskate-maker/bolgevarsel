@@ -20,6 +20,31 @@ function windDesc(s: number) {
   if (s < 21) return 'Stiv kuling'; return 'Kuling'
 }
 
+function getSunTimes(lat: number, lon: number, dateStr: string): { sunrise: string; sunset: string } {
+  const date = new Date(dateStr + 'T12:00:00Z')
+  const JD = date.getTime() / 86400000 + 2440587.5
+  const n = JD - 2451545.0
+  const L = (280.46 + 0.9856474 * n) % 360
+  const g = ((357.528 + 0.9856003 * n) % 360) * Math.PI / 180
+  const lambda = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * Math.PI / 180
+  const epsilon = 23.439 * Math.PI / 180
+  const sinDec = Math.sin(epsilon) * Math.sin(lambda)
+  const dec = Math.asin(sinDec)
+  const latR = lat * Math.PI / 180
+  const cosHA = (Math.sin(-0.0145) - Math.sin(latR) * Math.sin(dec)) / (Math.cos(latR) * Math.cos(dec))
+  if (Math.abs(cosHA) > 1) return { sunrise: '—', sunset: '—' }
+  const HA = Math.acos(cosHA) * 180 / Math.PI
+  const eqTime = 4 * (L - 0.0057183 - (Math.atan2(Math.cos(epsilon) * Math.sin(lambda), Math.cos(lambda)) * 180 / Math.PI) + lon)
+  const sunriseUTC = 720 - 4 * lon - HA * 4 + eqTime
+  const sunsetUTC  = 720 - 4 * lon + HA * 4 + eqTime
+  const fmt = (mins: number) => {
+    const total = Math.round(mins + 120) // UTC+2 (sommertid)
+    const h = Math.floor((total % 1440) / 60), m = total % 60
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`
+  }
+  return { sunrise: fmt(sunriseUTC), sunset: fmt(sunsetUTC) }
+}
+
 // Fareindikator 0–5:
 // 0 = Ikke aktuelt (for lite vind for seiler etc.)  → grå
 // 1 = Perfekte forhold                              → grønn #16a34a
@@ -222,6 +247,8 @@ export async function GET(req: NextRequest) {
       return hs < bs ? h : b
     }, hourly[0])
 
+    const sunTimes = getSunTimes(tLat, tLon, dateStr)
+
     dailyData.push({
       date: dateStr,
       dateLabel: d.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' }),
@@ -233,6 +260,8 @@ export async function GET(req: NextRequest) {
       hourly,
       bestTime: bestH?.time ?? '—',
       waveSource: hasBw ? 'barentswatch' : 'open-meteo',
+      sunrise: sunTimes.sunrise,
+      sunset: sunTimes.sunset,
     })
   }
 

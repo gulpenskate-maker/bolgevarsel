@@ -252,12 +252,27 @@ function DayCard({ day, profile }: { day: any; profile: string }) {
       <div>
         {[
           { label: 'Best tidspunkt', val: `${day.bestTime} — roligst`, green: true },
+          { label: 'Soloppgang', val: day.sunrise ?? '—', sun: true },
+          { label: 'Solnedgang', val: day.sunset ?? '—', sun: true },
           { label: 'Lufttemperatur', val: `${Math.round(day.temp)}°C` },
           ...(day.seaTemp !== null ? [{ label: 'Sjøtemperatur', val: `${day.seaTemp.toFixed(1)}°C` }] : []),
-        ].map((row, i) => (
+        ].map((row: any, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderTop: i === 0 ? 'none' : '0.5px solid rgba(10,42,61,0.07)' }}>
-            <span style={{ fontSize: 13, color: '#6b8fa3' }}>{row.label}</span>
-            <span style={{ fontSize: 13, fontWeight: 500, color: row.green ? '#16a34a' : '#0a2a3d' }}>{row.val}</span>
+            <span style={{ fontSize: 13, color: '#6b8fa3', display: 'flex', alignItems: 'center', gap: 5 }}>
+              {row.sun && (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <circle cx="6" cy="6" r="2.5" fill="#f59e0b"/>
+                  {[0,45,90,135,180,225,270,315].map((deg, j) => (
+                    <line key={j}
+                      x1={6 + Math.cos(deg*Math.PI/180)*3.5} y1={6 + Math.sin(deg*Math.PI/180)*3.5}
+                      x2={6 + Math.cos(deg*Math.PI/180)*4.8} y2={6 + Math.sin(deg*Math.PI/180)*4.8}
+                      stroke="#f59e0b" strokeWidth="1" strokeLinecap="round"/>
+                  ))}
+                </svg>
+              )}
+              {row.label}
+            </span>
+            <span style={{ fontSize: 13, fontWeight: 500, color: row.green ? '#16a34a' : row.sun ? '#d97706' : '#0a2a3d' }}>{row.val}</span>
           </div>
         ))}
       </div>
