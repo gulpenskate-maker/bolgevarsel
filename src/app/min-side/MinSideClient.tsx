@@ -500,6 +500,17 @@ export default function MinSideClient() {
                   </svg>
                   Hjelpesenter
                 </a>
+                <a href="/hjelp/varsler/tegnforklaring"
+                  style={{width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 10px',borderRadius:8,
+                    color:'#6b8fa3',fontSize:14,textDecoration:'none',transition:'all 0.15s'}}
+                  onMouseEnter={e=>{e.currentTarget.style.background='#f8fbfc';e.currentTarget.style.color='#1a6080'}}
+                  onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color='#6b8fa3'}}
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2 4h10M2 7h7M2 10h5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                  </svg>
+                  Tegnforklaring
+                </a>
               </div>
             </div>
           </div>
