@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState, useCallback } from 'react'
 
-type Loc = { id: string; name: string; lat: number; lon: number }
+type Loc = { id: string; name: string; lat: number; lon: number; profile?: string | null }
 
 type WeatherData = {
   windNow: number; windDir: number; windMax: number
@@ -250,6 +250,7 @@ export default function LokasjonPanel({ locations }: { locations: Loc[] }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null)
   const [hoveredStat, setHoveredStat] = useState<string | null>(null)
   const [data, setData] = useState<Record<number, WeatherData | 'loading' | 'error'>>({})
+  const [oppsummering, setOppsummering] = useState<Record<number, string>>({})
 
   const loaded = React.useRef<Set<number>>(new Set())
 
@@ -260,6 +261,23 @@ export default function LokasjonPanel({ locations }: { locations: Loc[] }) {
     try {
       const d = await fetchWeather(locations[i].lat, locations[i].lon)
       setData(prev => ({ ...prev, [i]: d }))
+
+      // Hent AI-oppsummering etter at væren er lastet
+      try {
+        const rapportRes = await fetch(`/api/min-side/rapport?lat=${locations[i].lat}&lon=${locations[i].lon}&profile=${locations[i].profile || ''}&days=1`)
+        const rapportData = await rapportRes.json()
+        const day = rapportData.days?.[0]
+        if (day) {
+          const oppRes = await fetch('/api/min-side/oppsummering', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ lokasjon: locations[i].name, profile: locations[i].profile || null, day }),
+          })
+          const oppData = await oppRes.json()
+          if (oppData.tekst) setOppsummering(prev => ({ ...prev, [i]: oppData.tekst }))
+        }
+      } catch (e) { console.warn('Oppsummering feilet', e) }
+
     } catch(e) {
       console.error('fetchWeather feil for', locations[i].name, e)
       setData(prev => ({ ...prev, [i]: 'error' }))
@@ -331,6 +349,11 @@ export default function LokasjonPanel({ locations }: { locations: Loc[] }) {
                 {d === 'loading' && <div style={{ textAlign: 'center', color: '#6b8fa3', fontSize: 13, padding: '1rem 0' }}>Henter data...</div>}
                 {d === 'error' && <div style={{ textAlign: 'center', color: '#dc2626', fontSize: 13, padding: '1rem 0' }}>Kunne ikke hente data</div>}
                 {wd && (<>
+                  {oppsummering[i] && (
+                    <p style={{ margin: '0 0 1rem', fontSize: 13, color: '#334155', lineHeight: 1.65, background: '#f8fafc', borderRadius: 8, padding: '12px 14px', borderLeft: `3px solid ${color}` }}>
+                      {oppsummering[i]}
+                    </p>
+                  )}
                   <div style={S.statGrid}>
                     {[
                       { key:'wave', label:'Bølger snitt', main: `${wd.avgWave.toFixed(1)}`, unit:'m', sub:`maks ${wd.maxWave.toFixed(1)}m`, detail:`Periode ${wd.avgPeriod.toFixed(0)}s · fra ${dir(wd.waveDir)}` },
