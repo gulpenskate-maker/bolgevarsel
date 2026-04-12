@@ -18,7 +18,7 @@ export default function Nav() {
         <li><a href="/sjokamera">Sjøkamera</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/hjelp">Hjelp</a></li>
-        <li><a href="/min-side">Min side</a></li>
+        <li><a href="/min-side">Logg inn</a></li>
       </ul>
       <a href="/registrer" className={styles.cta}>Start 7 dager gratis</a>
     </nav>
