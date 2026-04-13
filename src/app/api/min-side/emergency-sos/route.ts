@@ -62,9 +62,7 @@ export async function POST(req: NextRequest) {
         body: new URLSearchParams({
           from: process.env.ELKS_FROM_NUMBER || '+4600700072',
           to: contact.phone,
-          voice_start: JSON.stringify({
-            play: `https://api.46elks.com/a1/tts?text=${encodeURIComponent(voiceMessage)}&voice=nb-NO`,
-          }),
+          voice_start: `{"say":"${voiceMessage.replace(/"/g, '\\"')}","lang":"no"}`,
         }),
       })
       const voiceData = await voiceRes.json()
