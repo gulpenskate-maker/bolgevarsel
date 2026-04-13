@@ -56,10 +56,12 @@ export async function POST(req: NextRequest) {
       // Også ring med talemelding for ekstra urgency
       const voiceMessage = `Hei ${contact.name}. Dette er et noedvarsel fra Boelgevarsel. ${sub.email} har utloest et noedsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med noedetater umiddelbart. Husk aa lagre koordinatene fra SMS-en. Gjenta: dette er et noedvarsel. Merk: dette er kun en test av noedvarsel-funksjonen.`
 
+      // Sanitize voice message - fjern tegn som kan brekke JSON
+      const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
       const voiceBody = new URLSearchParams({
           from: process.env.ELKS_FROM_NUMBER || '+4600700072',
           to: contact.phone,
-          voice_start: `{"say":"${voiceMessage.replace(/"/g, '\\"')}","lang":"no"}`,
+          voice_start: `{"say":"${safeVoiceMessage}","lang":"no"}`,
         })
       console.log('46elks voice request:', Object.fromEntries(voiceBody))
       const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
