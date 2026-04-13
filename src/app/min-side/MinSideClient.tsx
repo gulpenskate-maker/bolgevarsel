@@ -894,7 +894,7 @@ export default function MinSideClient() {
                 </svg>
                 <div style={{fontSize:15,fontWeight:600,color:'#991b1b',marginBottom:4}}>SOS Nodvarsel</div>
                 <p style={{fontSize:12,color:'#b91c1c',marginBottom:12,lineHeight:1.5}}>
-                  Sender SMS og ringer alle nodkontaktene dine umiddelbart med din posisjon.
+                  Sender SMS og ringer alle nodkontaktene dine umiddelbart med din GPS-posisjon.
                 </p>
                 {!sosConfirm ? (
                   <button onClick={()=>setSosConfirm(true)} disabled={emergencyContacts.length===0}
@@ -907,8 +907,27 @@ export default function MinSideClient() {
                     <div style={{display:'flex',gap:8}}>
                       <button onClick={async()=>{
                         setSosSending(true); setSosResult(null)
-                        const loc = locs[0]
-                        const res = await fetch('/api/min-side/emergency-sos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat:loc?.lat,lng:loc?.lon,location_name:loc?.name,alert_type:'manual_sos'})})
+                        // Hent GPS-posisjon i sanntid
+                        let lat: number|null = null, lng: number|null = null, locName = ''
+                        try {
+                          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 })
+                          })
+                          lat = Math.round(pos.coords.latitude * 10000) / 10000
+                          lng = Math.round(pos.coords.longitude * 10000) / 10000
+                          locName = `GPS: ${lat}, ${lng}`
+                          // Prov reverse geocoding for lesbart stedsnavn
+                          try {
+                            const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=12&accept-language=no`)
+                            const geoData = await geo.json()
+                            if (geoData.display_name) locName = geoData.display_name.split(',').slice(0,3).join(',').trim()
+                          } catch {}
+                        } catch {
+                          // GPS feilet — fall tilbake til forste registrerte lokasjon
+                          const fallback = locs[0]
+                          if (fallback) { lat = fallback.lat; lng = fallback.lon; locName = fallback.name + ' (registrert lokasjon)' }
+                        }
+                        const res = await fetch('/api/min-side/emergency-sos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat,lng,location_name:locName,alert_type:'manual_sos'})})
                         const d = await res.json()
                         setSosSending(false); setSosConfirm(false)
                         setSosResult({success:d.success,contacts_notified:d.contacts_notified||0})
@@ -1009,7 +1028,7 @@ export default function MinSideClient() {
                 <ul style={{margin:0,paddingLeft:16,fontSize:12,color:'#6b8fa3',lineHeight:1.8}}>
                   <li>Trykk SOS-knappen for a varsle alle kontaktene dine</li>
                   <li>Kontaktene mottar bade SMS og telefonoppringning</li>
-                  <li>Din posisjon fra forste lokasjon sendes med</li>
+                  <li>Din GPS-posisjon sendes med i sanntid</li>
                   <li>Maks 3 nodkontakter per abonnement</li>
                 </ul>
               </div>
