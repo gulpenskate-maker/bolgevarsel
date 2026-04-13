@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       if (smsData.id) callIds.push(smsData.id)
 
       // Også ring med talemelding - 30 sek delay etter SMS
-      const voiceMessage = `Hei ${contact.name}. Dette er et noedvarsel fra Boelgevarsel. ${sub.email} har utloest et noedsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med noedetater umiddelbart. Husk aa lagre koordinatene fra SMS-en. Gjenta: dette er et noedvarsel. Merk: dette er kun en test av noedvarsel-funksjonen.`
+      const voiceMessage = `Hei ${contact.name}. Dette er et nødvarsel fra Bølgevarsel. ${sub.email} har utløst et nødsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med nødetater umiddelbart. Husk å lagre koordinatene fra SMS-en. Gjenta: dette er et nødvarsel. Merk: dette er kun en test av nødvarsel-funksjonen.`
 
       // Generer talemelding via ElevenLabs TTS og last opp til uguu.se
       const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
