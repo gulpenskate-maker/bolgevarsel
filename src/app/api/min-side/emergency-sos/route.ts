@@ -53,32 +53,45 @@ export async function POST(req: NextRequest) {
       })
       if (smsData.id) callIds.push(smsData.id)
 
-      // Også ring med talemelding for ekstra urgency
+      // Også ring med talemelding - 30 sek delay etter SMS
       const voiceMessage = `Hei ${contact.name}. Dette er et noedvarsel fra Boelgevarsel. ${sub.email} har utloest et noedsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med noedetater umiddelbart. Husk aa lagre koordinatene fra SMS-en. Gjenta: dette er et noedvarsel. Merk: dette er kun en test av noedvarsel-funksjonen.`
 
       // Sanitize voice message - fjern tegn som kan brekke JSON
       const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
-      const voiceBody = new URLSearchParams({
-          from: process.env.ELKS_FROM_NUMBER || '+4600700072',
-          to: contact.phone,
-          voice_start: `{"say":"${safeVoiceMessage}","lang":"no"}`,
-        })
-      console.log('46elks voice request:', Object.fromEntries(voiceBody))
-      const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
-        method: 'POST',
-        headers: { 'Authorization': `Basic ${elksAuth}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: voiceBody,
-      })
-      const voiceData = await voiceRes.json()
-      console.log('46elks voice response:', JSON.stringify(voiceData))
 
-      contactsNotified.push({
-        name: contact.name,
-        phone: contact.phone,
-        method: 'voice_call',
-        status: voiceData.state || 'initiated',
-      })
-      if (voiceData.id) callIds.push(voiceData.id)
+      // Vent 30 sekunder slik at mottaker kan lese SMS forst
+      await new Promise(resolve => setTimeout(resolve, 30000))
+
+      try {
+        const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
+          method: 'POST',
+          headers: { 'Authorization': `Basic ${elksAuth}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            from: process.env.ELKS_FROM_NUMBER || '+4600700072',
+            to: contact.phone,
+            voice_start: `{"say":"${safeVoiceMessage}","lang":"no"}`,
+          }),
+        })
+        const voiceData = await voiceRes.json()
+        console.log('46elks voice status:', voiceRes.status, JSON.stringify(voiceData))
+
+        contactsNotified.push({
+          name: contact.name,
+          phone: contact.phone,
+          method: 'voice_call',
+          status: voiceData.state || voiceData.error || 'unknown',
+        })
+        if (voiceData.id) callIds.push(voiceData.id)
+      } catch (voiceErr: any) {
+        console.error('Voice call failed:', voiceErr.message)
+        contactsNotified.push({
+          name: contact.name,
+          phone: contact.phone,
+          method: 'voice_call',
+          status: 'failed',
+          error: voiceErr.message,
+        })
+      }
 
     } catch (err: any) {
       contactsNotified.push({
