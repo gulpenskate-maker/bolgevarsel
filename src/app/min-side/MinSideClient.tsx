@@ -15,7 +15,7 @@ const S = {
   btnPrimary: { background:'#0a2a3d', color:'white', padding:'0.75rem 1.3rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.92rem', fontWeight:500 } as React.CSSProperties,
   btnDanger: { background:'#fee2e2', color:'#ef4444', padding:'0.55rem 1rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.85rem', fontWeight:500 } as React.CSSProperties,
   btnGhost: { background:'#f0f8fc', color:'#0a2a3d', padding:'0.55rem 1rem', borderRadius:100, border:'none', cursor:'pointer', fontSize:'0.85rem', fontWeight:500 } as React.CSSProperties,
-  badge: (plan: string) => ({ background: plan==='pro'?'#fef3c7':plan==='familie'?'#dbeafe':'#e8f4f8', color: plan==='pro'?'#92400e':plan==='familie'?'#1d4ed8':'#0a2a3d', padding:'7px 18px', borderRadius:100, fontSize:'0.85rem', fontWeight:500 }) as React.CSSProperties,
+  badge: (plan: string) => ({ background: plan==='sikkerhet'?'#fce7f3':plan==='pro'?'#fef3c7':plan==='familie'?'#dbeafe':'#e8f4f8', color: plan==='sikkerhet'?'#9d174d':plan==='pro'?'#92400e':plan==='familie'?'#1d4ed8':'#0a2a3d', padding:'7px 18px', borderRadius:100, fontSize:'0.85rem', fontWeight:500 }) as React.CSSProperties,
   tag: (active: boolean) => ({ background: active?'#dcfce7':'#f1f5f9', color: active?'#16a34a':'#64748b', padding:'2px 8px', borderRadius:100, fontSize:'0.75rem', fontWeight:500 }) as React.CSSProperties,
 }
 
@@ -53,6 +53,7 @@ function BrandIllustration() {
 type Sub = { id:string; email:string; plan:string; status:string; send_time?:string }
 type Loc = { id:string; name:string; lat:number; lon:number }
 type Rec = { id:string; location_id:string; phone:string; name:string; email?:string; active:boolean; sms_enabled:boolean; sms_daily:boolean; send_time?:string; profile?:string }
+type EmergencyContact = { id:string; name:string; phone:string; relation?:string; active:boolean; created_at:string }
 
 export default function MinSideClient() {
   const [email, setEmail] = useState('')
@@ -62,9 +63,20 @@ export default function MinSideClient() {
   const [sendTimeSaved, setSendTimeSaved] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showAddLoc, setShowAddLoc] = useState(false)
-  const [activeTab, setActiveTab] = useState<'lokasjoner'|'mottakere'|'rapport'|'konto'>('lokasjoner')
+  const [activeTab, setActiveTab] = useState<'lokasjoner'|'mottakere'|'rapport'|'konto'|'nodkontakt'>('lokasjoner')
   const [accountLoading, setAccountLoading] = useState<string|null>(null)
   const [showAddRec, setShowAddRec] = useState(false)
+  // Nødkontakt-state
+  const [emergencyContacts, setEmergencyContacts] = useState<EmergencyContact[]>([])
+  const [showAddEmergency, setShowAddEmergency] = useState(false)
+  const [ecName, setEcName] = useState('')
+  const [ecPhone, setEcPhone] = useState('')
+  const [ecRelation, setEcRelation] = useState('')
+  const [ecSaving, setEcSaving] = useState(false)
+  const [ecError, setEcError] = useState('')
+  const [sosConfirm, setSosConfirm] = useState(false)
+  const [sosSending, setSosSending] = useState(false)
+  const [sosResult, setSosResult] = useState<{success:boolean;contacts_notified:number}|null>(null)
   const [showCsvImport, setShowCsvImport] = useState(false)
   const [csvRows, setCsvRows] = useState<any[]>([])
   const [csvFileName, setCsvFileName] = useState('')
@@ -91,6 +103,7 @@ export default function MinSideClient() {
         clearTimeout(timeout)
         if (d.subscriber) {
           setSub(d.subscriber); setLocs(d.locations||[]); setRecs(d.recipients||[])
+          if (d.emergency_contacts) setEmergencyContacts(d.emergency_contacts)
           setEmail(d.subscriber.email); setSendTime(d.subscriber.send_time||'07:30'); setView('dash')
         } else {
           const saved = localStorage.getItem('bv_email')
@@ -100,6 +113,7 @@ export default function MinSideClient() {
             const d2 = await r2.json()
             if (d2.subscriber) {
               setSub(d2.subscriber); setLocs(d2.locations||[]); setRecs(d2.recipients||[])
+              if (d2.emergency_contacts) setEmergencyContacts(d2.emergency_contacts)
               setView('dash')
             } else localStorage.removeItem('bv_email')
           }
@@ -244,7 +258,7 @@ export default function MinSideClient() {
     if (d.recipient) { setRecs(recs.map(r=>r.id===editRec.id ? d.recipient : r)); setEditRec(null) }
   }
 
-  const planLabel: Record<string,string> = { kyst:'Kyst', familie:'Familie', pro:'Pro' }
+  const planLabel: Record<string,string> = { kyst:'Kyst', familie:'Familie', pro:'Pro', sikkerhet:'Sikkerhet' }
 
   // LOGIN VIEW
   if (view==='login') return (
@@ -320,9 +334,10 @@ export default function MinSideClient() {
   const tabs = [
     { key: 'lokasjoner', label: 'Lokasjoner', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C4.8 1.5 3 3.3 3 5.5C3 8.2 7 12.5 7 12.5C7 12.5 11 8.2 11 5.5C11 3.3 9.2 1.5 7 1.5Z" stroke="currentColor" strokeWidth="1.2" fill="none"/><circle cx="7" cy="5.5" r="1.3" fill="currentColor"/></svg>, count: locs.length },
     { key: 'mottakere', label: 'Mottakere', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="1" width="6" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M5.5 10h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/></svg>, count: recs.length },
+    ...(sub?.plan === 'sikkerhet' ? [{ key: 'nodkontakt' as const, label: 'Nodkontakt', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2" fill="none"/></svg>, count: emergencyContacts.length }] : []),
     { key: 'rapport', label: 'Rapport', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M1 5.5h12" stroke="currentColor" strokeWidth="1.2"/><path d="M4.5 1v2M9.5 1v2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>, count: null },
     { key: 'konto', label: 'Konto', icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M2 12.5c0-2.8 2.2-4.5 5-4.5s5 1.7 5 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" fill="none"/></svg>, count: null },
-  ] as const
+  ]
 
   return (
     <div style={S.page}>
@@ -406,8 +421,8 @@ export default function MinSideClient() {
               <div style={{background:'#f8fbfc',borderRadius:10,padding:'10px 12px',marginBottom:10}}>
                 <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
                   <div>
-                    <div style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{({'kyst':'Kyst-plan','familie':'Familie-plan','pro':'Pro-plan'}[sub!.plan]||sub!.plan)}</div>
-                    <div style={{fontSize:11,color:'#6b8fa3'}}>{({'kyst':'49','familie':'179','pro':'299'}[sub!.plan]||'—')} kr/mnd</div>
+                    <div style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>{({'kyst':'Kyst-plan','familie':'Familie-plan','pro':'Pro-plan','sikkerhet':'Sikkerhet-plan'}[sub!.plan]||sub!.plan)}</div>
+                    <div style={{fontSize:11,color:'#6b8fa3'}}>{({'kyst':'49','familie':'179','pro':'299','sikkerhet':'499'}[sub!.plan]||'—')} kr/mnd</div>
                   </div>
                   <span style={{fontSize:12,fontWeight:500,padding:'4px 10px',borderRadius:100,background:'#e8f5ed',color:'#16a34a'}}>{sub!.status==='active'?'Aktivt':'Pauset'}</span>
                 </div>
@@ -865,6 +880,139 @@ export default function MinSideClient() {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* ===== TAB: NØDKONTAKT ===== */}
+          {activeTab === 'nodkontakt' && sub?.plan === 'sikkerhet' && (
+            <div>
+              {/* SOS-knapp */}
+              <div style={{background:'linear-gradient(135deg, #fef2f2, #fff1f2)',border:'1px solid #fecaca',borderRadius:16,padding:'1.5rem',marginBottom:'1.2rem',textAlign:'center'}}>
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style={{marginBottom:8}}>
+                  <circle cx="16" cy="16" r="14" stroke="#ef4444" strokeWidth="2" fill="none"/>
+                  <path d="M16 8v10M16 22v2" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round"/>
+                </svg>
+                <div style={{fontSize:15,fontWeight:600,color:'#991b1b',marginBottom:4}}>SOS Nodvarsel</div>
+                <p style={{fontSize:12,color:'#b91c1c',marginBottom:12,lineHeight:1.5}}>
+                  Sender SMS og ringer alle nodkontaktene dine umiddelbart med din posisjon.
+                </p>
+                {!sosConfirm ? (
+                  <button onClick={()=>setSosConfirm(true)} disabled={emergencyContacts.length===0}
+                    style={{background:emergencyContacts.length===0?'#d1d5db':'#ef4444',color:'white',padding:'0.7rem 2rem',borderRadius:100,border:'none',cursor:emergencyContacts.length===0?'not-allowed':'pointer',fontSize:'0.95rem',fontWeight:600,letterSpacing:'0.02em'}}>
+                    {emergencyContacts.length===0?'Legg til nodkontakt forst':'Send SOS-varsel'}
+                  </button>
+                ) : (
+                  <div style={{display:'flex',flexDirection:'column',gap:8,alignItems:'center'}}>
+                    <p style={{fontSize:13,fontWeight:600,color:'#991b1b'}}>Er du sikker? Dette varsler {emergencyContacts.length} kontakt{emergencyContacts.length>1?'er':''}.</p>
+                    <div style={{display:'flex',gap:8}}>
+                      <button onClick={async()=>{
+                        setSosSending(true); setSosResult(null)
+                        const loc = locs[0]
+                        const res = await fetch('/api/min-side/emergency-sos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat:loc?.lat,lng:loc?.lon,location_name:loc?.name,alert_type:'manual_sos'})})
+                        const d = await res.json()
+                        setSosSending(false); setSosConfirm(false)
+                        setSosResult({success:d.success,contacts_notified:d.contacts_notified||0})
+                        setTimeout(()=>setSosResult(null),8000)
+                      }} disabled={sosSending}
+                        style={{background:'#ef4444',color:'white',padding:'0.55rem 1.5rem',borderRadius:100,border:'none',cursor:'pointer',fontSize:'0.9rem',fontWeight:600}}>
+                        {sosSending?'Sender varsel...':'Ja, send SOS'}
+                      </button>
+                      <button onClick={()=>setSosConfirm(false)}
+                        style={{background:'white',color:'#991b1b',padding:'0.55rem 1.5rem',borderRadius:100,border:'1px solid #fecaca',cursor:'pointer',fontSize:'0.9rem'}}>
+                        Avbryt
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {sosResult && (
+                  <div style={{marginTop:12,padding:'8px 14px',borderRadius:10,background:sosResult.success?'#dcfce7':'#fef2f2',color:sosResult.success?'#16a34a':'#ef4444',fontSize:13,fontWeight:500}}>
+                    {sosResult.success ? `Varsel sendt til ${sosResult.contacts_notified} kontakt${sosResult.contacts_notified>1?'er':''}` : 'Noe gikk galt. Prov igjen.'}
+                  </div>
+                )}
+              </div>
+
+              {/* Kontakt-liste */}
+              <div style={{marginBottom:'1rem'}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'0.8rem'}}>
+                  <div style={{fontSize:13,fontWeight:500,color:'#0a2a3d'}}>Dine nodkontakter ({emergencyContacts.length}/3)</div>
+                </div>
+                {emergencyContacts.length === 0 && (
+                  <p style={{color:'#6b8fa3',fontSize:'0.88rem',marginBottom:'0.8rem'}}>Ingen nodkontakter lagt til enda.</p>
+                )}
+                {emergencyContacts.map(ec => (
+                  <div key={ec.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.75rem 1rem',background:'#f8fbfc',borderRadius:12,marginBottom:6}}>
+                    <div style={{display:'flex',alignItems:'center',gap:10}}>
+                      <div style={{width:36,height:36,borderRadius:'50%',background:'#e8f4f8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:500,color:'#1a6080',flexShrink:0}}>
+                        {ec.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
+                      </div>
+                      <div>
+                        <div style={{fontSize:14,fontWeight:500,color:'#0a2a3d'}}>{ec.name}</div>
+                        <div style={{fontSize:12,color:'#6b8fa3'}}>{ec.phone}{ec.relation ? ` · ${ec.relation}` : ''}</div>
+                      </div>
+                    </div>
+                    <button onClick={async()=>{
+                      await fetch('/api/min-side/emergency-contacts',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:ec.id})})
+                      setEmergencyContacts(emergencyContacts.filter(c=>c.id!==ec.id))
+                    }} style={{...S.btnDanger,padding:'0.4rem 0.8rem',fontSize:'0.78rem'}}>Fjern</button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Legg til kontakt */}
+              {emergencyContacts.length < 3 && (
+                !showAddEmergency ? (
+                  <button onClick={()=>setShowAddEmergency(true)} style={{...S.btnPrimary,width:'100%',textAlign:'center'}}>
+                    + Legg til nodkontakt
+                  </button>
+                ) : (
+                  <div style={{background:'#f8fbfc',borderRadius:12,padding:'1rem',border:'1px solid rgba(10,42,61,0.07)'}}>
+                    <div style={{fontSize:13,fontWeight:500,color:'#0a2a3d',marginBottom:10}}>Ny nodkontakt</div>
+                    {ecError && <div style={{background:'#fef2f2',color:'#ef4444',padding:'6px 10px',borderRadius:8,fontSize:12,marginBottom:8}}>{ecError}</div>}
+                    <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                      <input placeholder="Navn" value={ecName} onChange={e=>setEcName(e.target.value)}
+                        style={{...S.inp,padding:'0.65rem 1rem'}}/>
+                      <input placeholder="+47XXXXXXXX" value={ecPhone} onChange={e=>setEcPhone(e.target.value)}
+                        style={{...S.inp,padding:'0.65rem 1rem'}}/>
+                      <select value={ecRelation} onChange={e=>setEcRelation(e.target.value)}
+                        style={{...S.inp,padding:'0.65rem 1rem',cursor:'pointer'}}>
+                        <option value="">Relasjon (valgfritt)</option>
+                        <option value="familie">Familie</option>
+                        <option value="venn">Venn</option>
+                        <option value="kollega">Kollega</option>
+                        <option value="partner">Partner</option>
+                        <option value="nabo">Nabo</option>
+                      </select>
+                    </div>
+                    <div style={{display:'flex',gap:8,marginTop:10}}>
+                      <button onClick={async()=>{
+                        setEcSaving(true); setEcError('')
+                        const res = await fetch('/api/min-side/emergency-contacts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:ecName,phone:ecPhone,relation:ecRelation||undefined})})
+                        const d = await res.json()
+                        setEcSaving(false)
+                        if (d.contact) {
+                          setEmergencyContacts([...emergencyContacts, d.contact])
+                          setEcName(''); setEcPhone(''); setEcRelation(''); setShowAddEmergency(false)
+                        } else setEcError(d.error||'Noe gikk galt')
+                      }} disabled={ecSaving||!ecName||!ecPhone}
+                        style={{...S.btnPrimary,opacity:(!ecName||!ecPhone)?0.5:1}}>
+                        {ecSaving?'Lagrer...':'Legg til'}
+                      </button>
+                      <button onClick={()=>{setShowAddEmergency(false);setEcError('')}} style={S.btnGhost}>Avbryt</button>
+                    </div>
+                  </div>
+                )
+              )}
+
+              {/* Info-boks */}
+              <div style={{marginTop:'1rem',padding:'0.85rem 1rem',background:'#f0f8fc',borderRadius:10,border:'1px solid rgba(26,96,128,0.1)'}}>
+                <div style={{fontSize:12,fontWeight:500,color:'#1a6080',marginBottom:4}}>Hvordan fungerer nodvarsling?</div>
+                <ul style={{margin:0,paddingLeft:16,fontSize:12,color:'#6b8fa3',lineHeight:1.8}}>
+                  <li>Trykk SOS-knappen for a varsle alle kontaktene dine</li>
+                  <li>Kontaktene mottar bade SMS og telefonoppringning</li>
+                  <li>Din posisjon fra forste lokasjon sendes med</li>
+                  <li>Maks 3 nodkontakter per abonnement</li>
+                </ul>
+              </div>
             </div>
           )}
 

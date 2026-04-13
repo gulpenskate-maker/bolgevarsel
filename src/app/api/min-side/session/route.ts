@@ -24,5 +24,13 @@ export async function GET(req: NextRequest) {
 
   const { data: locations } = await supabase.from('bv_locations').select('*').eq('subscriber_id', subscriber.id)
   const { data: recipients } = await supabase.from('bv_recipients').select('*').eq('subscriber_id', subscriber.id)
-  return NextResponse.json({ subscriber, locations: locations || [], recipients: recipients || [] })
+
+  // Last nødkontakter kun for sikkerhet-plan
+  let emergency_contacts: any[] = []
+  if (subscriber.plan === 'sikkerhet') {
+    const { data: ec } = await supabase.from('bv_emergency_contacts').select('*').eq('subscriber_id', subscriber.id).order('created_at', { ascending: true })
+    emergency_contacts = ec || []
+  }
+
+  return NextResponse.json({ subscriber, locations: locations || [], recipients: recipients || [], emergency_contacts })
 }
