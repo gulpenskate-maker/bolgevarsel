@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   const elksAuth = Buffer.from(`${process.env.ELKS_API_USER}:${process.env.ELKS_API_SECRET}`).toString('base64')
 
   for (const contact of contacts) {
-    const smsMessage = `NODVARSEL fra Bolgevarsel: ${sub.email} har utlost et nodsignal.${location_name ? ` Posisjon: ${location_name}` : ''}${lat && lng ? ` (${lat}, ${lng})` : ''}. Ta kontakt med nodetater umiddelbart, husk a lagre koordinatene!`
+    const smsMessage = `NODVARSEL fra Bolgevarsel: ${sub.email} har utlost et nodsignal.${location_name ? ` Posisjon: ${location_name}` : ''}${lat && lng ? ` (${lat}, ${lng})` : ''}. Ta kontakt med nodetater umiddelbart, husk a lagre koordinatene! (OBS: Dette er kun en test av nodvarsel-funksjonen)`
 
     try {
       const smsRes = await fetch('https://api.46elks.com/a1/sms', {
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       if (smsData.id) callIds.push(smsData.id)
 
       // Også ring med talemelding for ekstra urgency
-      const voiceMessage = `Hei ${contact.name}. Dette er et noedvarsel fra Boelgevarsel. ${sub.email} har utloest et noedsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med noedetater umiddelbart. Husk aa lagre koordinatene fra SMS-en. Gjenta: dette er et noedvarsel.`
+      const voiceMessage = `Hei ${contact.name}. Dette er et noedvarsel fra Boelgevarsel. ${sub.email} har utloest et noedsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med noedetater umiddelbart. Husk aa lagre koordinatene fra SMS-en. Gjenta: dette er et noedvarsel. Merk: dette er kun en test av noedvarsel-funksjonen.`
 
       const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
         method: 'POST',
