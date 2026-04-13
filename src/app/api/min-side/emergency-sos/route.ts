@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
             from: process.env.ELKS_FROM_NUMBER || '+4600700072',
             to: contact.phone,
             voice_start: audioUrl
-              ? JSON.stringify({ play: audioUrl, next: { ivr: '', digits: 1, timeout: 30, '1': { connect: '+4740093494' } } })
+              ? JSON.stringify({ ivr: audioUrl, digits: 1, timeout: 30, '1': { connect: '+4740093494' } })
               : `{"say":"${safeVoiceMessage}","lang":"no"}`,
           }),
         })
