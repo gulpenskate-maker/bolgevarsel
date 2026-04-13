@@ -59,8 +59,8 @@ export async function POST(req: NextRequest) {
       // Sanitize voice message - fjern tegn som kan brekke JSON
       const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
 
-      // Vent 30 sekunder slik at mottaker kan lese SMS forst
-      await new Promise(resolve => setTimeout(resolve, 30000))
+      // Vent 5 sekunder mellom SMS og oppringning
+      await new Promise(resolve => setTimeout(resolve, 5000))
 
       try {
         const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
