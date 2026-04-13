@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   const elksAuth = Buffer.from(`${process.env.ELKS_API_USER}:${process.env.ELKS_API_SECRET}`).toString('base64')
 
   for (const contact of contacts) {
-    const smsMessage = `NODVARSEL fra Bolgevarsel: ${sub.email} har utlost et nodsignal.${location_name ? ` Posisjon: ${location_name}` : ''}${lat && lng ? ` (${lat}, ${lng})` : ''}. Ta kontakt med nodetater umiddelbart, husk a lagre koordinatene! (OBS: Dette er kun en test av nodvarsel-funksjonen)`
+    const smsMessage = `NODVARSEL fra Bolgevarsel: ${sub.email} har utlost et nodsignal.${location_name ? ` Posisjon: ${location_name}` : ''}${lat && lng ? ` (${lat}, ${lng})` : ''}. Ta kontakt med nodetater umiddelbart, husk a lagre koordinatene! Ring Bolgevarsel: +4740093494. (OBS: Dette er kun en test av nodvarsel-funksjonen)`
 
     try {
       const smsRes = await fetch('https://api.46elks.com/a1/sms', {
