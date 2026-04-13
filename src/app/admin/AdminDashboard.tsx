@@ -63,6 +63,7 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
             {testLoading ? '...' : '📨 Send test'}
           </button>
           <a href="/admin/farevarsel" style={{ background: 'rgba(239,68,68,0.15)', color: '#f87171', padding: '0.5rem 1rem', borderRadius: 100, border: '1px solid rgba(239,68,68,0.2)', textDecoration: 'none', fontSize: '0.82rem', fontWeight: 500 }}>🚨 Farevarsel</a>
+          <a href="/admin/nodvarsler" style={{ background: 'rgba(251,191,36,0.15)', color: '#fbbf24', padding: '0.5rem 1rem', borderRadius: 100, border: '1px solid rgba(251,191,36,0.2)', textDecoration: 'none', fontSize: '0.82rem', fontWeight: 500 }}>🆘 Nodvarsler</a>
           <button onClick={loggUt} style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', padding: '0.5rem 1rem', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.82rem' }}>Logg ut</button>
         </div>
       </nav>
