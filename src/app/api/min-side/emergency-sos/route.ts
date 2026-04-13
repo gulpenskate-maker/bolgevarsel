@@ -81,8 +81,8 @@ export async function POST(req: NextRequest) {
         console.error('TTS failed, falling back to say:', ttsErr.message)
       }
 
-      // Vent 10 sekunder mellom SMS og oppringning
-      await new Promise(resolve => setTimeout(resolve, 10000))
+      // Vent 5 sekunder mellom SMS og oppringning
+      await new Promise(resolve => setTimeout(resolve, 5000))
 
       try {
         const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
