@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       if (smsData.id) callIds.push(smsData.id)
 
       // Også ring med talemelding - 30 sek delay etter SMS
-      const voiceMessage = `Hei ${contact.name}. Dette er et nødvarsel fra Bølgevarsel. ${sub.email} har utløst et nødsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med nødetater umiddelbart. Husk å lagre koordinatene fra SMS-en. Gjenta: dette er et nødvarsel. Merk: dette er kun en test av nødvarsel-funksjonen.`
+      const voiceMessage = `Hei ${contact.name}. Dette er et nødvarsel fra Bølgevarsel. ${sub.email} har utløst et nødsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med nødetater umiddelbart. Husk å lagre koordinatene fra SMS-en. Trykk 1 for å bli koblet til Bølgevarsel. Merk: dette er kun en test av nødvarsel-funksjonen.`
 
       // Generer talemelding via ElevenLabs TTS og last opp til uguu.se
       const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
@@ -91,7 +91,9 @@ export async function POST(req: NextRequest) {
           body: new URLSearchParams({
             from: process.env.ELKS_FROM_NUMBER || '+4600700072',
             to: contact.phone,
-            voice_start: audioUrl ? JSON.stringify({ play: audioUrl }) : `{"say":"${safeVoiceMessage}","lang":"no"}`,
+            voice_start: audioUrl
+              ? JSON.stringify({ play: audioUrl, next: { ivr: audioUrl, digits: 1, timeout: 15, '1': { connect: '+4740093494' } } })
+              : `{"say":"${safeVoiceMessage}","lang":"no"}`,
           }),
         })
         const voiceText = await voiceRes.text()
