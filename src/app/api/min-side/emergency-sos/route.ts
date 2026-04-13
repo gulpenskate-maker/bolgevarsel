@@ -72,8 +72,10 @@ export async function POST(req: NextRequest) {
             voice_start: `{"say":"${safeVoiceMessage}","lang":"no"}`,
           }),
         })
-        const voiceData = await voiceRes.json()
-        console.log('46elks voice status:', voiceRes.status, JSON.stringify(voiceData))
+        const voiceText = await voiceRes.text()
+        console.log('46elks voice raw:', voiceRes.status, voiceText)
+        let voiceData: any = {}
+        try { voiceData = JSON.parse(voiceText) } catch { voiceData = { error: voiceText } }
 
         contactsNotified.push({
           name: contact.name,
