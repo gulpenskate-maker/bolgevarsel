@@ -56,8 +56,30 @@ export async function POST(req: NextRequest) {
       // Også ring med talemelding - 30 sek delay etter SMS
       const voiceMessage = `Hei ${contact.name}. Dette er et noedvarsel fra Boelgevarsel. ${sub.email} har utloest et noedsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med noedetater umiddelbart. Husk aa lagre koordinatene fra SMS-en. Gjenta: dette er et noedvarsel. Merk: dette er kun en test av noedvarsel-funksjonen.`
 
-      // Sanitize voice message - fjern tegn som kan brekke JSON
+      // Generer talemelding via ElevenLabs TTS og last opp til uguu.se
       const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
+      let audioUrl = ''
+      try {
+        const ttsRes = await fetch(
+          `https://api.elevenlabs.io/v1/text-to-speech/s2xtA7B2CTXPPlJzch1v`,
+          {
+            method: 'POST',
+            headers: { 'xi-api-key': 'sk_b9d92350f9d2b18004984778b9cb6929887da6e49e7d068b', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: safeVoiceMessage, model_id: 'eleven_flash_v2_5', voice_settings: { stability: 0.75, similarity_boost: 0.75, speed: 1.1 }, apply_text_normalization: 'on' }),
+          }
+        )
+        if (!ttsRes.ok) throw new Error(`ElevenLabs: ${await ttsRes.text()}`)
+        const audioBuffer = Buffer.from(await ttsRes.arrayBuffer())
+        const formData = new FormData()
+        formData.append('files[]', new Blob([audioBuffer], { type: 'audio/mpeg' }), 'sos.mp3')
+        const uploadRes = await fetch('https://uguu.se/upload', { method: 'POST', body: formData })
+        const uploadData = await uploadRes.json() as any
+        audioUrl = uploadData?.files?.[0]?.url
+        if (!audioUrl) throw new Error(`uguu.se: ${JSON.stringify(uploadData)}`)
+        console.log('TTS audio uploaded:', audioUrl)
+      } catch (ttsErr: any) {
+        console.error('TTS failed, falling back to say:', ttsErr.message)
+      }
 
       // Vent 5 sekunder mellom SMS og oppringning
       await new Promise(resolve => setTimeout(resolve, 5000))
@@ -69,7 +91,7 @@ export async function POST(req: NextRequest) {
           body: new URLSearchParams({
             from: process.env.ELKS_FROM_NUMBER || '+4600700072',
             to: contact.phone,
-            voice_start: `{"say":"${safeVoiceMessage}","lang":"no"}`,
+            voice_start: audioUrl ? JSON.stringify({ play: audioUrl }) : `{"say":"${safeVoiceMessage}","lang":"no"}`,
           }),
         })
         const voiceText = await voiceRes.text()
