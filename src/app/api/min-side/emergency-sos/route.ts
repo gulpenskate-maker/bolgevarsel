@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       if (smsData.id) callIds.push(smsData.id)
 
       // Også ring med talemelding - 30 sek delay etter SMS
-      const voiceMessage = `Hei ${contact.name}. Dette er et nødvarsel fra Bølgevarsel. ${sub.email} har utløst et nødsignal.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Ta kontakt med nødetater umiddelbart. Husk å lagre koordinatene fra SMS-en. Trykk 1 for å bli koblet til Bølgevarsel. Merk: dette er kun en test av nødvarsel-funksjonen.`
+      const voiceMessage = `Hei ${contact.name}. Dette er et nødvarsel fra Bølgevarsel. Brukeren ${sub.email} har utløst et nødsignal via posisjon.${location_name ? ` Sist kjente posisjon er ${location_name}.` : ''} Husk å lagre koordinatene fra SMS-en. Trykk 1 for å bli koblet direkte til et menneske hos operasjonssentralen hos Bølgevarsel. Merk: dette er kun en test av nødvarsel-funksjonen.`
 
       // Generer talemelding via ElevenLabs TTS og last opp til uguu.se
       const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
@@ -81,8 +81,8 @@ export async function POST(req: NextRequest) {
         console.error('TTS failed, falling back to say:', ttsErr.message)
       }
 
-      // Vent 5 sekunder mellom SMS og oppringning
-      await new Promise(resolve => setTimeout(resolve, 5000))
+      // Vent 10 sekunder mellom SMS og oppringning
+      await new Promise(resolve => setTimeout(resolve, 10000))
 
       try {
         const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
