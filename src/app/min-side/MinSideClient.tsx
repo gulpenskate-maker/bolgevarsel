@@ -907,30 +907,35 @@ export default function MinSideClient() {
                     <div style={{display:'flex',gap:8}}>
                       <button onClick={async()=>{
                         setSosSending(true); setSosResult(null)
-                        // Hent GPS-posisjon i sanntid
-                        let lat: number|null = null, lng: number|null = null, locName = ''
                         try {
-                          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-                            navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 })
-                          })
-                          lat = Math.round(pos.coords.latitude * 10000) / 10000
-                          lng = Math.round(pos.coords.longitude * 10000) / 10000
-                          locName = `GPS: ${lat}, ${lng}`
-                          // Prov reverse geocoding for lesbart stedsnavn
+                          // Hent GPS-posisjon i sanntid
+                          let lat: number|null = null, lng: number|null = null, locName = ''
                           try {
-                            const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=12&accept-language=no`)
-                            const geoData = await geo.json()
-                            if (geoData.display_name) locName = geoData.display_name.split(',').slice(0,3).join(',').trim()
-                          } catch {}
-                        } catch {
-                          // GPS feilet — fall tilbake til forste registrerte lokasjon
-                          const fallback = locs[0]
-                          if (fallback) { lat = fallback.lat; lng = fallback.lon; locName = fallback.name + ' (registrert lokasjon)' }
+                            const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+                              navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 })
+                            })
+                            lat = Math.round(pos.coords.latitude * 10000) / 10000
+                            lng = Math.round(pos.coords.longitude * 10000) / 10000
+                            locName = `GPS: ${lat}, ${lng}`
+                            // Prov reverse geocoding for lesbart stedsnavn
+                            try {
+                              const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=12&accept-language=no`)
+                              const geoData = await geo.json()
+                              if (geoData.display_name) locName = geoData.display_name.split(',').slice(0,3).join(',').trim()
+                            } catch {}
+                          } catch {
+                            // GPS feilet — fall tilbake til forste registrerte lokasjon
+                            const fallback = locs[0]
+                            if (fallback) { lat = fallback.lat; lng = fallback.lon; locName = fallback.name + ' (registrert lokasjon)' }
+                          }
+                          const res = await fetch('/api/min-side/emergency-sos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat,lng,location_name:locName,alert_type:'manual_sos'})})
+                          const d = await res.json()
+                          setSosResult({success:d.success,contacts_notified:d.contacts_notified||0})
+                        } catch (err) {
+                          console.error('SOS feil:', err)
+                          setSosResult({success:false,contacts_notified:0})
                         }
-                        const res = await fetch('/api/min-side/emergency-sos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat,lng,location_name:locName,alert_type:'manual_sos'})})
-                        const d = await res.json()
                         setSosSending(false); setSosConfirm(false)
-                        setSosResult({success:d.success,contacts_notified:d.contacts_notified||0})
                         setTimeout(()=>setSosResult(null),8000)
                       }} disabled={sosSending}
                         style={{background:'#ef4444',color:'white',padding:'0.55rem 1.5rem',borderRadius:100,border:'none',cursor:'pointer',fontSize:'0.9rem',fontWeight:600}}>
