@@ -100,7 +100,13 @@ export default async function NodvarslerAdmin() {
                       </td>
                       <td style={{padding:'0.75rem 0.8rem',fontSize:'0.85rem',color:'rgba(255,255,255,0.7)',maxWidth:200,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{a.location_name || '—'}</td>
                       <td style={{padding:'0.75rem 0.8rem',fontSize:'0.8rem',color:'rgba(255,255,255,0.5)',fontFamily:'monospace'}}>
-                        {a.location_lat && a.location_lng ? `${a.location_lat}, ${a.location_lng}` : '—'}
+                        {a.location_lat && a.location_lng ? (
+                          <a href={`https://www.google.com/maps?q=${a.location_lat},${a.location_lng}`} target="_blank" rel="noopener noreferrer"
+                            style={{color:'#7dd3fc',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:4}}>
+                            {`${a.location_lat}, ${a.location_lng}`}
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M5 1h6v6M11 1L4 8" stroke="#7dd3fc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          </a>
+                        ) : '—'}
                       </td>
                       <td style={{padding:'0.75rem 0.8rem',fontSize:'0.85rem'}}>
                         {kontakter.map((k: any, i: number) => (
