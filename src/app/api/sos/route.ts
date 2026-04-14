@@ -1,5 +1,5 @@
 export const dynamic = 'force-dynamic'
-export const maxDuration = 25
+export const maxDuration = 10
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
 
@@ -77,10 +77,33 @@ async function handleSOS(req: NextRequest) {
   const callIds: string[] = []
   const elksAuth = Buffer.from(`${process.env.ELKS_API_USER}:${process.env.ELKS_API_SECRET}`).toString('base64')
 
-  for (const contact of contacts) {
-    // SMS
-    const smsMessage = `NODVARSEL fra Bolgevarsel: ${sub.email} har utlost et nodsignal.${locationName ? ` Posisjon: ${locationName}` : ''}${lat && lng ? ` (${lat}, ${lng})` : ''}. Ta kontakt med nodetater umiddelbart, husk a lagre koordinatene! Ring Bolgevarsel: +4740093494. (OBS: Dette er kun en test av nodvarsel-funksjonen)`
+  // Pre-generate TTS audio once (shared across all contacts)
+  let audioUrl = ''
+  const voiceMessageTemplate = (name: string) => `Hei ${name}. Dette er et nødvarsel fra Bølgevarsel. Brukeren ${sub.email} har utløst et nødsignal via posisjon.${locationName ? ` Sist kjente posisjon er ${locationName}.` : ''} Husk å lagre koordinatene fra SMS-en. Trykk 1 for å bli koblet direkte til et menneske hos operasjonssentralen hos Bølgevarsel. Merk: dette er kun en test av nødvarsel-funksjonen.`
 
+  // Generate TTS for first contact name (reuse for all)
+  const firstVoiceMsg = voiceMessageTemplate(contacts[0].name).replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
+  try {
+    const ttsRes = await fetch('https://api.elevenlabs.io/v1/text-to-speech/s2xtA7B2CTXPPlJzch1v', {
+      method: 'POST',
+      headers: { 'xi-api-key': 'sk_b9d92350f9d2b18004984778b9cb6929887da6e49e7d068b', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: firstVoiceMsg, model_id: 'eleven_flash_v2_5', voice_settings: { stability: 0.75, similarity_boost: 0.75, speed: 1.1 }, apply_text_normalization: 'on' }),
+    })
+    if (ttsRes.ok) {
+      const audioBuffer = Buffer.from(await ttsRes.arrayBuffer())
+      const formData = new FormData()
+      formData.append('files[]', new Blob([audioBuffer], { type: 'audio/mpeg' }), 'sos.mp3')
+      const uploadRes = await fetch('https://uguu.se/upload', { method: 'POST', body: formData })
+      const uploadData = await uploadRes.json() as any
+      audioUrl = uploadData?.files?.[0]?.url || ''
+    }
+  } catch {}
+
+  // Send SMS + Voice for each contact in parallel
+  const promises = contacts.map(async (contact) => {
+    const smsMessage = `NODVARSEL fra Bolgevarsel: ${sub.email} har utlost et nodsignal.${locationName ? ` Posisjon: ${locationName}` : ''}${lat && lng ? ` (${lat}, ${lng})` : ''}. Ta kontakt umiddelbart, husk a lagre koordinatene! Ring Bolgevarsel: +4740093494. (OBS: Dette er kun en test av nodvarsel-funksjonen)`
+
+    // SMS
     try {
       const smsRes = await fetch('https://api.46elks.com/a1/sms', {
         method: 'POST',
@@ -88,34 +111,11 @@ async function handleSOS(req: NextRequest) {
         body: new URLSearchParams({ from: 'Bolgevarsel', to: contact.phone, message: smsMessage }),
       })
       const smsData = await smsRes.json()
-      contactsNotified.push({ name: contact.name, phone: contact.phone, method: 'sms', status: smsData.status || 'sent' })
+      contactsNotified.push({ name: contact.name, phone: contact.phone, method: 'sms', status: smsData.status || 'created' })
       if (smsData.id) callIds.push(smsData.id)
     } catch {}
 
-    // Voice via ElevenLabs TTS
-    const voiceMessage = `Hei ${contact.name}. Dette er et nødvarsel fra Bølgevarsel. Brukeren ${sub.email} har utløst et nødsignal via posisjon.${locationName ? ` Sist kjente posisjon er ${locationName}.` : ''} Husk å lagre koordinatene fra SMS-en. Trykk 1 for å bli koblet direkte til et menneske hos operasjonssentralen hos Bølgevarsel. Merk: dette er kun en test av nødvarsel-funksjonen.`
-    const safeVoiceMessage = voiceMessage.replace(/["\\\n\r\t]/g, ' ').replace(/\s+/g, ' ')
-
-    let audioUrl = ''
-    try {
-      const ttsRes = await fetch('https://api.elevenlabs.io/v1/text-to-speech/s2xtA7B2CTXPPlJzch1v', {
-        method: 'POST',
-        headers: { 'xi-api-key': 'sk_b9d92350f9d2b18004984778b9cb6929887da6e49e7d068b', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: safeVoiceMessage, model_id: 'eleven_flash_v2_5', voice_settings: { stability: 0.75, similarity_boost: 0.75, speed: 1.1 }, apply_text_normalization: 'on' }),
-      })
-      if (ttsRes.ok) {
-        const audioBuffer = Buffer.from(await ttsRes.arrayBuffer())
-        const formData = new FormData()
-        formData.append('files[]', new Blob([audioBuffer], { type: 'audio/mpeg' }), 'sos.mp3')
-        const uploadRes = await fetch('https://uguu.se/upload', { method: 'POST', body: formData })
-        const uploadData = await uploadRes.json() as any
-        audioUrl = uploadData?.files?.[0]?.url || ''
-      }
-    } catch {}
-
-    // Vent 5 sek mellom SMS og oppringning
-    await new Promise(resolve => setTimeout(resolve, 5000))
-
+    // Voice (no delay)
     try {
       const voiceRes = await fetch('https://api.46elks.com/a1/calls', {
         method: 'POST',
@@ -125,7 +125,7 @@ async function handleSOS(req: NextRequest) {
           to: contact.phone,
           voice_start: audioUrl
             ? JSON.stringify({ ivr: audioUrl, digits: 1, timeout: 30, '1': { connect: '+4740093494' } })
-            : `{"say":"${safeVoiceMessage}","lang":"no"}`,
+            : `{"say":"${firstVoiceMsg}","lang":"no"}`,
         }),
       })
       const voiceText = await voiceRes.text()
@@ -136,7 +136,9 @@ async function handleSOS(req: NextRequest) {
     } catch (voiceErr: any) {
       contactsNotified.push({ name: contact.name, phone: contact.phone, method: 'voice_call', status: 'failed', error: voiceErr.message })
     }
-  }
+  })
+
+  await Promise.all(promises)
 
   // Logg i database
   await supabase.from('bv_emergency_alerts').insert({
