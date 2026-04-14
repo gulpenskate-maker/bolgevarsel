@@ -22,6 +22,10 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
   const [valgt, setValgt] = useState<any>(null)
   const [melding, setMelding] = useState('')
   const [testLoading, setTestLoading] = useState(false)
+  const [showSmsModal, setShowSmsModal] = useState(false)
+  const [smsTo, setSmsTo] = useState('')
+  const [smsText, setSmsText] = useState('')
+  const [smsSending, setSmsSending] = useState(false)
 
   const filtrert = subscribers.filter(s =>
     s.email.toLowerCase().includes(søk.toLowerCase())
@@ -32,13 +36,27 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
     window.location.href = '/admin/login'
   }
 
-  async function sendTestVarsel() {
-    setTestLoading(true)
-    const res = await fetch('https://zqodoekmswibvjzhtixf.supabase.co/functions/v1/bolgevarsel', { method: 'POST' })
-    const d = await res.json()
-    setMelding(d.ok ? '✅ Varsel sendt!' : '❌ Feil: ' + d.error)
-    setTimeout(() => setMelding(''), 4000)
-    setTestLoading(false)
+  async function sendManualSms() {
+    if (!smsTo || !smsText) return
+    setSmsSending(true)
+    try {
+      const res = await fetch('/api/admin/send-sms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': 'ulrik-admin-2026' },
+        body: JSON.stringify({ to: smsTo, message: smsText }),
+      })
+      const d = await res.json()
+      if (d.success) {
+        setMelding('✅ SMS sendt til ' + smsTo)
+        setSmsTo(''); setSmsText(''); setShowSmsModal(false)
+      } else {
+        setMelding('❌ Feil: ' + (d.error || 'Ukjent feil'))
+      }
+    } catch (err: any) {
+      setMelding('❌ Feil: ' + err.message)
+    }
+    setSmsSending(false)
+    setTimeout(() => setMelding(''), 5000)
   }
 
   async function oppdaterStatus(id: string, status: string) {
@@ -59,14 +77,44 @@ export default function AdminDashboard({ subscribers, stats, planTelling }: Prop
         </div>
         <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
           {melding && <span style={{ fontSize: '0.85rem', color: melding.startsWith('✅') ? '#4ade80' : '#f87171' }}>{melding}</span>}
-          <button onClick={sendTestVarsel} disabled={testLoading} style={{ background: 'rgba(77,168,204,0.2)', color: '#4da8cc', padding: '0.5rem 1rem', borderRadius: 100, border: '1px solid rgba(77,168,204,0.3)', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 500 }}>
-            {testLoading ? '...' : '📨 Send test'}
+          <button onClick={() => setShowSmsModal(true)} style={{ background: 'rgba(77,168,204,0.2)', color: '#4da8cc', padding: '0.5rem 1rem', borderRadius: 100, border: '1px solid rgba(77,168,204,0.3)', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 500 }}>
+            📨 Send SMS
           </button>
           <a href="/admin/farevarsel" style={{ background: 'rgba(239,68,68,0.15)', color: '#f87171', padding: '0.5rem 1rem', borderRadius: 100, border: '1px solid rgba(239,68,68,0.2)', textDecoration: 'none', fontSize: '0.82rem', fontWeight: 500 }}>🚨 Farevarsel</a>
           <a href="/admin/nodvarsler" style={{ background: 'rgba(251,191,36,0.15)', color: '#fbbf24', padding: '0.5rem 1rem', borderRadius: 100, border: '1px solid rgba(251,191,36,0.2)', textDecoration: 'none', fontSize: '0.82rem', fontWeight: 500 }}>🆘 Nodvarsler</a>
           <button onClick={loggUt} style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', padding: '0.5rem 1rem', borderRadius: 100, border: 'none', cursor: 'pointer', fontSize: '0.82rem' }}>Logg ut</button>
         </div>
       </nav>
+
+      {/* SMS Modal */}
+      {showSmsModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowSmsModal(false)}>
+          <div style={{ background: '#0d2d42', borderRadius: 20, padding: '2rem', border: '1px solid rgba(255,255,255,0.1)', width: 420, maxWidth: '90vw' }} onClick={e => e.stopPropagation()}>
+            <h3 style={{ margin: '0 0 1.2rem', fontFamily: "'Fraunces', Georgia, serif", fontWeight: 400, fontSize: '1.3rem', color: 'white' }}>📨 Send SMS</h3>
+            <div style={{ marginBottom: '0.8rem' }}>
+              <label style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>Telefonnummer</label>
+              <input value={smsTo} onChange={e => setSmsTo(e.target.value)} placeholder="+47XXXXXXXX"
+                style={{ width: '100%', padding: '0.7rem 1rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: '0.95rem', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' }} />
+            </div>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>Melding</label>
+              <textarea value={smsText} onChange={e => setSmsText(e.target.value)} rows={4} placeholder="Skriv meldingen her..."
+                style={{ width: '100%', padding: '0.7rem 1rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: '0.95rem', fontFamily: 'inherit', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }} />
+              <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', marginTop: '0.3rem', textAlign: 'right' }}>{smsText.length} tegn</div>
+            </div>
+            <div style={{ display: 'flex', gap: '0.6rem' }}>
+              <button onClick={sendManualSms} disabled={smsSending || !smsTo || !smsText}
+                style={{ flex: 1, padding: '0.7rem', borderRadius: 10, border: 'none', background: smsSending || !smsTo || !smsText ? 'rgba(77,168,204,0.2)' : '#4da8cc', color: 'white', cursor: smsSending || !smsTo || !smsText ? 'not-allowed' : 'pointer', fontSize: '0.9rem', fontWeight: 500, fontFamily: 'inherit' }}>
+                {smsSending ? 'Sender...' : 'Send SMS'}
+              </button>
+              <button onClick={() => setShowSmsModal(false)}
+                style={{ padding: '0.7rem 1.2rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'inherit' }}>
+                Avbryt
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div style={S.wrap}>
         {/* STATS */}
