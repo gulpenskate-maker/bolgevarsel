@@ -47,7 +47,7 @@ export default function Footer() {
             hei@bolgevarsel.no
           </a>
           <p className={styles.about}>
-            Laget av Stå på Pinne AS i Stavanger. Data fra met.no (CC BY 4.0) og Open-Meteo Marine.
+            Laget av Solidlab.ai i Stavanger. Data fra met.no (CC BY 4.0) og Open-Meteo Marine.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ export default function Footer() {
 
       {/* Bunnlinje */}
       <div className={styles.bottom}>
-        <span>© 2026 Stå på Pinne AS</span>
+        <span>© 2026 Solidlab.ai</span>
         <span className={styles.bottomDot}>·</span>
         <a href="/personvern">Personvern</a>
         <span className={styles.bottomDot}>·</span>

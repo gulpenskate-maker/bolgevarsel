@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description: 'Få daglig bølge- og værvarsel direkte på SMS — skreddersydd for din kystlokasjon langs norskekysten. Enkelt, pålitelig og norsk.',
   keywords: ['bølgevarsel', 'sjøvarsel', 'bølger SMS', 'værvarsel kyst', 'sjøvær Norge', 'bølgehøyde', 'kystvarsel', 'fiskevarsel', 'havvarsel', 'sjøforhold', 'fiske SMS varsel', 'bølgevarsel fisker'],
   authors: [{ name: 'Bølgevarsel', url: BASE }],
-  creator: 'Stå på Pinne AS',
-  publisher: 'Stå på Pinne AS',
+  creator: 'Solidlab.ai',
+  publisher: 'Solidlab.ai',
   alternates: {
     canonical: BASE,
   },

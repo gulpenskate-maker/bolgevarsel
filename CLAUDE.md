@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-**bolgevarsel.no** — a Norwegian SaaS that sends daily sea/wave forecasts via SMS and email, tailored to coastal locations along the Norwegian coast. Built by Stå på Pinne AS.
+**bolgevarsel.no** — a Norwegian SaaS that sends daily sea/wave forecasts via SMS and email, tailored to coastal locations along the Norwegian coast. Built by Solidlab.ai.
 
 All UI text, routes, and variable names are in Norwegian. Maintain this convention.
 

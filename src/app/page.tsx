@@ -33,7 +33,7 @@ export default function Home() {
           description: 'Daglig bølge- og sjøvarsel på SMS for norskekysten',
           publisher: {
             '@type': 'Organization',
-            name: 'Stå på Pinne AS',
+            name: 'Solidlab.ai',
             url: 'https://bolgevarsel.no',
             contactPoint: { '@type': 'ContactPoint', email: 'hei@bolgevarsel.no', contactType: 'customer support', availableLanguage: 'Norwegian' }
           },

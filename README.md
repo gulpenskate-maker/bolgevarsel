@@ -214,4 +214,4 @@ Deploy skjer automatisk via Vercel ved push til `main`.
 
 ---
 
-*Bygget av Stå på Pinne AS · hei@bolgevarsel.no*
+*Bygget av Solidlab.ai · hei@bolgevarsel.no*
